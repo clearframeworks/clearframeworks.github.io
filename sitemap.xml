@@ -6,6 +6,26 @@
   </url>
 
   <url>
+    <loc>https://clearframeworks.org/examples/</loc>
+  </url>
+
+  <url>
+    <loc>https://clearframeworks.org/execution/</loc>
+  </url>
+
+  <url>
+    <loc>https://clearframeworks.org/branding/</loc>
+  </url>
+
+  <url>
+    <loc>https://clearframeworks.org/design/</loc>
+  </url>
+
+  <url>
+    <loc>https://clearframeworks.org/learn/</loc>
+  </url>
+
+  <url>
     <loc>https://clearframeworks.org/proximity/</loc>
   </url>
 
@@ -17,18 +37,16 @@
     <loc>https://clearframeworks.org/dadinavan/</loc>
   </url>
 
-<url>
-  <loc>https://clearframeworks.org/clarity/</loc>
-  <changefreq>monthly</changefreq>
-  <priority>0.7</priority>
-</url>
+  <url>
+    <loc>https://clearframeworks.org/clarity/</loc>
+  </url>
 
-<url>
-  <loc>https://clearframeworks.org/the-9th-gate/</loc>
-</url>
+  <url>
+    <loc>https://clearframeworks.org/the-9th-gate/</loc>
+  </url>
 
-<url>
-  <loc>https://clearframeworks.org/the-9th-gate/play.html</loc>
-</url>
+  <url>
+    <loc>https://clearframeworks.org/the-9th-gate/play.html</loc>
+  </url>
 
 </urlset>
