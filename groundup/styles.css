@@ -80,9 +80,8 @@ button, input, textarea{ font:inherit; color:inherit; }
   display:flex; align-items:center; gap:12px; min-width: 220px;
 }
 .brand img{
-  height: 56px;
-  width:auto;
-  filter: drop-shadow(0 8px 16px rgba(0,0,0,.35));
+  height: 88px;   /* try 88 */
+  width: auto;
 }
 .nav{
   display:flex;
