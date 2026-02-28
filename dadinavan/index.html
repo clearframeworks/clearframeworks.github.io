@@ -4,33 +4,25 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>Dad in a Van | Painting & Home Repairs</title>
-  <meta name="description" content="Painting, home repairs, and cleanouts. No electrical work. Call/Text: 540-728-7705" />
+  <title>Dad in a Van | Painting • Home Repairs • Cleanouts</title>
+  <meta name="description" content="Painting, general home repairs, and cleanouts. Straightforward service. No electrical work. Call/Text: 540-728-7705" />
 
   <!-- Open Graph (Facebook Preview) -->
   <meta property="og:title" content="Dad in a Van | Painting • Home Repairs • Cleanouts" />
-  <meta property="og:description" content="Reliable painting, repairs, and cleanouts. No electrical work. Call/Text: 540-728-7705" />
+  <meta property="og:description" content="Straightforward pricing. Clean work. Clear communication. No electrical work. Call/Text: 540-728-7705" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://clearframeworks.org/dadinavan/" />
-  <meta property="og:image" content="https://clearframeworks.org/dadinavan/assets/og-dad-in-a-van.png?v=1" />
+  <meta property="og:image" content="https://clearframeworks.org/dadinavan/assets/og-dad-in-a-van.png?v=2" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <link rel="stylesheet" href="./styles.css?v=4" />
+  <link rel="stylesheet" href="./styles_v2.css?v=1" />
 </head>
 
 <body>
-  
-<header style="position:sticky;top:0;z-index:999;background:rgba(255,255,255,0.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(0,0,0,0.10);">
-  <div style="max-width:1100px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;">
-    <a href="/" style="color:#0b1320;text-decoration:none;font-weight:700;">Clearframe</a>
-    <div style="display:flex;gap:14px;">
-      <a href="/" style="color:#0b1320;text-decoration:none;font-weight:600;">Hub</a>
-    </div>
-  </div>
-</header>
-<header class="site-header">
+
+  <header class="site-header">
     <div class="wrap header-inner">
       <a class="brand" href="./" aria-label="Dad in a Van home">
         <img class="brand-mark"
@@ -38,11 +30,9 @@
              alt="Dad in a Van Logo" />
       </a>
 
-      <nav class="nav">
-        <a href="#examples">Examples</a>
-        <a href="#how">How it works</a>
-        <a href="#fit">Good fit</a>
-        <a class="nav-cta" href="#start">Contact</a>
+      <nav class="nav" aria-label="Primary">
+        <a href="#proof">Examples</a>
+        <a class="nav-cta" href="#start">Call / Text</a>
       </nav>
     </div>
   </header>
@@ -53,35 +43,32 @@
     <section class="hero">
       <div class="wrap hero-inner">
         <div class="hero-copy">
-          <h1>Reliable help for the jobs you don’t have time for.</h1>
+          <p class="kicker">Local • Reliable • Clean work</p>
+
+          <h1>Painting. Repairs. Cleanouts.<br/>Done right the first time.</h1>
 
           <p class="lead">
-            Painting, general home repairs, and cleanouts —
-            handled carefully, communicated clearly, and cleaned up after.
+            Straightforward pricing. Clean lines. Clear communication.
             <strong>No electrical work.</strong>
           </p>
 
-          <p class="lead" style="font-weight:600;">
+          <p class="lead strong">
             Call/Text: <a href="tel:5407287705">540-728-7705</a>
+            <span class="micro">Most messages answered same day.</span>
           </p>
 
           <div class="hero-actions">
-            <a class="btn primary" href="tel:5407287705">
-              Call / Text
+            <a class="btn primary" href="tel:5407287705">Call / Text</a>
+
+            <a class="btn"
+               href="sms:5407287705?&body=Hi%20Dad%20in%20a%20Van%20%E2%80%94%20I%E2%80%99d%20like%20a%20quote.%20My%20address%20is%3A%20%0AJob%3A%20%0APhotos%3A%20(attached)">
+              Text a photo
             </a>
 
             <a class="btn"
                href="mailto:dadinavan@gmail.com?subject=Dad%20in%20a%20Van%20Request">
               Email a request
             </a>
-
-            <button class="btn" type="button" id="copyEmailBtn">
-              Copy email
-            </button>
-
-            <span class="micro" id="copyHint">
-              No electrical work.
-            </span>
           </div>
 
           <ul class="checks">
@@ -100,67 +87,69 @@
           </div>
 
           <div class="hero-logo-center">
-            <img src="./assets/dad-in-a-van-logo.jpg?v=3" alt="" />
+            <img src="./assets/dad-in-a-van-logo.jpg?v=3" alt="Dad in a Van wordmark" />
           </div>
         </aside>
       </div>
     </section>
 
-    <!-- SERVICES -->
-    <section class="section">
-      <div class="wrap grid-2">
-        <div class="card">
-          <h2>What I do</h2>
-          <p>
-            Interior & exterior painting, drywall patching, minor repairs,
-            door adjustments, caulking, light installs,
-            garage and property cleanouts.
-          </p>
+    <!-- INTENT ROUTER -->
+    <section class="section intent" id="services">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>What do you need help with?</h2>
+          <p class="muted">Pick one — you’ll land on the right info and the fastest way to get a quote.</p>
         </div>
 
-        <div class="card">
-          <h2>What I don’t do</h2>
-          <ul class="bullets">
-            <li><strong>No electrical work.</strong></li>
-            <li>No major remodels or structural work.</li>
-          </ul>
-          <p class="small">Send a photo if unsure — quick yes/no on scope.</p>
+        <div class="intent-grid">
+          <a class="intent-btn" href="#painting">
+            <span class="intent-title">Painting</span>
+            <span class="intent-sub">Interior / exterior • prep + patch</span>
+          </a>
+
+          <a class="intent-btn" href="#repairs">
+            <span class="intent-title">Home repairs</span>
+            <span class="intent-sub">Drywall, doors, trim, caulk</span>
+          </a>
+
+          <a class="intent-btn" href="#cleanouts">
+            <span class="intent-title">Cleanouts</span>
+            <span class="intent-sub">Garage, storage, property reset</span>
+          </a>
+
+          <a class="intent-btn intent-btn-dark" href="#photo">
+            <span class="intent-title">Not sure?</span>
+            <span class="intent-sub">Send a photo — quick yes/no</span>
+          </a>
+        </div>
+
+        <div class="why-strip">
+          <div class="why-item">✔ Shows up</div>
+          <div class="why-item">✔ Communicates clearly</div>
+          <div class="why-item">✔ Cleans up after</div>
+          <div class="why-item">✔ No surprise add-ons</div>
         </div>
       </div>
     </section>
 
-    <!-- EXAMPLES -->
-    <section class="section" id="examples">
+    <!-- PROOF (MOVE UP) -->
+    <section class="section" id="proof">
       <div class="wrap">
         <div class="section-head">
-          <h2>Examples</h2>
+          <h2>Recent work</h2>
+          <p class="muted">Before / after examples.</p>
         </div>
 
         <div class="examples-grid">
-
           <!-- A1 -->
           <div class="card example-card">
             <div class="pair">
-              <a class="shot shot-link" href="./assets/a1-before.jpg" target="_blank">
-                <img src="./assets/a1-before.jpg" alt="">
+              <a class="shot shot-link" href="./assets/a1-before.jpg" target="_blank" rel="noreferrer">
+                <img src="./assets/a1-before.jpg" alt="Before painting - bathroom">
                 <span class="tag">Before</span>
               </a>
-              <a class="shot shot-link" href="./assets/a1-after.jpg" target="_blank">
-                <img src="./assets/a1-after.jpg" alt="">
-                <span class="tag">After</span>
-              </a>
-            </div>
-          </div>
-
-          <!-- A2 -->
-          <div class="card example-card">
-            <div class="pair">
-              <a class="shot shot-link" href="./assets/a2-before.jpg" target="_blank">
-                <img src="./assets/a2-before.jpg" alt="">
-                <span class="tag">Before</span>
-              </a>
-              <a class="shot shot-link" href="./assets/a2-after.jpg" target="_blank">
-                <img src="./assets/a2-after.jpg" alt="">
+              <a class="shot shot-link" href="./assets/a1-after.jpg" target="_blank" rel="noreferrer">
+                <img src="./assets/a1-after.jpg" alt="After painting - bathroom">
                 <span class="tag">After</span>
               </a>
             </div>
@@ -169,12 +158,114 @@
           <!-- B1 -->
           <div class="card example-card">
             <div class="pair">
-              <a class="shot shot-link" href="./assets/b1-before.jpg" target="_blank">
-                <img src="./assets/b1-before.jpg" alt="">
+              <a class="shot shot-link" href="./assets/b1-before.jpg" target="_blank" rel="noreferrer">
+                <img src="./assets/b1-before.jpg" alt="Before work - living room">
                 <span class="tag">Before</span>
               </a>
-              <a class="shot shot-link" href="./assets/b1-after.jpg" target="_blank">
-                <img src="./assets/b1-after.jpg" alt="">
+              <a class="shot shot-link" href="./assets/b1-after.jpg" target="_blank" rel="noreferrer">
+                <img src="./assets/b1-after.jpg" alt="After work - living room">
+                <span class="tag">After</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <p class="small" style="margin-top:12px;">
+          Want more examples? Scroll down — full gallery is below.
+        </p>
+      </div>
+    </section>
+
+    <!-- SERVICES (MICRO AUTHORITY) -->
+    <section class="section">
+      <div class="wrap service-grid">
+
+        <div class="card service-card" id="painting">
+          <h2>Painting</h2>
+          <p>
+            Interior and exterior painting with proper prep — patching, sanding, caulking, and clean edges.
+          </p>
+          <ul class="bullets">
+            <li>Walls, ceilings, trim, doors</li>
+            <li>Patch + prep included</li>
+            <li>Clean work area + cleanup</li>
+          </ul>
+          <div class="service-actions">
+            <a class="btn primary" href="sms:5407287705?&body=Hi%20Dad%20in%20a%20Van%20%E2%80%94%20I%E2%80%99d%20like%20a%20PAINTING%20quote.%20Address%3A%20%0ADetails%3A%20%0APhotos%3A%20(attached)">Text for a quote</a>
+            <a class="btn" href="tel:5407287705">Call now</a>
+          </div>
+        </div>
+
+        <div class="card service-card" id="repairs">
+          <h2>Home repairs</h2>
+          <p>
+            General repairs and fixes that keep a house functioning — done cleanly and finished properly.
+          </p>
+          <ul class="bullets">
+            <li>Drywall patching</li>
+            <li>Door adjustments / hardware</li>
+            <li>Trim fixes, caulking, small installs</li>
+          </ul>
+          <div class="service-actions">
+            <a class="btn primary" href="sms:5407287705?&body=Hi%20Dad%20in%20a%20Van%20%E2%80%94%20I%E2%80%99d%20like%20a%20REPAIR%20quote.%20Address%3A%20%0ADetails%3A%20%0APhotos%3A%20(attached)">Text a photo</a>
+            <a class="btn" href="tel:5407287705">Call now</a>
+          </div>
+          <p class="small"><strong>No electrical work.</strong> If you’re unsure, send a photo.</p>
+        </div>
+
+        <div class="card service-card" id="cleanouts">
+          <h2>Cleanouts</h2>
+          <p>
+            Garage, storage, and property cleanouts — haul away, sweep up, and leave it better than we found it.
+          </p>
+          <ul class="bullets">
+            <li>Garage / shed cleanouts</li>
+            <li>Storage unit cleanouts</li>
+            <li>Small property resets</li>
+          </ul>
+          <div class="service-actions">
+            <a class="btn primary" href="sms:5407287705?&body=Hi%20Dad%20in%20a%20Van%20%E2%80%94%20I%E2%80%99d%20like%20a%20CLEANOUT%20quote.%20Address%3A%20%0ADetails%3A%20%0APhotos%3A%20(attached)">Text for pricing</a>
+            <a class="btn" href="tel:5407287705">Call now</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PHOTO QUICK CHECK -->
+    <section class="section" id="photo">
+      <div class="wrap">
+        <div class="card start">
+          <h2>Fast scope check</h2>
+          <p class="muted">Not sure if it’s a fit? Send a photo and a one-line description.</p>
+
+          <div class="start-actions">
+            <a class="btn primary" href="sms:5407287705?&body=Hi%20Dad%20in%20a%20Van%20%E2%80%94%20Can%20you%20tell%20me%20if%20this%20job%20is%20a%20good%20fit%3F%20Address%3A%20%0ADescription%3A%20%0APhotos%3A%20(attached)">Text a photo</a>
+            <a class="btn" href="mailto:dadinavan@gmail.com?subject=Scope%20check%20%E2%80%94%20Dad%20in%20a%20Van">Email photos</a>
+          </div>
+
+          <p class="small"><strong>No electrical work.</strong> If it’s outside scope, you’ll get a quick yes/no.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FULL EXAMPLES (GALLERY) -->
+    <section class="section" id="examples">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>More examples</h2>
+        </div>
+
+        <div class="examples-grid">
+          <!-- A2 -->
+          <div class="card example-card">
+            <div class="pair">
+              <a class="shot shot-link" href="./assets/a2-before.jpg" target="_blank" rel="noreferrer">
+                <img src="./assets/a2-before.jpg" alt="Before painting - bathroom">
+                <span class="tag">Before</span>
+              </a>
+              <a class="shot shot-link" href="./assets/a2-after.jpg" target="_blank" rel="noreferrer">
+                <img src="./assets/a2-after.jpg" alt="After painting - bathroom">
                 <span class="tag">After</span>
               </a>
             </div>
@@ -183,12 +274,12 @@
           <!-- B2 -->
           <div class="card example-card">
             <div class="pair">
-              <a class="shot shot-link" href="./assets/b2-before.jpg" target="_blank">
-                <img src="./assets/b2-before.jpg" alt="">
+              <a class="shot shot-link" href="./assets/b2-before.jpg" target="_blank" rel="noreferrer">
+                <img src="./assets/b2-before.jpg" alt="Before work - living room">
                 <span class="tag">Before</span>
               </a>
-              <a class="shot shot-link" href="./assets/b2-after.jpg" target="_blank">
-                <img src="./assets/b2-after.jpg" alt="">
+              <a class="shot shot-link" href="./assets/b2-after.jpg" target="_blank" rel="noreferrer">
+                <img src="./assets/b2-after.jpg" alt="After work - living room">
                 <span class="tag">After</span>
               </a>
             </div>
@@ -202,28 +293,43 @@
     <section class="section" id="start">
       <div class="wrap">
         <div class="card start">
-          <h2>Contact</h2>
+          <h2>Call or text now</h2>
 
-          <p style="font-weight:600;">
-            Phone: <a href="tel:5407287705">540-728-7705</a>
+          <p class="lead strong" style="margin-bottom:8px;">
+            <a href="tel:5407287705">540-728-7705</a>
           </p>
+
+          <p class="muted" style="margin-bottom:10px;">Most messages answered same day.</p>
 
           <p>Email: <a href="mailto:dadinavan@gmail.com">dadinavan@gmail.com</a></p>
 
           <div class="start-actions">
             <a class="btn primary" href="tel:5407287705">Call / Text</a>
+            <a class="btn" href="sms:5407287705?&body=Hi%20Dad%20in%20a%20Van%20%E2%80%94%20I%E2%80%99d%20like%20a%20quote.%20Address%3A%20%0AJob%3A%20%0APhotos%3A%20(attached)">Text a photo</a>
             <a class="btn" href="mailto:dadinavan@gmail.com">Email</a>
           </div>
 
           <p class="small">
-            Jade — Dad in a Van Painting & Home Repairs. No electrical work.
+            Jade — Dad in a Van Painting &amp; Home Repairs. <strong>No electrical work.</strong>
           </p>
         </div>
       </div>
     </section>
 
   </main>
-<footer style="border-top:1px solid rgba(0,0,0,0.10);padding:18px 16px;text-align:center;color:rgba(11,19,32,0.70);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;">Created by <a href="/" style="color:#0b1320;text-decoration:none;font-weight:800;">Clearframe</a></footer>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div class="footer-left">
+        <img class="footer-icon" src="./assets/dad-in-a-van-logo.jpg?v=3" alt="" />
+        <div>
+          <div class="footer-title">Dad in a Van</div>
+          <div class="footer-sub">Painting • Home Repairs • Cleanouts</div>
+        </div>
+      </div>
+      <div class="footer-sub">Call/Text: <a href="tel:5407287705">540-728-7705</a></div>
+    </div>
+  </footer>
 
 </body>
 </html>
