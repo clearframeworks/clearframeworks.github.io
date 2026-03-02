@@ -819,3 +819,28 @@ p{ margin: 0 0 10px 0; }
 .info-card h2{ margin:0 0 8px; font-size: 18px; }
 .info-card p{ margin:0; color: var(--muted); line-height:1.65; }
 .page-actions{ display:flex; gap:10px; margin-top: 18px; flex-wrap:wrap; }
+
+
+/* Execution page anchors */
+.execution-hero{ padding-bottom: 10px; }
+
+.execution-anchor{
+  background: #0b1320;
+  padding: 56px 0;
+  margin-top: 14px;
+}
+
+.execution-anchor .info-card{
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.14);
+  box-shadow: none;
+}
+
+.execution-anchor .info-card h2{ color: #ffffff; }
+.execution-anchor .info-card p{ color: rgba(255,255,255,0.82); }
+
+.execution-cta{
+  padding-top: 26px;
+  padding-bottom: 34px;
+  border-top: 1px solid var(--border);
+}
