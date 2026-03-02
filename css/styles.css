@@ -154,7 +154,68 @@ h1{
   padding: 18px;
   box-shadow: var(--shadow);
 }
+/* Bottom anchor band (home) */
+.cf-anchor-band{
+  background: #0b1220; /* dark navy */
+  padding: 72px 0;
+  margin-top: 48px;
+}
 
+.cf-anchor-inner{
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.cf-anchor-title{
+  color: #ffffff;
+  margin: 0 0 8px 0;
+}
+
+.cf-anchor-sub{
+  color: rgba(255,255,255,0.70);
+  margin: 0 0 28px 0;
+  max-width: 62ch;
+}
+
+.cf-anchor-cards{
+  display: grid;
+  gap: 14px;
+}
+
+.cf-anchor-card{
+  display: block;
+  padding: 16px 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.04);
+  text-decoration: none;
+  color: inherit;
+
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.cf-anchor-card h3{
+  margin: 0 0 6px 0;
+  color: #ffffff;
+  font-size: 15px;
+}
+
+.cf-anchor-card p{
+  margin: 0;
+  color: rgba(255,255,255,0.72);
+  line-height: 1.55;
+  font-size: 13px;
+}
+
+.cf-anchor-card:hover,
+.cf-anchor-card:focus-visible{
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.06);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.35);
+  outline: none;
+}
 .section{ padding: 18px 0; }
 
 .grid-2{
