@@ -56,12 +56,17 @@
 
 <body>
 
-<header style="position:sticky;top:0;z-index:999;background:rgba(255,255,255,0.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(0,0,0,0.10);">
-  <div style="max-width:1100px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;">
-    <a href="/" style="color:#0b1320;text-decoration:none;font-weight:700;">Clearframe</a>
-    <div style="display:flex;gap:14px;">
-      <a href="/" style="color:#0b1320;text-decoration:none;font-weight:600;">Hub</a>
-    </div>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="/proximity/" class="brand" aria-label="Proximity home">
+      <img src="./assets/proximity-wordmark.png?v=9" alt="Proximity" />
+    </a>
+
+    <nav class="nav" aria-label="Primary">
+      <a href="/proximity/photo/">Photo concept</a>
+      <a href="/proximity/3d/">3D design</a>
+      <a class="pill" href="/proximity/#start">Request</a>
+    </nav>
   </div>
 </header>
 
@@ -77,10 +82,10 @@
     <nav class="nav">
       <a href="#offers">Offers</a>
       <a href="./photo/">Photo Concept</a>
-      <a href="/photo/#examples">Examples</a>
+      <a href="/proximity/photo/#examples">Examples</a>
       <a href="#how">How it works</a>
       <a href="#fit">Good fit</a>
-      <a class="nav-cta" href="#start">Request</a>
+      <a class="nav-cta" href="/proximity/#start">Request</a>
     </nav>
   </div>
 </header>
@@ -121,22 +126,22 @@
           <h2 class="intent-title">What do you need right now?</h2>
 
           <div class="intent-grid">
-            <a class="intent-card" href="/photo/">
+            <a class="intent-card" href="/proximity/photo/">
               <div class="intent-top">I just want to visualize an idea.</div>
               <div class="intent-pop">Fast concept visual from your real photo.</div>
             </a>
 
-            <a class="intent-card" href="/3d/">
+            <a class="intent-card" href="/proximity/3d/">
               <div class="intent-top">I want a clear plan before hiring anyone.</div>
               <div class="intent-pop">Layout decisions first — then quotes.</div>
             </a>
 
-            <a class="intent-card" href="#start">
+            <a class="intent-card" href="/proximity/#start">
               <div class="intent-top">I’ve gotten quotes but I’m unsure.</div>
               <div class="intent-pop">Sanity-check the outcome before you commit.</div>
             </a>
 
-            <a class="intent-card" href="/photo/#examples">
+            <a class="intent-card" href="/proximity/photo/#examples">
               <div class="intent-top">I’m planning a full renovation.</div>
               <div class="intent-pop">See what “finished” can look like.</div>
             </a>
@@ -161,30 +166,7 @@
     </div>
   </section>
 
-  <!-- WHAT / CHANGE -->
-  <section class="section">
-    <div class="wrap grid-2">
-      <div class="card">
-        <h2>What this is</h2>
-        <p>
-          Proximity creates visual landscape concepts from photos of your real property.
-          We show possible finished outcomes before any work is done.
-          This lets you choose with confidence instead of guessing.
-        </p>
-      </div>
-
-      <div class="card">
-        <h2>What we change (and what we don’t)</h2>
-        <ul class="bullets">
-          <li><strong>We change:</strong> plants, beds, ground cover, layout.</li>
-          <li><strong>We don’t change:</strong> buildings, hardscape, grading, camera angle.</li>
-        </ul>
-        <p class="small">Concept visuals keep the real structure fixed.</p>
-      </div>
-    </div>
-  </section>
-
-<!-- HOW -->
+  <!-- HOW -->
   <section class="section" id="how">
     <div class="wrap">
       <div class="section-head">
@@ -219,49 +201,22 @@
       </div>
     </div>
   </section>
-
-  <!-- FIT -->
-  <section class="section" id="fit">
-    <div class="wrap grid-2">
-      <div class="card">
-        <h2>A good fit if you</h2>
-        <ul class="bullets">
-          <li>Are planning landscape changes</li>
-          <li>Want to avoid expensive mistakes</li>
-          <li>Need clarity before hiring</li>
-        </ul>
-      </div>
-
-      <div class="card">
-        <h2>Not a good fit if you</h2>
-        <ul class="bullets">
-          <li>Want installation included</li>
-          <li>Need instant turnaround</li>
-        </ul>
-      </div>
+  <!-- AUTHORITY -->
+  <section class="section section--thin">
+    <div class="wrap authority">
+      <div class="authority-line">Design before build.</div>
+      <div class="authority-sub">Installers are paid to construct. We are paid to think.</div>
     </div>
   </section>
 
-  <!-- FAQ (A1) -->
-  <section class="section" id="faq">
-    <div class="wrap">
-      <div class="card faq">
-        <h2>Frequently Asked Questions</h2>
-
-        <h3>Do you change my house, driveway, or hardscape?</h3>
-        <p>No. Buildings, walkways, walls, and permanent structures stay exactly as-is. We only change landscape elements like plants, beds, mulch/stone, and layout.</p>
-
-        <h3>Is this 3D modeling?</h3>
-        <p>The Photo Render Concept is photo-based visualization. Full 3D modeling is available as a separate offer.</p>
-
-        <h3>Can I use this with my contractor?</h3>
-        <p>Yes. These visuals help you communicate clearly before requesting quotes or starting installation.</p>
-
-        <h3>Do you install the landscape?</h3>
-        <p>No. Proximity provides design visuals only. Installation is handled by contractors you choose locally.</p>
-      </div>
+  <!-- QUOTE -->
+  <section class="section section--thin">
+    <div class="wrap quote">
+      <div class="quote-text">“Simplicity is the ultimate sophistication.”</div>
+      <div class="quote-attrib">— Leonardo da Vinci</div>
     </div>
   </section>
+
 
   <!-- CTA -->
   <section class="section" id="start">
@@ -346,9 +301,9 @@
           <p class="bigline">Installers are paid to construct. <strong>We are paid to think.</strong></p>
           <p class="muted">A design-first approach protects your budget and gives you clarity before construction begins.</p>
           <div class="mini-actions">
-            <a class="link" href="/photo/">Concept visualization</a>
+            <a class="link" href="/proximity/photo/">Concept visualization</a>
             <span class="dot">•</span>
-            <a class="link" href="/3d/">Full 3D design</a>
+            <a class="link" href="/proximity/3d/">Full 3D design</a>
           </div>
         </div>
 
