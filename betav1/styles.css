@@ -795,3 +795,12 @@ a:hover{ color: rgba(240,246,243,1); }
   font-size: 12px;
   font-weight: 750;
 }
+
+
+/* Card content colors (dark site + light cards) */
+.card p{ color: var(--card-muted); }
+.card h2, .card h3{ color: var(--card-text); }
+
+/* Step cards override (previously used global muted, causing unreadable text) */
+.card.step p{ color: var(--card-muted); }
+.card.step .step-num{ color: var(--card-text); }
