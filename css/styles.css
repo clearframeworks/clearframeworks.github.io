@@ -894,3 +894,100 @@ p{ margin: 0 0 10px 0; }
 .info-card h2{ margin:0 0 8px; font-size: 18px; }
 .info-card p{ margin:0; color: var(--muted); line-height:1.65; }
 .page-actions{ display:flex; gap:10px; margin-top: 18px; flex-wrap:wrap; }
+
+
+/* === Hero About Panel (Home) === */
+.hero-about{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.hero-about-mark{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding-top:6px;
+}
+.hero-about-mark img{
+  width:180px;
+  height:auto;
+}
+.hero-about-title{
+  font-size:18px;
+  line-height:1.2;
+  margin:6px 0 0 0;
+}
+.hero-about-text{
+  margin:0;
+  color:var(--muted);
+}
+.hero-about-link{
+  display:inline-block;
+  margin-top:4px;
+  font-weight:600;
+  color:var(--accent);
+  text-decoration:none;
+}
+.hero-about-link:hover{ text-decoration:underline; }
+.hero-about-quote{
+  margin-top:6px;
+  padding-top:10px;
+  border-top:1px solid var(--border);
+  color:rgba(11,19,32,0.65);
+  font-size:12px;
+}
+.hero-about-quote span{
+  opacity:0.9;
+}
+
+/* === Navy Offer Authority Band (Service Pages) === */
+.cf-offer-band{
+  background:#0b1220;
+  padding:84px 0;
+  margin-top:10px;
+}
+.cf-offer-band .wrap{
+  max-width:980px;
+}
+.cf-offer-title{
+  color:#fff;
+  margin:0 0 10px 0;
+}
+.cf-offer-sub{
+  color:rgba(255,255,255,0.72);
+  margin:0 0 26px 0;
+  max-width:68ch;
+}
+.cf-offer-cards{
+  display:grid;
+  gap:14px;
+  margin:0 0 22px 0;
+}
+@media (min-width: 860px){
+  .cf-offer-cards{ grid-template-columns: 1fr 1fr 1fr; }
+}
+.cf-offer-card{
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.14);
+  background:rgba(255,255,255,0.04);
+  padding:16px 18px;
+}
+.cf-offer-card h3{
+  margin:0 0 6px 0;
+  color:#fff;
+  font-size:14px;
+}
+.cf-offer-card p{
+  margin:0;
+  color:rgba(255,255,255,0.72);
+  font-size:13px;
+  line-height:1.55;
+}
+.cf-offer-quote{
+  padding-top:14px;
+  border-top:1px solid rgba(255,255,255,0.14);
+  color:rgba(255,255,255,0.58);
+  font-size:12px;
+}
+.cf-offer-quote span{ opacity:0.9; }
