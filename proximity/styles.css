@@ -1,9 +1,17 @@
 :root{
-  --text: #0b1320;
-  --muted: rgba(11, 19, 32, 0.70);
-  --border: rgba(11, 19, 32, 0.10);
-  --shadow: 0 16px 40px rgba(11, 19, 32, 0.08);
-  --shadow2: 0 10px 24px rgba(11, 19, 32, 0.10);
+  --bg: #0f1a17;
+  --text: rgba(248, 247, 242, 0.96);
+  --muted: rgba(248, 247, 242, 0.82);
+  --muted2: rgba(248, 247, 242, 0.68);
+  --border: rgba(255, 255, 255, 0.10);
+  --shadow: 0 16px 40px rgba(0, 0, 0, 0.34);
+  --shadow2: 0 10px 24px rgba(0, 0, 0, 0.30);
+
+  --card-bg: rgba(255,255,255,0.92);
+  --card-border: rgba(11, 19, 32, 0.14);
+  --card-text: #0b1320;
+  --card-muted: rgba(11, 19, 32, 0.70);
+
   --accent: #1f6b3a;
 }
 
@@ -14,18 +22,18 @@ body{
   margin:0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
   color: var(--text);
-  background: #ffffff;
+  background: var(--bg);
   line-height: 1.5;
 }
 
-body::before{ content:none !important; background:none !important; }
 body::after{
   content:"";
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(900px 420px at 15% 10%, rgba(31,107,58,0.07), transparent 60%),
-    radial-gradient(700px 360px at 70% 0%, rgba(11,79,120,0.06), transparent 60%);
+    radial-gradient(900px 420px at 15% 10%, rgba(31,107,58,0.16), transparent 60%),
+    radial-gradient(700px 360px at 70% 0%, rgba(31,107,58,0.10), transparent 60%),
+    radial-gradient(900px 520px at 60% 95%, rgba(255,255,255,0.04), transparent 60%);
   pointer-events: none;
   z-index: -1;
 }
@@ -41,7 +49,7 @@ body::after{
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(255,255,255,0.82);
+  background: rgba(15,26,23,0.82);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border);
 }
@@ -148,7 +156,7 @@ body::after{
 
 .micro{
   font-size: 12px;
-  color: rgba(11,19,32,0.62);
+  color: var(--muted2);
   padding: 2px 6px;
 }
 
@@ -183,12 +191,13 @@ body::after{
 }
 
 .card-shell{
-  border: 1px solid var(--border);
+  border: 1px solid var(--card-border);
   border-radius: 20px;
-  background: rgba(255,255,255,0.72);
+  background: var(--card-bg);
   box-shadow: var(--shadow);
   padding: 18px;
   overflow:hidden;
+  color: var(--card-text);
 }
 
 .hero-card{
@@ -203,13 +212,13 @@ body::after{
 
 .hero-card-top{ width:100%; }
 
-.hero-card-title{ font-weight: 900; }
+.hero-card-title{ font-weight: 900; color: var(--card-text); font-size: 14px; }
 
 .hero-card-sub{
-  font-size: 14px;
-  color: rgba(11, 19, 32, 0.68);
+  font-size: 13px;
+  color: var(--card-muted);
   margin-top: 2px;
-  max-width: 42ch;
+  max-width: 44ch;
 }
 
 /* Hero card logo (match Clearframe sizing/placement) */
@@ -224,7 +233,7 @@ body::after{
 }
 
 .hero-logo-center img{
-  width: 230px;   /* FINAL: ~30% smaller */
+  width: clamp(220px, 24vw, 280px);
   height: auto;
   display:block;
 }
@@ -283,11 +292,12 @@ body::after{
 }
 
 .card{
-  border: 1px solid var(--border);
+  border: 1px solid var(--card-border);
   border-radius: 20px;
-  background: rgba(255,255,255,0.72);
+  background: var(--card-bg);
   box-shadow: var(--shadow2);
   padding: 14px;
+  color: var(--card-text);
 }
 
 .card p{
@@ -408,7 +418,11 @@ body::after{
 
 /* On small screens, let it breathe a bit but keep it controlled */
 @media (max-width: 560px){
-  .hero-logo-center img{ width: 210px; }
+  .hero-logo-center img{
+  width: clamp(220px, 24vw, 280px);
+  height: auto;
+  display:block;
+}
 }
 
 /* =========================
@@ -550,4 +564,388 @@ body::after{
   color: var(--muted);
   line-height: 1.6;
   font-size: 14px;
+}
+
+
+/* Smart Routing (intent cards) */
+.intent{
+  margin-top: 18px;
+}
+
+.intent-title{
+  margin: 18px 0 10px 0;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: rgba(11,19,32,0.86);
+  font-weight: 900;
+}
+
+.intent-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.intent-card{
+  position: relative;
+  display:block;
+  text-decoration:none;
+  color: inherit;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: rgba(255,255,255,0.72);
+  box-shadow: var(--shadow2);
+  padding: 12px 12px 14px 12px;
+  overflow:hidden;
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+  min-height: 64px;
+}
+
+.intent-card:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  border-color: rgba(11,19,32,0.18);
+}
+
+.intent-top{
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+/* Intent cards — full content visible (no reveal) */
+.intent-card{
+  text-align: center;
+  padding: 16px 16px 18px 16px;
+  min-height: 110px;
+}
+
+.intent-top{
+  font-weight: 950;
+  line-height: 1.25;
+}
+
+.intent-pop{
+  margin-top: 10px;
+  font-size: 13px;
+  color: rgba(248,247,242,0.78);
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+/* Hover = emphasis only */
+.intent-card:hover{
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,0.28);
+}
+
+/* Offers authority mini block */
+.authority-mini{
+  margin-top: 12px;
+  padding: 14px 14px;
+  border: 1px solid rgba(11,19,32,0.10);
+  border-radius: 16px;
+  background: rgba(255,255,255,0.62);
+}
+
+.authority-mini h3{
+  margin: 0 0 6px 0;
+  font-size: 14px;
+  font-weight: 950;
+  letter-spacing: -0.01em;
+}
+
+.authority-mini p{
+  margin: 0 0 8px 0;
+}
+
+.authority-mini p.muted{
+  margin: 0;
+}
+
+
+/* Dark full theme (Proximity) */
+body{
+  background: radial-gradient(900px 600px at 18% -10%, rgba(31,107,58,0.28), rgba(15,26,23,0) 55%),
+              radial-gradient(800px 520px at 92% 0%, rgba(31,107,58,0.18), rgba(15,26,23,0) 60%),
+              #0f1a17;
+  color: rgba(255,255,255,0.92);
+}
+
+.site-header{
+  background: rgba(15,26,23,0.72);
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+}
+
+.site-header a{
+  color: rgba(255,255,255,0.90);
+}
+
+.site-header .pill{
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.06);
+}
+
+.site-header .pill:hover{
+  background: rgba(255,255,255,0.10);
+}
+
+.hero h1{
+  color: rgba(255,255,255,0.96);
+}
+
+.hero .lead,
+.hero .micro,
+.hero .checks{
+  color: rgba(255,255,255,0.74);
+}
+
+.hero .micro{
+  opacity: 1;
+}
+
+.card{
+  color: var(--text);
+}
+
+.section{
+  padding: 22px 0;
+}
+
+.grid-2{
+  gap: 14px;
+}
+
+/* Intent cards tighter */
+.intent{ margin-top: 14px; }
+.intent-grid{ gap: 10px; }
+.intent-card{ padding: 12px 12px 14px 12px; min-height: 70px; background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.12); box-shadow: none; }
+.intent-card:hover{ border-color: rgba(255,255,255,0.22); box-shadow: none; }
+.intent-top{ color: rgba(255,255,255,0.94); }
+.intent-pop{ color: rgba(255,255,255,0.72); }
+
+/* Authority/quote layout */
+.authority-grid{
+  display:grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 14px;
+}
+
+.authority-card .bigline{
+  font-size: 16px;
+  line-height: 1.35;
+}
+
+.quote-card .quote{
+  margin: 0 0 10px 0;
+  font-size: 18px;
+  line-height: 1.35;
+  font-weight: 950;
+  letter-spacing: -0.01em;
+}
+
+.quote-card .quote-by{
+  margin: 0 0 10px 0;
+  color: rgba(11,19,32,0.70);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.mini-actions{
+  margin-top: 10px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap: wrap;
+}
+
+.mini-actions .link{
+  font-weight: 850;
+}
+
+.mini-actions .dot{
+  color: rgba(11,19,32,0.35);
+}
+
+/* Responsive */
+@media (max-width: 860px){
+  .authority-grid{ grid-template-columns: 1fr; }
+}
+
+a{ color: rgba(240,246,243,0.92); }
+a:hover{ color: rgba(240,246,243,1); }
+
+.card .muted{ color: var(--card-muted); }
+
+.section--thin{ padding: 10px 0; }
+
+.brand img{
+  height: 34px;
+  width: auto;
+  display: block;
+}
+
+.authority{
+  text-align:left;
+  padding: 0;
+}
+.authority-line{
+  font-size: 16px;
+  font-weight: 950;
+  letter-spacing: -0.01em;
+}
+.authority-sub{
+  margin-top: 6px;
+  color: rgba(240,246,243,0.72);
+  font-weight: 650;
+}
+
+.quote{
+  text-align:left;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 12px;
+}
+.quote-text{
+  color: rgba(240,246,243,0.78);
+  font-style: italic;
+  font-weight: 650;
+}
+.quote-attrib{
+  margin-top: 6px;
+  color: rgba(240,246,243,0.55);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+
+/* Card content colors (dark site + light cards) */
+.card p{ color: var(--card-muted); }
+.card h2, .card h3{ color: var(--card-text); }
+
+/* Step cards override (previously used global muted, causing unreadable text) */
+.card.step p{ color: var(--card-muted); }
+.card.step .step-num{ color: var(--card-text); }
+
+
+/* Dark background readability */
+h1, h2, h3, h4{ color: var(--text); }
+p, li{ color: var(--muted); }
+.small, .muted{ color: var(--muted); }
+
+/* Authority + quote readability on dark */
+.authority-line{ color: var(--text); }
+.authority-sub{ color: rgba(240, 246, 243, 0.82); }
+.quote-text{ color: rgba(240, 246, 243, 0.86); }
+.quote-attrib{ color: rgba(240, 246, 243, 0.72); }
+
+
+/* Button contrast fixes */
+.btn.primary{
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.28);
+  color: rgba(248,247,242,0.96);
+}
+
+.btn.primary:hover{
+  background: rgba(255,255,255,0.22);
+}
+
+.btn:not(.primary){
+  background: rgba(255,255,255,0.94);
+  border: 1px solid rgba(11,19,32,0.12);
+  color: rgba(11,19,32,0.92);
+}
+
+
+/* Force readable text on dark background */
+body{
+  color: var(--text);
+}
+
+h1, h2, h3, h4{
+  color: var(--text);
+}
+
+p, li{
+  color: var(--muted);
+}
+
+
+/* Dark backdrop text overrides (prevent accidental dark text) */
+.hero .checks li{ color: var(--muted); }
+.hero .checks{ color: var(--muted); }
+.intent-title, .intent .intent-title{ color: var(--text); }
+.intent .intent-top{ color: var(--text); }
+.intent .intent-pop{ color: var(--muted); }
+
+.site-footer, .site-footer *{ color: rgba(248, 247, 242, 0.78); }
+.site-footer a{ color: rgba(248, 247, 242, 0.86); text-decoration: none; }
+.site-footer a:hover{ color: rgba(248, 247, 242, 0.96); }
+
+
+/* Fallback footer/link contrast */
+footer, footer *{ color: rgba(248, 247, 242, 0.78); }
+footer a{ color: rgba(248, 247, 242, 0.86); }
+
+
+/* Fix hero checklist contrast */
+.hero .checks li{
+  color: var(--muted);
+}
+
+.hero .checks li::before{
+  color: rgba(248,247,242,0.92) !important;
+}
+/* =========================
+   FINAL OVERRIDES (Intent + Checks)
+   Paste at END of file
+   ========================= */
+
+/* 1) Hero checklist: force readable text + checkmarks */
+.checks li{
+  color: var(--muted) !important;
+}
+
+.checks li::before{
+  color: rgba(248,247,242,0.92) !important;
+  background: rgba(255,255,255,0.08) !important; /* subtle, readable on dark */
+  border: 1px solid rgba(255,255,255,0.12) !important;
+}
+
+/* 2) Intent cards: full text visible by default, hover = emphasis only */
+.intent-card{
+  text-align: center !important;
+  padding: 16px 16px 18px 16px !important;
+  min-height: 110px !important;
+  background: rgba(255,255,255,0.10) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  box-shadow: none !important;
+}
+
+.intent-top{
+  color: rgba(248,247,242,0.94) !important;
+  font-weight: 950 !important;
+  line-height: 1.25 !important;
+}
+
+.intent-pop{
+  display: block !important;
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+  margin-top: 10px !important;
+  font-size: 13px !important;
+  color: rgba(248,247,242,0.78) !important;
+}
+
+/* Hover = polish only */
+.intent-card:hover{
+  transform: translateY(-2px) !important;
+  border-color: rgba(255,255,255,0.26) !important;
+}
+/* Ensure call button readable inside light cards */
+.card a.btn{
+  color: rgba(11,19,32,0.92);
 }
