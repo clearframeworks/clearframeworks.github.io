@@ -637,3 +637,112 @@ body::after{
 .authority-mini p.muted{
   margin: 0;
 }
+
+
+/* Dark full theme (Proximity) */
+body{
+  background: radial-gradient(900px 600px at 18% -10%, rgba(31,107,58,0.28), rgba(15,26,23,0) 55%),
+              radial-gradient(800px 520px at 92% 0%, rgba(31,107,58,0.18), rgba(15,26,23,0) 60%),
+              #0f1a17;
+  color: rgba(255,255,255,0.92);
+}
+
+.site-header{
+  background: rgba(15,26,23,0.72);
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+}
+
+.site-header a{
+  color: rgba(255,255,255,0.90);
+}
+
+.site-header .pill{
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.06);
+}
+
+.site-header .pill:hover{
+  background: rgba(255,255,255,0.10);
+}
+
+.hero h1{
+  color: rgba(255,255,255,0.96);
+}
+
+.hero .lead,
+.hero .micro,
+.hero .checks{
+  color: rgba(255,255,255,0.74);
+}
+
+.hero .micro{
+  opacity: 1;
+}
+
+.card{
+  color: var(--text);
+}
+
+.section{
+  padding: 22px 0;
+}
+
+.grid-2{
+  gap: 14px;
+}
+
+/* Intent cards tighter */
+.intent{ margin-top: 14px; }
+.intent-grid{ gap: 10px; }
+.intent-card{ padding: 12px 12px 14px 12px; min-height: 70px; background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.12); box-shadow: none; }
+.intent-card:hover{ border-color: rgba(255,255,255,0.22); box-shadow: none; }
+.intent-top{ color: rgba(255,255,255,0.94); }
+.intent-pop{ color: rgba(255,255,255,0.72); }
+
+/* Authority/quote layout */
+.authority-grid{
+  display:grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 14px;
+}
+
+.authority-card .bigline{
+  font-size: 16px;
+  line-height: 1.35;
+}
+
+.quote-card .quote{
+  margin: 0 0 10px 0;
+  font-size: 18px;
+  line-height: 1.35;
+  font-weight: 950;
+  letter-spacing: -0.01em;
+}
+
+.quote-card .quote-by{
+  margin: 0 0 10px 0;
+  color: rgba(11,19,32,0.70);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.mini-actions{
+  margin-top: 10px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap: wrap;
+}
+
+.mini-actions .link{
+  font-weight: 850;
+}
+
+.mini-actions .dot{
+  color: rgba(11,19,32,0.35);
+}
+
+/* Responsive */
+@media (max-width: 860px){
+  .authority-grid{ grid-template-columns: 1fr; }
+}
