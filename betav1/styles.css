@@ -804,3 +804,15 @@ a:hover{ color: rgba(240,246,243,1); }
 /* Step cards override (previously used global muted, causing unreadable text) */
 .card.step p{ color: var(--card-muted); }
 .card.step .step-num{ color: var(--card-text); }
+
+
+/* Dark background readability */
+h1, h2, h3, h4{ color: var(--text); }
+p, li{ color: var(--muted); }
+.small, .muted{ color: var(--muted); }
+
+/* Authority + quote readability on dark */
+.authority-line{ color: var(--text); }
+.authority-sub{ color: rgba(240, 246, 243, 0.82); }
+.quote-text{ color: rgba(240, 246, 243, 0.86); }
+.quote-attrib{ color: rgba(240, 246, 243, 0.72); }
