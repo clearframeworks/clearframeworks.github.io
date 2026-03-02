@@ -1,7 +1,8 @@
 :root{
   --bg: #0f1a17;
-  --text: rgba(240, 246, 243, 0.94);
-  --muted: rgba(240, 246, 243, 0.70);
+  --text: rgba(248, 247, 242, 0.96);
+  --muted: rgba(248, 247, 242, 0.82);
+  --muted2: rgba(248, 247, 242, 0.68);
   --border: rgba(255, 255, 255, 0.10);
   --shadow: 0 16px 40px rgba(0, 0, 0, 0.34);
   --shadow2: 0 10px 24px rgba(0, 0, 0, 0.30);
@@ -155,7 +156,7 @@ body::after{
 
 .micro{
   font-size: 12px;
-  color: rgba(11,19,32,0.62);
+  color: var(--muted2);
   padding: 2px 6px;
 }
 
@@ -190,12 +191,13 @@ body::after{
 }
 
 .card-shell{
-  border: 1px solid var(--border);
+  border: 1px solid var(--card-border);
   border-radius: 20px;
-  background: rgba(255,255,255,0.72);
+  background: var(--card-bg);
   box-shadow: var(--shadow);
   padding: 18px;
   overflow:hidden;
+  color: var(--card-text);
 }
 
 .hero-card{
@@ -210,13 +212,13 @@ body::after{
 
 .hero-card-top{ width:100%; }
 
-.hero-card-title{ font-weight: 900; }
+.hero-card-title{ font-weight: 900; color: var(--card-text); font-size: 14px; }
 
 .hero-card-sub{
-  font-size: 14px;
-  color: rgba(11, 19, 32, 0.68);
+  font-size: 13px;
+  color: var(--card-muted);
   margin-top: 2px;
-  max-width: 42ch;
+  max-width: 44ch;
 }
 
 /* Hero card logo (match Clearframe sizing/placement) */
@@ -231,7 +233,7 @@ body::after{
 }
 
 .hero-logo-center img{
-  width: 230px;   /* FINAL: ~30% smaller */
+  width: clamp(220px, 24vw, 280px);
   height: auto;
   display:block;
 }
@@ -416,7 +418,11 @@ body::after{
 
 /* On small screens, let it breathe a bit but keep it controlled */
 @media (max-width: 560px){
-  .hero-logo-center img{ width: 210px; }
+  .hero-logo-center img{
+  width: clamp(220px, 24vw, 280px);
+  height: auto;
+  display:block;
+}
 }
 
 /* =========================
@@ -762,7 +768,11 @@ a:hover{ color: rgba(240,246,243,1); }
 
 .section--thin{ padding: 10px 0; }
 
-.brand img{ height: 22px; width:auto; display:block; }
+.brand img{
+  height: 34px;
+  width: auto;
+  display: block;
+}
 
 .authority{
   text-align:left;
@@ -816,3 +826,62 @@ p, li{ color: var(--muted); }
 .authority-sub{ color: rgba(240, 246, 243, 0.82); }
 .quote-text{ color: rgba(240, 246, 243, 0.86); }
 .quote-attrib{ color: rgba(240, 246, 243, 0.72); }
+
+
+/* Button contrast fixes */
+.btn.primary{
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.28);
+  color: rgba(248,247,242,0.96);
+}
+
+.btn.primary:hover{
+  background: rgba(255,255,255,0.22);
+}
+
+.btn:not(.primary){
+  background: rgba(255,255,255,0.94);
+  border: 1px solid rgba(11,19,32,0.12);
+  color: rgba(11,19,32,0.92);
+}
+
+
+/* Force readable text on dark background */
+body{
+  color: var(--text);
+}
+
+h1, h2, h3, h4{
+  color: var(--text);
+}
+
+p, li{
+  color: var(--muted);
+}
+
+
+/* Dark backdrop text overrides (prevent accidental dark text) */
+.hero .checks li{ color: var(--muted); }
+.hero .checks{ color: var(--muted); }
+.intent-title, .intent .intent-title{ color: var(--text); }
+.intent .intent-top{ color: var(--text); }
+.intent .intent-pop{ color: var(--muted); }
+
+.site-footer, .site-footer *{ color: rgba(248, 247, 242, 0.78); }
+.site-footer a{ color: rgba(248, 247, 242, 0.86); text-decoration: none; }
+.site-footer a:hover{ color: rgba(248, 247, 242, 0.96); }
+
+
+/* Fallback footer/link contrast */
+footer, footer *{ color: rgba(248, 247, 242, 0.78); }
+footer a{ color: rgba(248, 247, 242, 0.86); }
+
+
+/* Fix hero checklist contrast */
+.hero .checks li{
+  color: var(--muted);
+}
+
+.hero .checks li::before{
+  color: rgba(248,247,242,0.92) !important;
+}
