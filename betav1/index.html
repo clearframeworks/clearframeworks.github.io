@@ -213,7 +213,7 @@
              href="mailto:michaelpaynotta@clearframeworks.org?subject=Proximity%20Landscape%20Design%20Request">
             Email a request
           </a>
-          <button class="btn" type="button" id="copyEmailBtn2">Copy email</button>
+         <a class="btn" href="tel:5409857517">Call 540-985-7517</a>
         </div>
 
         <p class="small">Proximity is design only. No material sales. No installation.</p>
@@ -257,15 +257,6 @@
       }
     });
 
-    if (b2) b2.addEventListener("click", async () => {
-      const ok = await copyEmail();
-      if (ok) {
-        b2.textContent = "Copied";
-        setTimeout(() => b2.textContent = "Copy email", 1200);
-      } else {
-        window.location.href = "mailto:" + email + "?subject=Proximity%20Landscape%20Design%20Request";
-      }
-    });
   })();
 </script>
 
