@@ -6,7 +6,7 @@
 
   <!-- Primary SEO -->
   <title>Photo Render Concept | Proximity Landscape Design</title>
-  <meta name="description" content="A  photo-based landscape concept render built directly on your real property image. Same camera angle, same structures—new landscape concept. One revision included. Design only. No installation." />
+  <meta name="description" content="A photo-based landscape concept render built directly on your real property image. Same camera angle, same structures—new landscape concept. One revision included. Design only. No installation." />
   <link rel="canonical" href="https://clearframeworks.org/proximity/photo/" />
   <meta name="robots" content="index,follow,max-image-preview:large" />
 
@@ -33,7 +33,8 @@
     "@context": "https://schema.org",
     "@type": "Offer",
     "name": "Photo Render Concept",
-    "url": "https://clearframeworks.org/proximity/photo/",    "availability": "https://schema.org/InStock",
+    "url": "https://clearframeworks.org/proximity/photo/",
+    "availability": "https://schema.org/InStock",
     "category": "Landscape design visualization",
     "description": "One photo-based landscape concept render built directly on the client's real property photo. Same camera angle and structures; landscape elements changed only. One revision included.",
     "seller": {
@@ -47,12 +48,11 @@
 
   <link rel="stylesheet" href="../styles.css?v=9" />
   <style>
-    /* Page-local safeguard: ensure light cards never inherit the global white text rules */
+    /* Ensure light cards never inherit global white-text rules */
     .card, .card * { color: var(--card-text); }
     .card p, .card li, .card .muted, .card .small { color: var(--card-muted) !important; }
     .card h2, .card h3, .card h4 { color: var(--card-text) !important; }
   </style>
-
 </head>
 
 <body>
@@ -88,39 +88,44 @@
         </p>
 
         <div class="hero-actions">
-          
-        <a class="btn primary" href="mailto:michaelpaynotta@clearframeworks.org?subject=Proximity%20Photo%20Render%20Concept">Email to start</a>
-        <a class="btn" href="tel:5409857517">Call 540-985-7517</a>
-        <a class="btn" href="/proximity/">Back to Proximity</a>
-        <span class="micro">Design only. No installation. No pressure.</span>
-    
+          <a class="btn primary" href="mailto:michaelpaynotta@clearframeworks.org?subject=Proximity%20Photo%20Render%20Concept">Email to start</a>
+          <a class="btn" href="tel:5409857517">Call 540-985-7517</a>
+          <a class="btn" href="/proximity/">Back to Proximity</a>
+          <span class="micro">Design only. No installation. No pressure.</span>
         </div>
 
         <ul class="checks">
           <li>One photo. Same angle. Same structures.</li>
-          <li>Landscape-only edits (plants, beds, ground cover).</li>
+          <li>Landscape-only edits (plants, beds, ground cover, layout).</li>
           <li>Fast concept clarity before you pay contractors.</li>
         </ul>
       </div>
-<aside class="hero-card card-shell" aria-label="Photo render example">
-  <div class="pair">
-    <div class="shot">
-      <img src="../assets/photobefore.webp"
-           alt="Before landscape example"
-           loading="lazy"
-           decoding="async" />
-      <span class="tag">Before</span>
-    </div>
 
-    <div class="shot">
-      <img src="../assets/photoafter.png"
-           alt="After landscape concept render"
-           loading="lazy"
-           decoding="async" />
-      <span class="tag">After</span>
-    </div>
-  </div>
-</aside>
+      <aside class="hero-card card-shell" aria-label="Photo render example">
+        <div class="pair">
+          <div class="shot">
+            <img
+              class="swap-src"
+              src="../assets/photobefore.webp"
+              data-fallback="../assets/proxbefore.png"
+              alt="Before landscape example"
+              loading="lazy"
+              decoding="async" />
+            <span class="tag">Before</span>
+          </div>
+
+          <div class="shot">
+            <img
+              class="swap-src"
+              src="../assets/photoafter.png"
+              data-fallback="../assets/proxafter.png"
+              alt="After landscape concept render"
+              loading="lazy"
+              decoding="async" />
+            <span class="tag">After</span>
+          </div>
+        </div>
+      </aside>
     </div>
   </section>
 
@@ -158,19 +163,22 @@
       </div>
 
       <div class="examples-grid">
+
+        <!-- Example 1 (new names, fallback to prox*) -->
         <div class="card example-card">
           <div class="pair">
             <a class="shot shot-link" href="../assets/photobefore.webp" target="_blank" rel="noopener">
-              <img src="../assets/photobefore.webp" alt="Before example 1" loading="lazy" decoding="async" />
+              <img class="swap-src" src="../assets/photobefore.webp" data-fallback="../assets/proxbefore.png" alt="Before example 1" loading="lazy" decoding="async" />
               <span class="tag">Before</span>
             </a>
             <a class="shot shot-link" href="../assets/photoafter.png" target="_blank" rel="noopener">
-              <img src="../assets/photoafter.png" alt="After example 1" loading="lazy" decoding="async" />
+              <img class="swap-src" src="../assets/photoafter.png" data-fallback="../assets/proxafter.png" alt="After example 1" loading="lazy" decoding="async" />
               <span class="tag">After</span>
             </a>
           </div>
         </div>
 
+        <!-- Example 2 (your existing pair) -->
         <div class="card example-card">
           <div class="pair">
             <a class="shot shot-link" href="../assets/example-02-before.png" target="_blank" rel="noopener">
@@ -183,10 +191,8 @@
             </a>
           </div>
         </div>
-      </div>
 
-      <p class="caption">Structures and camera perspective remain fixed. Landscape elements change only.</p>
-    
+        <!-- Example 3 (prox pair) -->
         <div class="card example-card">
           <div class="pair">
             <a class="shot shot-link" href="../assets/proxbefore.png" target="_blank" rel="noopener">
@@ -199,7 +205,11 @@
             </a>
           </div>
         </div>
-</div>
+
+      </div>
+
+      <p class="caption">Structures and camera perspective remain fixed. Landscape elements change only.</p>
+    </div>
   </section>
 
   <section class="section" id="start">
@@ -213,6 +223,7 @@
              href="mailto:michaelpaynotta@clearframeworks.org?subject=Proximity%20Photo%20Render%20Concept&body=Attach%20your%20photo%20and%20tell%20me%20what%20you%20want%20changed.%0A%0A(1)%20What%20to%20remove:%0A(2)%20What%20style%20you%20want:%0A(3)%20Any%20must-keep%20elements:">
             Email to start
           </a>
+          <a class="btn" href="tel:5409857517">Call 540-985-7517</a>
           <a class="btn" href="../">Back</a>
         </div>
 
@@ -234,6 +245,20 @@
     </div>
   </div>
 </footer>
+
+<script>
+  // If any of the "new name" images 404 (or case mismatches on GitHub Pages),
+  // fall back to the prox* versions automatically.
+  (function () {
+    const imgs = document.querySelectorAll("img.swap-src[data-fallback]");
+    imgs.forEach(img => {
+      img.addEventListener("error", () => {
+        const fb = img.getAttribute("data-fallback");
+        if (fb && img.src.indexOf(fb) === -1) img.src = fb;
+      }, { once: true });
+    });
+  })();
+</script>
 
 </body>
 </html>
