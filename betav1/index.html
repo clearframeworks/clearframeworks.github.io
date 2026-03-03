@@ -1,266 +1,260 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <script defer src="https://cloud.umami.is/script.js"
-        data-website-id="bf308f80-b85b-4bda-9c06-0210d4922859"></script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Primary SEO -->
-  <title>Proximity Landscape Design | Remote Landscape Concept Visuals</title>
-  <meta name="description" content="Proximity creates realistic landscape concept visuals from your real property photos—same angle, same structures—so you can see the outcome before contractors, quotes, or installation. Design only. No installation." />
-  <link rel="canonical" href="https://clearframeworks.org/proximity/" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <!-- Primary SEO (beta page) -->
+  <title>Clarity | Constraint-aware decision support</title>
+  <meta name="description" content="Clarity helps people make decisions under pressure by mapping constraints, reducing distortion, and choosing the safest next step." />
+  <link rel="canonical" href="https://clearframeworks.org/betav1/clarity/" />
+  <meta name="robots" content="noindex,nofollow" />
 
-  <!-- Open Graph (Facebook link preview) -->
-  <meta property="og:title" content="Proximity Landscape Design" />
-  <meta property="og:description" content="Realistic landscape concept visuals from your real property photo—see the outcome before you spend." />
+  <!-- Open Graph -->
+  <meta property="og:title" content="Clarity — Decision support under pressure" />
+  <meta property="og:description" content="Constraint-aware decision support focused on stability, reversibility, and next steps." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://clearframeworks.org/proximity/" />
+  <meta property="og:url" content="https://clearframeworks.org/betav1/clarity/" />
+  <meta property="og:image" content="https://clearframeworks.org/clarity/assets/og-clarity.png" />
 
-  <!-- Keep this path stable; change the filename (not query params) when you truly need to refresh caches -->
-  <meta property="og:image" content="https://clearframeworks.org/proximity/assets/og-proximity.png" />
-  <meta property="og:image:secure_url" content="https://clearframeworks.org/proximity/assets/og-proximity.png" />
-  <meta property="og:image:type" content="image/png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-
-  <!-- Twitter/X -->
+  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Proximity Landscape Design" />
-  <meta name="twitter:description" content="See the finished landscape result before you spend. Same photo angle. Same structures. New landscape concept." />
-  <meta name="twitter:image" content="https://clearframeworks.org/proximity/assets/og-proximity.png" />
+  <meta name="twitter:title" content="Clarity — Decision support under pressure" />
+  <meta name="twitter:description" content="Constraint-aware decision support focused on stability, reversibility, and next steps." />
+  <meta name="twitter:image" content="https://clearframeworks.org/clarity/assets/og-clarity.png" />
 
-  <!-- Schema -->
+  <!-- Structured Data -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "name": "Proximity Landscape Design",
-    "url": "https://clearframeworks.org/proximity/",
-    "description": "Remote, photo-based landscape concept visuals using the client's real property image. Same camera angle and structures; landscape elements changed only. Design only—no installation.",
+    "@type": "Service",
+    "name": "Clarity",
+    "url": "https://clearframeworks.org/clarity/",
+    "serviceType": "Decision support",
     "areaServed": "US",
-    "email": "michaelpaynotta@clearframeworks.org",
-    "brand": { "@type": "Brand", "name": "Proximity Landscape Design" },
-    "offers": {
-      "@type": "Offer",
-      "category": "Landscape design visualization",
-      "availability": "https://schema.org/InStock"
-    }
+    "provider": {
+      "@type": "Organization",
+      "name": "Clarity"
+    },
+    "description": "Constraint-aware decision support focused on stability, reversibility, downside control, and next steps under pressure."
   }
   </script>
 
-  <!-- bump this when you change assets -->
-  <link rel="stylesheet" href="./styles.css?v=9" />
+  <link rel="stylesheet" href="../styles.css?v=10" />
+
+  <!-- Page-level safety overrides (prevents white-on-white if global CSS drifts) -->
+  <style>
+    /* Keep cards readable even if global theme changes. */
+    .page .card,
+    .page .card * { color: #101214; }
+    .page .card .muted,
+    .page .card .small { color: rgba(16,18,20,.72); }
+
+    /* Clarity-specific hero spacing */
+    .hero .lead { max-width: 60ch; }
+    .intent-grid { display:grid; gap:18px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    @media (max-width: 980px){ .intent-grid { grid-template-columns: 1fr; } }
+
+    .intent-card { position:relative; }
+    .intent-card .tag { position:absolute; top:14px; right:14px; }
+    .intent-card h3 { margin-top: 8px; margin-bottom: 8px; }
+    .intent-card p { margin: 0; }
+
+    /* Hero card hierarchy */
+    .hero-card-title { font-weight: 700; }
+    .hero-card-quote { margin-top: 10px; font-size: 14px; line-height: 1.35; }
+    .hero-card-quote .attribution { display:block; margin-top: 8px; opacity:.72; font-size: 12px; }
+    .hero-logo-center { padding: 18px 14px 22px; display:flex; align-items:center; justify-content:center; }
+    .hero-logo-center img { max-width: 420px; width: 100%; height: auto; display:block; }
+  </style>
 </head>
 
 <body>
 
-
-
 <header class="site-header">
   <div class="wrap header-inner">
-    <a class="brand" href="/proximity/" aria-label="Proximity home">
+    <a class="brand" href="/clarity/" aria-label="Go to Clarity home">
       <img class="brand-mark"
-           src="./assets/proximity-wordmark.png?v=9"
-           alt="Proximity Landscape Design wordmark"
+           src="../../clarity/assets/clarity-wordmark.png"
+           alt="Clarity wordmark"
            decoding="async" />
     </a>
 
-    <nav class="nav" aria-label="Primary">
-      <a href="/proximity/photo/">Photo concept</a>
-      <a href="/proximity/3d/">3D design</a>
-      <a class="pill" href="/proximity/#start">Request</a>
+    <nav class="nav">
+      <a href="#what">What this is</a>
+      <a href="#how">How it works</a>
+      <a href="#offers">What we do</a>
+      <a class="nav-cta" href="#start">Start</a>
     </nav>
   </div>
 </header>
 
 <main class="page">
-  <!-- HERO -->
+
   <section class="hero">
     <div class="wrap hero-inner">
       <div class="hero-copy">
-        <h1>See the finished result before you spend thousands.</h1>
+        <h1>Decision support for real constraints.</h1>
 
         <p class="lead">
-          Landscape decisions are expensive.
-          Clarity should come first — so you can decide if you like the outcome <strong>before</strong> contractors, quotes, or installation.
+          Clarity helps you understand what’s actually binding you, why your mind is behaving the way it does under pressure,
+          and what moves make sense <strong>without pretending constraints don’t exist</strong>.
         </p>
 
         <div class="hero-actions">
           <a class="btn primary"
-             href="mailto:michaelpaynotta@clearframeworks.org?subject=Proximity%20Landscape%20Design%20Request">
+             href="mailto:michaelpaynotta@clearframeworks.org?subject=Clarity%20Request">
             Email a request
           </a>
 
-          <a class="btn" href="tel:5409857517">Call 540-985-7517</a>
-
-          <span class="micro" id="copyHint" aria-live="polite">Design only. No installation. No pressure.</span>
+          <a class="btn" href="tel:+15409857517">Call 540-985-7517</a>
         </div>
 
         <ul class="checks">
-          <li>Same photo angle. Same structures. New landscape concept.</li>
-          <li>Realistic spacing and scale.</li>
-          <li>Built for planning — not hype.</li>
+          <li>Stability first: reduce downside and prevent avoidable damage</li>
+          <li>Reversible moves over “perfect” plans</li>
+          <li>Plain language: no therapy-speak, no hype</li>
         </ul>
-
-        <!-- SMART ROUTING -->
-        <div class="intent">
-          <h2 class="intent-title">What do you need right now?</h2>
-
-          <div class="intent-grid">
-            <a class="intent-card" href="/proximity/photo/">
-              <div class="intent-top">I just want to visualize an idea.</div>
-              <div class="intent-pop">Fast concept visual from your real photo.</div>
-            </a>
-
-            <a class="intent-card" href="/proximity/3d/">
-              <div class="intent-top">I want a clear plan before hiring anyone.</div>
-              <div class="intent-pop">Layout decisions first — then quotes.</div>
-            </a>
-
-            <a class="intent-card" href="/proximity/#start">
-              <div class="intent-top">I’ve gotten quotes but I’m unsure.</div>
-              <div class="intent-pop">Sanity-check the outcome before you commit.</div>
-            </a>
-
-            <a class="intent-card" href="/proximity/photo/#examples">
-              <div class="intent-top">I’m planning a full renovation.</div>
-              <div class="intent-pop">See what “finished” can look like.</div>
-            </a>
-          </div>
-        </div>
-
       </div>
 
       <aside class="hero-card card-shell" aria-label="Outcome clarity first">
         <div class="hero-card-top">
-          <div>
-            <div class="hero-card-title">Outcome clarity first</div>
-            <div class="hero-card-sub">Know what you’re paying for before the project grows.</div>
+          <div class="hero-card-title">Outcome clarity first</div>
+          <div class="hero-card-quote">
+            “Simplicity is the ultimate sophistication.”
+            <span class="attribution">— Leonardo da Vinci</span>
           </div>
         </div>
 
-        <!-- Hero card logo (match Clearframe sizing/placement) -->
         <div class="hero-logo-center" aria-hidden="true">
-          <img src="./assets/proximity-wordmark.png?v=9" alt="" decoding="async" />
+          <img src="../../clarity/assets/clarity-wordmark-alt.png" alt="" decoding="async" />
         </div>
       </aside>
     </div>
   </section>
 
-  <!-- HOW -->
-  <section class="section" id="how">
+  <section class="section" id="what">
     <div class="wrap">
-      <div class="section-head">
+      <h2>What this is</h2>
+      <p class="muted">
+        This is not motivation. It’s not “life coaching.” It’s structured thinking when the situation is noisy and time matters.
+        We map constraints, surface options, and choose the safest next step.
+      </p>
+
+      <div class="intent-grid" style="margin-top:16px;">
+        <div class="card intent-card">
+          <span class="tag">Money</span>
+          <h3>Money & stability</h3>
+          <p class="muted">Bills, income volatility, debt, savings, and what to do next without making it worse.</p>
+        </div>
+
+        <div class="card intent-card">
+          <span class="tag">Work</span>
+          <h3>Work & time pressure</h3>
+          <p class="muted">Forks in the road, opportunity cost, overload, and how to build leverage without burning out.</p>
+        </div>
+
+        <div class="card intent-card">
+          <span class="tag">Personal</span>
+          <h3>Life decisions</h3>
+          <p class="muted">Relationships, boundaries, moves, and decisions that are hard because the tradeoffs are real.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="how">
+    <div class="wrap grid-2">
+
+      <div class="card">
         <h2>How it works</h2>
-        <p class="muted">Simple. Linear. Low-friction.</p>
+        <ol class="steps">
+          <li><strong>You send context</strong> (what’s happening + what’s at stake)</li>
+          <li><strong>We map constraints</strong> (money, time, obligations, risk, energy)</li>
+          <li><strong>You get a plan</strong> focused on stability, reversibility, and next moves</li>
+        </ol>
+        <p class="muted">If you’re not sure what to include, send what you have — we’ll ask targeted questions.</p>
       </div>
 
-      <div class="steps">
-        <div class="card step">
-          <div class="step-num">1</div>
-          <div>
-            <h3>Send photos</h3>
-            <p>Clear photos of your property or problem areas.</p>
-          </div>
-        </div>
-
-        <div class="card step">
-          <div class="step-num">2</div>
-          <div>
-            <h3>We design visually</h3>
-            <p>Existing landscape is removed digitally and redesigned.</p>
-          </div>
-        </div>
-
-        <div class="card step">
-          <div class="step-num">3</div>
-          <div>
-            <h3>You decide</h3>
-            <p>Use the visuals to plan, quote, or DIY.</p>
-          </div>
-        </div>
+      <div class="card">
+        <h2>What you can expect</h2>
+        <ul class="bullets">
+          <li>Clear description of what’s driving the problem</li>
+          <li>Options that acknowledge real constraints</li>
+          <li>A short stabilization plan you can execute immediately</li>
+          <li>Follow-up direction if the situation changes</li>
+        </ul>
       </div>
-    </div>
-  </section>
-  <!-- AUTHORITY -->
-  <section class="section section--thin">
-    <div class="wrap authority">
-      <div class="authority-line">Design before build.</div>
-      <div class="authority-sub">Installers are paid to construct. We are paid to think.</div>
+
     </div>
   </section>
 
-  <!-- QUOTE -->
-  <section class="section section--thin">
-    <div class="wrap quote">
-      <div class="quote-text">“Simplicity is the ultimate sophistication.”</div>
-      <div class="quote-attrib">— Leonardo da Vinci</div>
+  <section class="section" id="offers">
+    <div class="wrap grid-2">
+
+      <div class="card">
+        <h2>What we do</h2>
+        <p class="muted">
+          We work in two modes depending on how stable your situation is and how fast you need clarity.
+        </p>
+        <ul class="bullets">
+          <li><strong>Ongoing support</strong> for active situations that evolve week to week</li>
+          <li><strong>One-time deep dive</strong> for a specific decision or fork</li>
+        </ul>
+        <p class="small">Details are handled directly by email so we don’t trap you in a one-size-fits-all package.</p>
+      </div>
+
+      <div class="card">
+        <h2>Integrity</h2>
+        <p class="muted">
+          Clarity doesn’t charge people in immediate survival crisis.
+          If you’re facing eviction, domestic violence, or a medical emergency, the right move is local assistance first.
+        </p>
+        <ul class="bullets">
+          <li>Emergency services: call 911 if you’re in immediate danger</li>
+          <li>If you’re in the U.S., dialing 211 can connect you to local resources</li>
+          <li>Once you’re stable, we can help you think cleanly again</li>
+        </ul>
+      </div>
+
     </div>
   </section>
 
-
-  <!-- CTA -->
   <section class="section" id="start">
     <div class="wrap">
       <div class="card start">
-        <h2>Start with clarity</h2>
-        <p class="muted">Send photos and a short note about what you want to change.</p>
+        <h2>Start</h2>
+        <p class="muted">
+          Email what’s going on and what decision you’re trying to make.
+          If you have numbers (income, bills, deadlines), include them — we’ll build around reality.
+        </p>
 
         <div class="start-actions">
           <a class="btn primary"
-             href="mailto:michaelpaynotta@clearframeworks.org?subject=Proximity%20Landscape%20Design%20Request">
-            Email a request
+             href="mailto:michaelpaynotta@clearframeworks.org?subject=Clarity%20Request">
+            Email request
           </a>
-         <a class="btn" href="tel:5409857517">Call 540-985-7517</a>
+
+          <a class="btn" href="tel:+15409857517">Call 540-985-7517</a>
         </div>
 
-        <p class="small">Proximity is design only. No material sales. No installation.</p>
+        <p class="small">You’re not behind. You’re navigating constraints.</p>
       </div>
     </div>
   </section>
+
 </main>
 
 <footer class="footer">
   <div class="wrap footer-inner">
     <div class="footer-left">
-      <img src="./assets/proximity-icon.png?v=9" class="footer-icon" alt="" decoding="async" />
+      <img src="../../clarity/assets/clarity-icon-1024.png" class="footer-icon" alt="" decoding="async" />
       <div>
-        <div class="footer-title">Proximity Landscape Design</div>
-        <div class="footer-sub">Outcome clarity before installation.</div>
+        <div class="footer-title">Clarity</div>
+        <div class="footer-sub">Decision support under pressure.</div>
       </div>
     </div>
   </div>
-</footer>
-
-<script>
-  (function () {
-    const email = "michaelpaynotta@clearframeworks.org";
-
-    async function copyEmail() {
-      try { await navigator.clipboard.writeText(email); return true; }
-      catch (e) { return false; }
-    }
-
-    const b1 = document.getElementById("copyEmailBtn");
-    const hint = document.getElementById("copyHint");
-
-    if (b1) b1.addEventListener("click", async () => {
-      const ok = await copyEmail();
-      if (ok && hint) {
-        hint.textContent = "Copied to clipboard.";
-        setTimeout(() => hint.textContent = "Design only. No installation. No pressure.", 1400);
-      } else {
-        window.location.href = "mailto:" + email + "?subject=Proximity%20Landscape%20Design%20Request";
-      }
-    });
-
-  })();
-</script>
-
-<footer style="border-top:1px solid rgba(0,0,0,0.10);padding:18px 16px;text-align:center;color:rgba(11,19,32,0.70);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;">
-  Created by <a href="/" style="color:#0b1320;text-decoration:none;font-weight:800;">Clearframe</a>
 </footer>
 
 </body>
