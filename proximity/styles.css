@@ -49,8 +49,8 @@ body::after{
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(15,26,23,0.82);
-  backdrop-filter: blur(10px);
+  background: rgba(15,26,23,0.88);
+  backdrop-filter: blur(4px);
   border-bottom: 1px solid var(--border);
 }
 
@@ -59,11 +59,11 @@ body::after{
   align-items:center;
   justify-content:space-between;
   gap:16px;
-  padding: 18px 0; /* Clearframe match */
+  padding: 12px 0; /* Clearframe match */
 }
 
 .brand-mark{
-  height: 56px;      /* Clearframe match */
+  height: 46px;      /* Clearframe match */
   width: auto;
   display:block;
 }
