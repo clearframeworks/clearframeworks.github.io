@@ -1,279 +1,155 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <script defer src="https://cloud.umami.is/script.js"
-        data-website-id="bf308f80-b85b-4bda-9c06-0210d4922859"></script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Primary SEO -->
-  <title>Proximity Landscape Design | Remote Landscape Concept Visuals</title>
-  <meta name="description" content="Proximity creates realistic landscape concept visuals from your real property photos—same angle, same structures—so you can see the outcome before contractors, quotes, or installation. Design only. No installation." />
-  <link rel="canonical" href="https://clearframeworks.org/proximity/" />
-  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <title>Clarity | Choose your context</title>
+  <meta name="description" content="Clarity helps you get clear under pressure—what matters first, what’s reversible, and what to do next." />
+  <link rel="canonical" href="https://clearframeworks.org/beta2/" />
+  <meta name="robots" content="noindex,nofollow" />
 
-  <!-- Open Graph (Facebook link preview) -->
-  <meta property="og:title" content="Proximity Landscape Design" />
-  <meta property="og:description" content="Realistic landscape concept visuals from your real property photo—see the outcome before you spend." />
+  <meta property="og:title" content="Clarity" />
+  <meta property="og:description" content="Get clear under pressure—choose individual or institution." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://clearframeworks.org/proximity/" />
+  <meta property="og:url" content="https://clearframeworks.org/beta2/" />
+  <meta property="og:image" content="https://clearframeworks.org/beta2/assets/og-clarity.png" />
 
-  <!-- Keep this path stable; change the filename (not query params) when you truly need to refresh caches -->
-  <meta property="og:image" content="https://clearframeworks.org/proximity/assets/og-proximity.png" />
-  <meta property="og:image:secure_url" content="https://clearframeworks.org/proximity/assets/og-proximity.png" />
-  <meta property="og:image:type" content="image/png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-
-  <!-- Twitter/X -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Proximity Landscape Design" />
-  <meta name="twitter:description" content="See the finished landscape result before you spend. Same photo angle. Same structures. New landscape concept." />
-  <meta name="twitter:image" content="https://clearframeworks.org/proximity/assets/og-proximity.png" />
+  <meta name="twitter:title" content="Clarity" />
+  <meta name="twitter:description" content="Get clear under pressure—choose individual or institution." />
+  <meta name="twitter:image" content="https://clearframeworks.org/beta2/assets/og-clarity.png" />
 
-  <!-- Schema -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "name": "Proximity Landscape Design",
-    "url": "https://clearframeworks.org/proximity/",
-    "description": "Remote, photo-based landscape concept visuals using the client's real property image. Same camera angle and structures; landscape elements changed only. Design only—no installation.",
-    "areaServed": "US",
-    "email": "michaelpaynotta@clearframeworks.org",
-    "brand": { "@type": "Brand", "name": "Proximity Landscape Design" },
-    "offers": {
-      "@type": "Offer",
-      "category": "Landscape design visualization",
-      "availability": "https://schema.org/InStock"
+  <style>
+    :root{
+      --bg: #070a10;
+      --bg2:#0b1220;
+      --card:#0e1728;
+      --card2:#0c1424;
+      --text:#e9eef7;
+      --muted: rgba(233,238,247,.72);
+      --border: rgba(233,238,247,.12);
+      --accent: #2f6f8a;
+      --authority:#0b1f3a;
+      --radius: 18px;
+      --shadow: 0 22px 50px rgba(0,0,0,.48);
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
-  }
-  </script>
-
-  <!-- bump this when you change assets -->
-  <link rel="stylesheet" href="./styles.css?v=9" />
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: var(--font);
+      color: var(--text);
+      background: radial-gradient(1200px 600px at 15% 10%, rgba(47,111,138,.22), transparent 60%),
+                  radial-gradient(1000px 700px at 85% 20%, rgba(11,31,58,.38), transparent 60%),
+                  linear-gradient(180deg, var(--bg), var(--bg2));
+      min-height: 100vh;
+    }
+    .wrap{ width:min(1040px, calc(100% - 40px)); margin:0 auto; }
+    header{ padding: 26px 0 14px; }
+    .brand{ display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit; }
+    .brand img{ height: 34px; width:auto; display:block; }
+    .kicker{
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: rgba(233,238,247,.62);
+    }
+    .hero{ padding: 34px 0 18px; }
+    h1{ margin: 10px 0 10px; font-size: clamp(32px, 4vw, 46px); line-height:1.05; }
+    .lead{ margin:0; max-width: 70ch; color: var(--muted); font-size: 16px; line-height:1.5; }
+    .rule{ height:1px; background: linear-gradient(90deg, transparent, rgba(233,238,247,.18), transparent); margin: 22px 0; }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 18px;
+      padding: 18px 0 44px;
+    }
+    @media (max-width: 860px){ .grid{ grid-template-columns: 1fr; } }
+    .card{
+      background: linear-gradient(180deg, rgba(14,23,40,.88), rgba(12,20,36,.88));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 18px;
+      box-shadow: var(--shadow);
+      text-decoration:none;
+      color: inherit;
+      position:relative;
+      overflow:hidden;
+    }
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      background: radial-gradient(500px 220px at 18% 18%, rgba(47,111,138,.18), transparent 60%);
+      pointer-events:none;
+    }
+    .card:hover{ transform: translateY(-2px); border-color: rgba(47,111,138,.34); }
+    .title{ font-size: 18px; font-weight: 800; margin:0 0 6px; position:relative; }
+    .sub{ margin:0 0 12px; color: var(--muted); position:relative; }
+    ul{ margin: 0; padding-left: 18px; color: rgba(233,238,247,.78); position:relative; }
+    li{ margin: 8px 0; }
+    .cta{
+      margin-top: 14px;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(233,238,247,.16);
+      background: rgba(7,10,16,.35);
+      position:relative;
+      font-weight: 700;
+    }
+    .note{ padding: 0 0 28px; color: rgba(233,238,247,.55); font-size: 13px; }
+  </style>
 </head>
-
 <body>
+  <header>
+    <div class="wrap">
+      <a class="brand" href="/beta2/" aria-label="Clarity beta2 home">
+        <img src="./assets/clarity-wordmark-alt.png" alt="Clarity" decoding="async" />
+      </a>
+    </div>
+  </header>
 
+  <main class="wrap">
+    <section class="hero">
+      <div class="kicker">Clarity</div>
+      <h1>Get your footing. Or stabilize a system.</h1>
+      <p class="lead">
+        Clarity is decision support for real pressure. Not hype. Not “we can solve your life.”
+        Just a clean order of operations: what matters first, what’s reversible, and what to do next.
+      </p>
+      <div class="rule"></div>
+      <div class="kicker">Choose your context</div>
+    </section>
 
-
-<header class="site-header">
-  <div class="wrap header-inner">
-    <a class="brand" href="/proximity/" aria-label="Proximity home">
-      <img class="brand-mark"
-           src="./assets/proximity-wordmark.png?v=9"
-           alt="Proximity Landscape Design wordmark"
-           decoding="async" />
-    </a>
-
-    <nav class="nav" aria-label="Primary">
-      <a href="/proximity/photo/">Photo concept</a>
-      <a href="/proximity/3d/">3D design</a>
-      <a class="pill" href="/proximity/#start">Request</a>
-    </nav>
-  </div>
-</header>
-
-<main class="page">
-  <!-- HERO -->
-  <section class="hero">
-    <div class="wrap hero-inner">
-      <div class="hero-copy">
-        <h1>See the finished result before you spend thousands.</h1>
-
-        <p class="lead">
-          Landscape decisions are expensive.
-          Clarity should come first — so you can decide if you like the outcome <strong>before</strong> contractors, quotes, or installation.
-        </p>
-
-        <div class="hero-actions">
-          <a class="btn primary"
-             href="mailto:michaelpaynotta@clearframeworks.org?subject=Proximity%20Landscape%20Design%20Request">
-            Email a request
-          </a>
-
-          <button class="btn" type="button" id="copyEmailBtn">
-            Copy email
-          </button>
-
-          <span class="micro" id="copyHint" aria-live="polite">Design only. No installation. No pressure.</span>
-        </div>
-
-        <ul class="checks">
-          <li>Same photo angle. Same structures. New landscape concept.</li>
-          <li>Realistic spacing and scale.</li>
-          <li>Built for planning — not hype.</li>
+    <section class="grid" aria-label="Clarity routing">
+      <a class="card" href="/beta2/individual/">
+        <h2 class="title">Individual</h2>
+        <p class="sub">For people who feel overwhelmed, behind, and out of margin.</p>
+        <ul>
+          <li>Sort what’s urgent vs what’s loud</li>
+          <li>Stop compounding damage</li>
+          <li>Build a small buffer before big moves</li>
         </ul>
+        <span class="cta">Enter Individual →</span>
+      </a>
 
-        <!-- SMART ROUTING -->
-        <div class="intent">
-          <h2 class="intent-title">What do you need right now?</h2>
+      <a class="card" href="/beta2/institution/">
+        <h2 class="title">Institution</h2>
+        <p class="sub">For operators mapping constraints, tradeoffs, and failure modes.</p>
+        <ul>
+          <li>Grounded analysis, not theater</li>
+          <li>Stability-first decision paths</li>
+          <li>Clear tradeoffs under stress</li>
+        </ul>
+        <span class="cta">Enter Institution →</span>
+      </a>
+    </section>
 
-          <div class="intent-grid">
-            <a class="intent-card" href="/proximity/photo/">
-              <div class="intent-top">I just want to visualize an idea.</div>
-              <div class="intent-pop">Fast concept visual from your real photo.</div>
-            </a>
-
-            <a class="intent-card" href="/proximity/3d/">
-              <div class="intent-top">I want a clear plan before hiring anyone.</div>
-              <div class="intent-pop">Layout decisions first — then quotes.</div>
-            </a>
-
-            <a class="intent-card" href="/proximity/#start">
-              <div class="intent-top">I’ve gotten quotes but I’m unsure.</div>
-              <div class="intent-pop">Sanity-check the outcome before you commit.</div>
-            </a>
-
-            <a class="intent-card" href="/proximity/photo/#examples">
-              <div class="intent-top">I’m planning a full renovation.</div>
-              <div class="intent-pop">See what “finished” can look like.</div>
-            </a>
-          </div>
-        </div>
-
-      </div>
-
-      <aside class="hero-card card-shell" aria-label="Outcome clarity first">
-        <div class="hero-card-top">
-          <div>
-            <div class="hero-card-title">Outcome clarity first</div>
-            <div class="hero-card-sub">Know what you’re paying for before the project grows.</div>
-          </div>
-        </div>
-
-        <!-- Hero card logo (match Clearframe sizing/placement) -->
-        <div class="hero-logo-center" aria-hidden="true">
-          <img src="./assets/proximity-wordmark.png?v=9" alt="" decoding="async" />
-        </div>
-      </aside>
-    </div>
-  </section>
-
-  <!-- HOW -->
-  <section class="section" id="how">
-    <div class="wrap">
-      <div class="section-head">
-        <h2>How it works</h2>
-        <p class="muted">Simple. Linear. Low-friction.</p>
-      </div>
-
-      <div class="steps">
-        <div class="card step">
-          <div class="step-num">1</div>
-          <div>
-            <h3>Send photos</h3>
-            <p>Clear photos of your property or problem areas.</p>
-          </div>
-        </div>
-
-        <div class="card step">
-          <div class="step-num">2</div>
-          <div>
-            <h3>We design visually</h3>
-            <p>Existing landscape is removed digitally and redesigned.</p>
-          </div>
-        </div>
-
-        <div class="card step">
-          <div class="step-num">3</div>
-          <div>
-            <h3>You decide</h3>
-            <p>Use the visuals to plan, quote, or DIY.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- AUTHORITY -->
-  <section class="section section--thin">
-    <div class="wrap authority">
-      <div class="authority-line">Design before build.</div>
-      <div class="authority-sub">Installers are paid to construct. We are paid to think.</div>
-    </div>
-  </section>
-
-  <!-- QUOTE -->
-  <section class="section section--thin">
-    <div class="wrap quote">
-      <div class="quote-text">“Simplicity is the ultimate sophistication.”</div>
-      <div class="quote-attrib">— Leonardo da Vinci</div>
-    </div>
-  </section>
-
-
-  <!-- CTA -->
-  <section class="section" id="start">
-    <div class="wrap">
-      <div class="card start">
-        <h2>Start with clarity</h2>
-        <p class="muted">Send photos and a short note about what you want to change.</p>
-
-        <div class="start-actions">
-          <a class="btn primary"
-             href="mailto:michaelpaynotta@clearframeworks.org?subject=Proximity%20Landscape%20Design%20Request">
-            Email a request
-          </a>
-          <button class="btn" type="button" id="copyEmailBtn2">Copy email</button>
-        </div>
-
-        <p class="small">Proximity is design only. No material sales. No installation.</p>
-      </div>
-    </div>
-  </section>
-</main>
-
-<footer class="footer">
-  <div class="wrap footer-inner">
-    <div class="footer-left">
-      <img src="./assets/proximity-icon.png?v=9" class="footer-icon" alt="" decoding="async" />
-      <div>
-        <div class="footer-title">Proximity Landscape Design</div>
-        <div class="footer-sub">Outcome clarity before installation.</div>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<script>
-  (function () {
-    const email = "michaelpaynotta@clearframeworks.org";
-
-    async function copyEmail() {
-      try { await navigator.clipboard.writeText(email); return true; }
-      catch (e) { return false; }
-    }
-
-    const b1 = document.getElementById("copyEmailBtn");
-    const b2 = document.getElementById("copyEmailBtn2");
-    const hint = document.getElementById("copyHint");
-
-    if (b1) b1.addEventListener("click", async () => {
-      const ok = await copyEmail();
-      if (ok && hint) {
-        hint.textContent = "Copied to clipboard.";
-        setTimeout(() => hint.textContent = "Design only. No installation. No pressure.", 1400);
-      } else {
-        window.location.href = "mailto:" + email + "?subject=Proximity%20Landscape%20Design%20Request";
-      }
-    });
-
-    if (b2) b2.addEventListener("click", async () => {
-      const ok = await copyEmail();
-      if (ok) {
-        b2.textContent = "Copied";
-        setTimeout(() => b2.textContent = "Copy email", 1200);
-      } else {
-        window.location.href = "mailto:" + email + "?subject=Proximity%20Landscape%20Design%20Request";
-      }
-    });
-  })();
-</script>
-
-<footer style="border-top:1px solid rgba(0,0,0,0.10);padding:18px 16px;text-align:center;color:rgba(11,19,32,0.70);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;">
-  Created by <a href="/" style="color:#0b1320;text-decoration:none;font-weight:800;">Clearframe</a>
-</footer>
-
+    <div class="note">No moral theater. No sales pressure. Just clarity.</div>
+  </main>
 </body>
 </html>
