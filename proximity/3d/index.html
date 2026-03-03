@@ -72,7 +72,10 @@
       <a href="../#offers">Offers</a>
       <a href="../photo/">Photo Concept</a>
       <a href="../3d/" aria-current="page">3D Redesign</a>
-      <a href="../#examples">Examples</a>
+
+      <!-- IMPORTANT: on this page, Examples should jump to THIS page section -->
+      <a href="#examples">Examples</a>
+
       <a class="nav-cta" href="#start">Start</a>
     </nav>
   </div>
@@ -111,22 +114,23 @@
         </ul>
       </div>
 
+      <!-- HERO SHOWCASE: use strongest "hook" images (front + close detail) -->
       <aside class="hero-card card-shell" aria-label="3D showcase">
         <div class="pair">
-          <a class="shot shot-link" href="./assets/Screenshot%202026-02-28%20130800.png" target="_blank" rel="noopener">
-            <img src="./assets/Screenshot%202026-02-28%20130800.png"
-                 alt="3D landscape design example view"
+          <a class="shot shot-link" href="./assets/housefront.png" target="_blank" rel="noopener">
+            <img src="./assets/housefront.png"
+                 alt="3D front property redesign"
                  loading="lazy"
                  decoding="async" />
-            <span class="tag">3D View</span>
+            <span class="tag">Front</span>
           </a>
 
-          <a class="shot shot-link" href="./assets/Screenshot%202026-02-28%20131402.png" target="_blank" rel="noopener">
-            <img src="./assets/Screenshot%202026-02-28%20131402.png"
-                 alt="3D landscape design example overhead"
+          <a class="shot shot-link" href="./assets/closefront.png" target="_blank" rel="noopener">
+            <img src="./assets/closefront.png"
+                 alt="3D close detail view"
                  loading="lazy"
                  decoding="async" />
-            <span class="tag">3D View</span>
+            <span class="tag">Detail</span>
           </a>
         </div>
       </aside>
@@ -164,21 +168,34 @@
       <h2>3D examples</h2>
       <p class="muted">These are 3D builds — not photo edits — used to make layout and spacing decisions before install.</p>
 
+      <!-- GALLERY: cover the full decision stack (front, close, single bed, topdown, fullback) -->
       <div class="gallery grid-3">
-        <a class="shot shot-link" href="./assets/Screenshot%202026-02-28%20130800.png" target="_blank" rel="noopener">
-          <img src="./assets/Screenshot%202026-02-28%20130800.png" alt="3D example 1" loading="lazy" decoding="async" />
-          <span class="tag">Perspective</span>
+
+        <a class="shot shot-link" href="./assets/housefront.png" target="_blank" rel="noopener">
+          <img src="./assets/housefront.png" alt="3D example — front view" loading="lazy" decoding="async" />
+          <span class="tag">Front</span>
         </a>
 
-        <a class="shot shot-link" href="./assets/Screenshot%202026-02-28%20131402.png" target="_blank" rel="noopener">
-          <img src="./assets/Screenshot%202026-02-28%20131402.png" alt="3D example 2" loading="lazy" decoding="async" />
-          <span class="tag">Overhead</span>
-        </a>
-
-        <a class="shot shot-link" href="./assets/Screenshot%202026-02-28%20130800.png" target="_blank" rel="noopener">
-          <img src="./assets/Screenshot%202026-02-28%20130800.png" alt="3D example 3" loading="lazy" decoding="async" />
+        <a class="shot shot-link" href="./assets/closefront.png" target="_blank" rel="noopener">
+          <img src="./assets/closefront.png" alt="3D example — close detail" loading="lazy" decoding="async" />
           <span class="tag">Detail</span>
         </a>
+
+        <a class="shot shot-link" href="./assets/singlebed.png" target="_blank" rel="noopener">
+          <img src="./assets/singlebed.png" alt="3D example — single bed layout" loading="lazy" decoding="async" />
+          <span class="tag">Bed</span>
+        </a>
+
+        <a class="shot shot-link" href="./assets/topdown.png" target="_blank" rel="noopener">
+          <img src="./assets/topdown.png" alt="3D example — top-down plan view" loading="lazy" decoding="async" />
+          <span class="tag">Top-down</span>
+        </a>
+
+        <a class="shot shot-link" href="./assets/fullback.png" target="_blank" rel="noopener">
+          <img src="./assets/fullback.png" alt="3D example — full backyard view" loading="lazy" decoding="async" />
+          <span class="tag">Back</span>
+        </a>
+
       </div>
     </div>
   </section>
