@@ -515,17 +515,6 @@
     }
 
     function updateStatusPill(remaining) {
-      if (hasProfile(profile)) {
-        usagePill.textContent = "Profile active. EVAN is using longer user context.";
-        memoryPill.textContent = "Session memory + profile memory active.";
-      } else if (typeof remaining === "number") {
-        usagePill.textContent = `${remaining} anonymous question${remaining === 1 ? "" : "s"} remaining.`;
-        memoryPill.textContent = "Session memory active for this browser.";
-      } else {
-        usagePill.textContent = "3 anonymous questions available.";
-        memoryPill.textContent = "Session memory active for this browser.";
-      }
-    }
 
     updateStatusPill();
 
@@ -572,7 +561,10 @@
         if (data?.gate) {
           addMessage("EVAN", "You’ve reached the anonymous preview limit. Create a profile for better accuracy or contact Michael directly.");
           showGate();
-          updateStatusPill(0);
+          updateStatupdateStatusPill({
+  profiled: false,
+  remaining: 0
+});usPill(0);
           return;
         }
 
@@ -582,7 +574,10 @@
         }
 
         addMessage("EVAN", data.reply);
-        updateStatusPill(data.remainingAnonymousQuestions);
+        updateStatusPill({
+  profiled: Boolean(data.profiled),
+  remaining: data.remainingAnonymousQuestions
+});
       } catch (err) {
         typing.remove();
         addMessage("EVAN", "Connection error. Please try again.");
