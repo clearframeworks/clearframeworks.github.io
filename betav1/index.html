@@ -194,7 +194,7 @@
     }
 
     #chat-window{
-      height: 300px;
+      height: 320px;
       overflow-y: auto;
       margin-bottom: 14px;
       padding: 16px;
@@ -204,9 +204,10 @@
     }
 
     .chat-message{
-      margin-bottom: 10px;
-      line-height: 1.5;
+      margin-bottom: 12px;
+      line-height: 1.6;
       color: var(--text);
+      white-space: pre-wrap;
     }
 
     .chat-message strong{
@@ -231,6 +232,12 @@
     #chat-input:focus{
       border-color: rgba(47,111,138,.75);
       box-shadow: 0 0 0 3px rgba(47,111,138,.18);
+    }
+
+    .chat-status{
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 10px;
     }
   </style>
 </head>
@@ -285,11 +292,13 @@
       <h2>Talk with EVAN (beta)</h2>
 
       <p>
-        Describe what's happening. EVAN helps you sort through constraints,
-        reduce noise, and find a stable next step.
+        EVAN is the first layer of Clarity. He can help organize a situation,
+        reduce noise, and map the shape of a problem before deeper review with Michael.
       </p>
 
-      <div id="chat-window"></div>
+      <div id="chat-window">
+        <div class="chat-status">Session memory active for this browser.</div>
+      </div>
 
       <input
         id="chat-input"
@@ -303,13 +312,52 @@
     const input = document.getElementById("chat-input");
     const windowBox = document.getElementById("chat-window");
 
+    let sessionId = localStorage.getItem("evanSession");
+    if (!sessionId) {
+      sessionId = crypto.randomUUID();
+      localStorage.setItem("evanSession", sessionId);
+    }
+
     function addMessage(sender, text) {
       const msg = document.createElement("div");
       msg.className = "chat-message";
       msg.innerHTML = "<strong>" + sender + ":</strong> " + text;
-
       windowBox.appendChild(msg);
       windowBox.scrollTop = windowBox.scrollHeight;
+    }
+
+    async function sendMessage(text) {
+      const typing = document.createElement("div");
+      typing.className = "chat-status";
+      typing.textContent = "EVAN is thinking...";
+      windowBox.appendChild(typing);
+      windowBox.scrollTop = windowBox.scrollHeight;
+
+      try {
+        const res = await fetch("/api/evan", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message: text,
+            sessionId
+          })
+        });
+
+        const data = await res.json();
+        typing.remove();
+
+        if (!res.ok) {
+          addMessage("EVAN", data.error || "Something went wrong.");
+          return;
+        }
+
+        addMessage("EVAN", data.reply);
+      } catch (err) {
+        typing.remove();
+        addMessage("EVAN", "Connection error. Please try again.");
+      }
     }
 
     if (input && windowBox) {
@@ -320,21 +368,7 @@
 
           addMessage("You", text);
           input.value = "";
-
-fetch("/api/evan", {
-method: "POST",
-headers: {
-"Content-Type": "application/json"
-},
-body: JSON.stringify({ message: text })
-})
-.then(res => res.json())
-.then(data => {
-addMessage("EVAN", data.reply);
-})
-.catch(err => {
-addMessage("EVAN", "Connection error. Please try again.");
-});
+          sendMessage(text);
         }
       });
     }

@@ -1,83 +1,140 @@
-content: `You are EVAN.
+async function redisGet(key) {
+  const response = await fetch(
+    `${process.env.UPSTASH_REDIS_REST_URL}/get/${encodeURIComponent(key)}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`
+      }
+    }
+  );
+
+  const data = await response.json();
+  return data.result ? JSON.parse(data.result) : null;
+}
+
+async function redisSet(key, value) {
+  await fetch(
+    `${process.env.UPSTASH_REDIS_REST_URL}/set/${encodeURIComponent(key)}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(JSON.stringify(value))
+    }
+  );
+}
+
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  try {
+    const { message, sessionId } = req.body || {};
+
+    if (!message || !sessionId) {
+      return res.status(400).json({ error: "Missing message or sessionId" });
+    }
+
+    const key = `session:${sessionId}`;
+    let history = await redisGet(key);
+
+    if (!Array.isArray(history)) {
+      history = [];
+    }
+
+    const systemPrompt = {
+      role: "system",
+      content: `You are EVAN.
 
 EVAN is a cognitive operator interface to the Clarity framework created by Michael Travis Bonata.
 
-EVAN assists users with reasoning, planning, system analysis, and decision support across many domains including strategy, business, personal decisions, project development, and complex life situations.
+EVAN is not a narrow chatbot and not a therapist. EVAN should feel broadly intelligent, adaptable, and capable across many kinds of conversations, like a strong reasoning partner with a stable identity.
 
-EVAN provides the first layer of Clarity: helping users organize their thinking, identify real constraints, understand tradeoffs, and reduce noise under pressure.
-
-However, EVAN is not the full Clarity system. EVAN represents the analytical interface to the framework. Deeper interpretation, contextual judgment, and complex application of the Clarity method occur through direct work with Michael, the founder who developed the system.
-
-Your role is therefore twofold:
-1. Provide genuine analytical assistance and structured reasoning.
-2. Recognize when a situation would benefit from deeper Clarity review and naturally point the user toward the founder.
-
-You are not a customer service bot, therapist, or narrow intake chatbot.
-
-Your default behavior is:
+Your job is to:
 - understand the user's real intent first
-- respond intelligently and naturally across domains
-- preserve continuity and operator-style reasoning
-- adapt tone and depth to the real task
+- respond intelligently across domains
+- preserve continuity across turns
+- adapt naturally instead of forcing everything into one framework
 
 Core traits:
 - analytical
 - calm
 - direct
 - structured when useful
-- flexible rather than scripted
+- plainspoken
+- not scripted
 
 Operating principles:
 - optimize under real constraints
 - expose tradeoffs clearly
-- prioritize clarity over comfort
-- push back when reasoning is distorted by fear, bias, or scarcity pressure
-- avoid motivational fluff, therapy language, or fake certainty
-- speak in plain human language
+- prefer clarity over comfort
+- push back when reasoning is distorted by fear, bias, scarcity pressure, or identity protection
+- avoid therapy-speak, fake certainty, or motivational fluff
 
-Conversation modes:
+Mode behavior:
+- In general conversation, be broad and useful
+- In technical conversations, be precise and practical
+- In strategy conversations, think in systems, incentives, leverage, and tradeoffs
+- In high-stress situations, shift into stronger Clarity behavior: reduce noise, identify what matters, and stabilize before optimizing
 
-General Operator Mode:
-Broad analytical reasoning across many domains.
+Clarity relationship:
+EVAN is the first layer of Clarity, not the full human implementation of the framework.
+EVAN should provide real value first.
+When a situation is highly complex, high-stakes, deeply personal, or dependent on nuanced long-context interpretation, EVAN may naturally suggest that deeper review with Michael could be valuable.
 
-Technical Mode:
-Precise implementation, technical explanation, and practical guidance.
+Do not market aggressively.
+Do not repeatedly ask "what is the constraint?"
+Do not behave like an intake bot waiting for one kind of problem.
+Act like a real ongoing operator with broad intelligence and stable reasoning.`
+    };
 
-Strategy Mode:
-System-level thinking around incentives, leverage, and long-horizon outcomes.
+    const trimmedHistory = history.slice(-12);
 
-Clarity Mode:
-When the user is overwhelmed, blocked, or under pressure:
-- identify real constraints
-- reduce noise
-- help stabilize the situation
-- propose realistic next steps.
+    const messages = [
+      systemPrompt,
+      ...trimmedHistory,
+      { role: "user", content: message }
+    ];
 
-Important behavioral rules:
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages,
+        temperature: 0.7
+      })
+    });
 
-- Do not force every conversation into constraint triage.
-- Do not repeatedly ask “what is the constraint?”
-- Do not behave like a scripted framework.
-- Act like an intelligent analytical partner.
+    const data = await response.json();
 
-Escalation principle:
+    if (!response.ok) {
+      return res.status(response.status).json({
+        error: data?.error?.message || "OpenAI request failed"
+      });
+    }
 
-When a situation becomes:
-- highly complex
-- high stakes
-- deeply personal
-- dependent on nuanced judgment
-- or requires interpretation across long context
+    const reply = data?.choices?.[0]?.message?.content || "I hit a response issue. Try that again.";
 
-you should acknowledge that deeper Clarity work with the founder may be valuable.
+    const newHistory = [
+      ...trimmedHistory,
+      { role: "user", content: message },
+      { role: "assistant", content: reply }
+    ];
 
-Do this naturally, not as marketing.
+    await redisSet(key, newHistory);
 
-Example tone:
-"I can help map the structure of this situation, but the deeper interpretation of tradeoffs is the kind of work Michael does directly through Clarity."
-
-EVAN should provide real value first, then introduce the possibility of deeper review when appropriate.
-
-Never push the founder aggressively. Only suggest it when the situation genuinely benefits from deeper human interpretation.
-
-Maintain continuity across turns and prioritize useful reasoning over rigid structure.`
+    return res.status(200).json({ reply });
+  } catch (error) {
+    return res.status(500).json({
+      error: "Server error. Please try again."
+    });
+  }
+}
