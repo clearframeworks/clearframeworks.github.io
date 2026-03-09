@@ -186,7 +186,7 @@
       line-height: 1.1;
     }
 
-    .evan p{
+    .evan > p{
       margin: 0 0 20px;
       color: var(--muted);
       max-width: 62ch;
@@ -194,7 +194,7 @@
     }
 
     #chat-window{
-      height: 300px;
+      height: 320px;
       overflow-y: auto;
       margin-bottom: 14px;
       padding: 16px;
@@ -204,14 +204,13 @@
     }
 
     .chat-message{
-      margin-bottom: 10px;
-      line-height: 1.5;
+      margin-bottom: 12px;
+      line-height: 1.6;
       color: var(--text);
+      white-space: pre-wrap;
     }
 
-    .chat-message strong{
-      color: #ffffff;
-    }
+    .chat-message strong{ color: #ffffff; }
 
     #chat-input{
       width: 100%;
@@ -224,21 +223,76 @@
       outline: none;
     }
 
-    #chat-input::placeholder{
-      color: rgba(233,238,247,.42);
-    }
+    #chat-input::placeholder{ color: rgba(233,238,247,.42); }
 
     #chat-input:focus{
       border-color: rgba(47,111,138,.75);
       box-shadow: 0 0 0 3px rgba(47,111,138,.18);
     }
+
+    .chat-status,
+    .anon-note{
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .gate {
+      display: none;
+      margin-top: 18px;
+      border: 1px solid rgba(233,238,247,.14);
+      border-radius: 14px;
+      padding: 18px;
+      background: rgba(7,10,16,.52);
+    }
+
+    .gate.is-open { display: block; }
+    .gate h3 { margin: 0 0 8px; font-size: 20px; }
+    .gate p { margin: 0 0 14px; color: var(--muted); line-height: 1.55; }
+    .gate-grid { display: grid; gap: 12px; grid-template-columns: 1.2fr .8fr; }
+    @media (max-width: 860px){ .gate-grid { grid-template-columns: 1fr; } }
+
+    .field { display: grid; gap: 6px; margin-bottom: 12px; }
+    .field label { font-size: 13px; color: var(--muted); }
+    .field input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(233,238,247,.16);
+      background: rgba(7,10,16,.55);
+      color: var(--text);
+      font-size: 15px;
+      outline: none;
+    }
+
+    .button-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(233,238,247,.18);
+      background: rgba(7,10,16,.38);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .button.primary {
+      background: linear-gradient(180deg, rgba(47,111,138,.9), rgba(29,70,87,.9));
+      border-color: rgba(47,111,138,.8);
+    }
+
+    .small-note { margin-top: 10px; font-size: 12px; color: rgba(233,238,247,.58); }
   </style>
 </head>
 <body>
   <header>
     <div class="wrap">
       <a class="brand" href="/clarity/" aria-label="Clarity home">
-        <img src="./assets/clarity-wordmark-alt.png" alt="Clarity" decoding="async" />
+        <img src="/clarity/assets/clarity-wordmark-alt.png" alt="Clarity" decoding="async" />
       </a>
     </div>
   </header>
@@ -281,50 +335,196 @@
 
     <div class="note">No moral theater. No sales pressure. Just clarity.</div>
 
-  <section id="evan" class="evan" aria-label="Talk with EVAN">
-
-  <h2>Talk with EVAN</h2>
-
-  <p>
-    EVAN is a decision support assistant designed to help people sort
-    through constraints and reduce noise during difficult moments.
-  </p>
-
-  <div style="
-      padding:18px;
-      border-radius:12px;
-      border:1px solid rgba(233,238,247,.14);
-      background:rgba(7,10,16,.45);
-      text-align:center;
-      margin-top:20px;
-  ">
-      <strong>EVAN is coming soon.</strong>
-      <p style="margin-top:8px;color:var(--muted);">
-        The interface is being built. When ready, you'll be able to
-        describe what's happening and EVAN will help map a stable next step.
+    <section id="evan" class="evan" aria-label="Talk with EVAN">
+      <h2>Talk with EVAN</h2>
+      <p>
+        EVAN is the first layer of Clarity. Ask a few questions anonymously, then create a profile for more accurate, persistent use or contact Michael for deeper Clarity work.
       </p>
-  </div>
 
-</section>
+      <div id="chat-window">
+        <div class="chat-status">EVAN is live. Anonymous users get 3 questions before profile gating.</div>
+        <div id="anon-note" class="anon-note">Anonymous questions remaining: 3</div>
+      </div>
+
+      <input id="chat-input" type="text" placeholder="Describe what's going on..." />
+
+      <div id="gate" class="gate" aria-live="polite">
+        <h3>Anonymous limit reached</h3>
+        <p>
+          You’ve used the 3-question anonymous layer. Create a profile for more accurate EVAN continuity, or contact Michael directly if the situation needs deeper Clarity review.
+        </p>
+
+        <div class="gate-grid">
+          <div>
+            <div class="field">
+              <label for="profile-name">Name</label>
+              <input id="profile-name" type="text" placeholder="Your name" />
+            </div>
+            <div class="field">
+              <label for="profile-email">Email</label>
+              <input id="profile-email" type="email" placeholder="you@example.com" />
+            </div>
+            <div class="button-row">
+              <button id="save-profile" class="button primary" type="button">Create profile and continue</button>
+              <button id="dismiss-gate" class="button" type="button">Not now</button>
+            </div>
+            <div class="small-note">
+              This stores a lightweight local profile for continuity. For true account login and verified auth, the next step is wiring Supabase Auth.
+            </div>
+          </div>
+
+          <div>
+            <p style="margin-top:0;">
+              If your situation is high-stakes, nuanced, or needs deeper human judgment, go straight to the founder.
+            </p>
+            <div class="button-row">
+              <a class="button" href="mailto:michaelpaynotta@clearframeworks.org?subject=Clarity inquiry">Contact Michael</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <script>
     const input = document.getElementById("chat-input");
     const windowBox = document.getElementById("chat-window");
+    const gate = document.getElementById("gate");
+    const anonNote = document.getElementById("anon-note");
+    const saveProfileButton = document.getElementById("save-profile");
+    const dismissGateButton = document.getElementById("dismiss-gate");
+    const profileNameInput = document.getElementById("profile-name");
+    const profileEmailInput = document.getElementById("profile-email");
+
+    let sessionId = localStorage.getItem("evanSession");
+    if (!sessionId) {
+      sessionId = crypto.randomUUID();
+      localStorage.setItem("evanSession", sessionId);
+    }
+
+    function getProfile() {
+      try {
+        return JSON.parse(localStorage.getItem("evanProfile") || "null");
+      } catch {
+        return null;
+      }
+    }
+
+    function setProfile(profile) {
+      localStorage.setItem("evanProfile", JSON.stringify(profile));
+    }
+
+    function addMessage(sender, text) {
+      const msg = document.createElement("div");
+      msg.className = "chat-message";
+      msg.innerHTML = "<strong>" + sender + ":</strong> " + text;
+      windowBox.appendChild(msg);
+      windowBox.scrollTop = windowBox.scrollHeight;
+    }
+
+    function setAnonymousCount(remaining) {
+      if (remaining === null || typeof remaining === "undefined") {
+        anonNote.textContent = "Profile active. EVAN can use your saved context more accurately.";
+        return;
+      }
+      anonNote.textContent = `Anonymous questions remaining: ${remaining}`;
+    }
+
+    function openGate() {
+      gate.classList.add("is-open");
+      input.disabled = true;
+      input.placeholder = "Create a profile or contact Michael to continue.";
+    }
+
+    function closeGate() {
+      gate.classList.remove("is-open");
+      const hasProfile = !!getProfile()?.email;
+      input.disabled = !hasProfile;
+      input.placeholder = hasProfile
+        ? "Describe what's going on..."
+        : "Create a profile or contact Michael to continue.";
+    }
+
+    async function sendMessage(text) {
+      const typing = document.createElement("div");
+      typing.className = "chat-status";
+      typing.textContent = "EVAN is thinking...";
+      windowBox.appendChild(typing);
+      windowBox.scrollTop = windowBox.scrollHeight;
+
+      try {
+        const res = await fetch("/api/evan", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message: text,
+            sessionId,
+            profile: getProfile()
+          })
+        });
+
+        const data = await res.json();
+        typing.remove();
+
+        if (data.gateRequired) {
+          addMessage("EVAN", data.error || "Anonymous limit reached.");
+          setAnonymousCount(0);
+          openGate();
+          return;
+        }
+
+        if (!res.ok) {
+          addMessage("EVAN", data.error || "Something went wrong.");
+          return;
+        }
+
+        addMessage("EVAN", data.reply);
+        setAnonymousCount(data.remainingAnonymous);
+      } catch (err) {
+        typing.remove();
+        addMessage("EVAN", "Connection error. Please try again.");
+      }
+    }
+
+    saveProfileButton.addEventListener("click", function () {
+      const name = profileNameInput.value.trim();
+      const email = profileEmailInput.value.trim();
+
+      if (!email) {
+        addMessage("EVAN", "Add an email to create your profile.");
+        return;
+      }
+
+      setProfile({ name, email });
+      setAnonymousCount(null);
+      input.disabled = false;
+      input.placeholder = "Describe what's going on...";
+      gate.classList.remove("is-open");
+      addMessage("EVAN", "Profile saved. I can now continue with stronger continuity for this browser session.");
+    });
+
+    dismissGateButton.addEventListener("click", function () {
+      gate.classList.remove("is-open");
+    });
+
+    const existingProfile = getProfile();
+    if (existingProfile?.email) {
+      profileNameInput.value = existingProfile.name || "";
+      profileEmailInput.value = existingProfile.email || "";
+      setAnonymousCount(null);
+    }
 
     if (input && windowBox) {
       input.addEventListener("keypress", function (e) {
         if (e.key === "Enter") {
           const text = input.value.trim();
-          if (!text) return;
+          if (!text || input.disabled) return;
 
-          const userMessage = document.createElement("div");
-          userMessage.className = "chat-message";
-          userMessage.innerHTML = "<strong>You:</strong> " + text;
-
-          windowBox.appendChild(userMessage);
+          addMessage("You", text);
           input.value = "";
-          windowBox.scrollTop = windowBox.scrollHeight;
+          sendMessage(text);
         }
       });
     }

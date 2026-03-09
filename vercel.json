@@ -1,0 +1,14 @@
+{
+  "redirects": [
+    {
+      "source": "/betav1",
+      "destination": "/clarity",
+      "permanent": false
+    },
+    {
+      "source": "/betav1/:path*",
+      "destination": "/clarity/:path*",
+      "permanent": false
+    }
+  ]
+}

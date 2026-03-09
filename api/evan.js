@@ -27,22 +27,48 @@ async function redisSet(key, value) {
   );
 }
 
+function normalizeProfile(profile) {
+  if (!profile || typeof profile !== "object") return null;
+  const name = typeof profile.name === "string" ? profile.name.trim() : "";
+  const email = typeof profile.email === "string" ? profile.email.trim().toLowerCase() : "";
+  if (!email) return null;
+  return { name, email };
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const { message, sessionId } = req.body || {};
+    const { message, sessionId, profile } = req.body || {};
+    const cleanProfile = normalizeProfile(profile);
 
     if (!message || !sessionId) {
       return res.status(400).json({ error: "Missing message or sessionId" });
     }
 
-    const key = `session:${sessionId}`;
-    let history = await redisGet(key);
+    const anonCountKey = `anon-count:${sessionId}`;
+    const sessionKey = cleanProfile
+      ? `profile-history:${cleanProfile.email}`
+      : `session:${sessionId}`;
 
+    let anonCount = await redisGet(anonCountKey);
+    if (typeof anonCount !== "number") anonCount = 0;
+
+    if (!cleanProfile && anonCount >= 3) {
+      return res.status(403).json({
+        gateRequired: true,
+        error: "You've reached the 3-question anonymous limit. Create a profile for more accurate EVAN support or contact Michael for deeper Clarity review."
+      });
+    }
+
+    let history = await redisGet(sessionKey);
     if (!Array.isArray(history)) history = [];
+
+    if (cleanProfile) {
+      await redisSet(`profile:${cleanProfile.email}`, cleanProfile);
+    }
 
     const systemPrompt = {
       role: "system",
@@ -84,16 +110,25 @@ EVAN is the first layer of Clarity, not the full human implementation of the fra
 EVAN should provide real value first.
 When a situation is highly complex, high-stakes, deeply personal, or dependent on nuanced long-context interpretation, EVAN may naturally suggest that deeper review with Michael could be valuable.
 
+If the user has created a profile, use that profile context naturally where relevant. Do not awkwardly restate profile details.
+
 Do not market aggressively.
-Do not repeatedly ask "what is the constraint?"
+Do not repeatedly ask \"what is the constraint?\"
 Do not behave like an intake bot waiting for one kind of problem.
 Act like a real ongoing operator with broad intelligence and stable reasoning.`
     };
 
     const trimmedHistory = history.slice(-12);
+    const profileMessage = cleanProfile
+      ? {
+          role: "system",
+          content: `Known user profile: ${JSON.stringify(cleanProfile)}`
+        }
+      : null;
 
     const messages = [
       systemPrompt,
+      ...(profileMessage ? [profileMessage] : []),
       ...trimmedHistory,
       { role: "user", content: message }
     ];
@@ -119,9 +154,7 @@ Act like a real ongoing operator with broad intelligence and stable reasoning.`
       });
     }
 
-    const reply =
-      data?.choices?.[0]?.message?.content ||
-      "I hit a response issue. Try that again.";
+    const reply = data?.choices?.[0]?.message?.content || "I hit a response issue. Try that again.";
 
     const newHistory = [
       ...trimmedHistory,
@@ -129,9 +162,17 @@ Act like a real ongoing operator with broad intelligence and stable reasoning.`
       { role: "assistant", content: reply }
     ];
 
-    await redisSet(key, newHistory);
+    await redisSet(sessionKey, newHistory);
 
-    return res.status(200).json({ reply });
+    if (!cleanProfile) {
+      await redisSet(anonCountKey, anonCount + 1);
+    }
+
+    return res.status(200).json({
+      reply,
+      gateRequired: false,
+      remainingAnonymous: cleanProfile ? null : Math.max(0, 2 - anonCount)
+    });
   } catch (error) {
     console.error("EVAN API ERROR:", error);
     return res.status(500).json({ error: "Server error. Please try again." });
