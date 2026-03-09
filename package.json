@@ -1,0 +1,27 @@
+{
+  "name": "clearframeworks-site",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clearframeworks/clearframeworks.github.io.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/clearframeworks/clearframeworks.github.io/issues"
+  },
+  "homepage": "https://github.com/clearframeworks/clearframeworks.github.io#readme",
+  "dependencies": {
+    "stripe": "^20.4.1"
+  }
+}
