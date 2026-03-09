@@ -1,9 +1,31 @@
-import { Redis } from "@upstash/redis";
+async function redisGet(key) {
+  const response = await fetch(
+    `${process.env.UPSTASH_REDIS_REST_URL}/get/${encodeURIComponent(key)}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`
+      }
+    }
+  );
 
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN,
-});
+  const data = await response.json();
+  return data.result ? JSON.parse(data.result) : null;
+}
+
+async function redisSet(key, value) {
+  await fetch(
+    `${process.env.UPSTASH_REDIS_REST_URL}/set/${encodeURIComponent(key)}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(JSON.stringify(value))
+    }
+  );
+}
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -18,8 +40,8 @@ export default async function handler(req, res) {
     }
 
     const key = `session:${sessionId}`;
+    let history = await redisGet(key);
 
-    let history = await redis.get(key);
     if (!Array.isArray(history)) history = [];
 
     const systemPrompt = {
@@ -97,7 +119,9 @@ Act like a real ongoing operator with broad intelligence and stable reasoning.`
       });
     }
 
-    const reply = data?.choices?.[0]?.message?.content || "I hit a response issue. Try that again.";
+    const reply =
+      data?.choices?.[0]?.message?.content ||
+      "I hit a response issue. Try that again.";
 
     const newHistory = [
       ...trimmedHistory,
@@ -105,13 +129,11 @@ Act like a real ongoing operator with broad intelligence and stable reasoning.`
       { role: "assistant", content: reply }
     ];
 
-    await redis.set(key, newHistory);
+    await redisSet(key, newHistory);
 
     return res.status(200).json({ reply });
   } catch (error) {
     console.error("EVAN API ERROR:", error);
-    return res.status(500).json({
-      error: "Server error. Please try again."
-    });
+    return res.status(500).json({ error: "Server error. Please try again." });
   }
 }
