@@ -6,19 +6,19 @@
 
   <title>Clarity | Choose your context</title>
   <meta name="description" content="Clarity helps you get clear under pressure—what matters first, what’s reversible, and what to do next." />
-  <link rel="canonical" href="https://clearframeworks.org/clarity/" />
+  <link rel="canonical" href="https://clearframeworks.org/betav1/" />
   <meta name="robots" content="index,follow,max-image-preview:large" />
 
   <meta property="og:title" content="Clarity" />
   <meta property="og:description" content="Get clear under pressure—choose individual or institution." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://clearframeworks.org/clarity/" />
-  <meta property="og:image" content="https://clearframeworks.org/clarity/assets/og-clarity.png" />
+  <meta property="og:url" content="https://clearframeworks.org/betav1/" />
+  <meta property="og:image" content="https://clearframeworks.org/betav1/assets/og-clarity.png" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Clarity" />
   <meta name="twitter:description" content="Get clear under pressure—choose individual or institution." />
-  <meta name="twitter:image" content="https://clearframeworks.org/clarity/assets/og-clarity.png" />
+  <meta name="twitter:image" content="https://clearframeworks.org/betav1/assets/og-clarity.png" />
 
   <style>
     :root{
@@ -193,34 +193,52 @@
       line-height: 1.55;
     }
 
-    .evan-coming{
-      padding: 18px;
-      margin-top: 20px;
+    #chat-window{
+      height: 300px;
+      overflow-y: auto;
+      margin-bottom: 14px;
+      padding: 16px;
       border-radius: 12px;
-      border: 1px solid rgba(233,238,247,.14);
-      background: rgba(7,10,16,.45);
-      text-align: center;
+      border: 1px solid rgba(233,238,247,.12);
+      background: rgba(7,10,16,.38);
     }
 
-    .evan-coming strong{
-      display: inline-block;
-      font-size: 16px;
+    .chat-message{
+      margin-bottom: 10px;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    .chat-message strong{
       color: #ffffff;
-      margin-bottom: 8px;
     }
 
-    .evan-coming p{
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.55;
+    #chat-input{
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(233,238,247,.16);
+      background: rgba(7,10,16,.55);
+      color: var(--text);
+      font-size: 16px;
+      outline: none;
+    }
+
+    #chat-input::placeholder{
+      color: rgba(233,238,247,.42);
+    }
+
+    #chat-input:focus{
+      border-color: rgba(47,111,138,.75);
+      box-shadow: 0 0 0 3px rgba(47,111,138,.18);
     }
   </style>
 </head>
 <body>
   <header>
     <div class="wrap">
-      <a class="brand" href="/clarity/" aria-label="Clarity home">
-        <img src="/clarity/assets/clarity-wordmark-alt.png" alt="Clarity" decoding="async" />
+      <a class="brand" href="/betav1/" aria-label="Clarity home">
+        <img src="/betav1/assets/clarity-wordmark-alt.png" alt="Clarity" decoding="async" />
       </a>
     </div>
   </header>
@@ -238,7 +256,7 @@
     </section>
 
     <section class="grid" aria-label="Clarity routing">
-      <a class="card" href="/clarity/individual/">
+      <a class="card" href="/betav1/individual/">
         <h2 class="title">Individual</h2>
         <p class="sub">For people who feel overwhelmed, behind, and out of margin.</p>
         <ul>
@@ -249,7 +267,7 @@
         <span class="cta">Enter Individual →</span>
       </a>
 
-      <a class="card" href="/clarity/institution/">
+      <a class="card" href="/betav1/institution/">
         <h2 class="title">Institution</h2>
         <p class="sub">For operators mapping constraints, tradeoffs, and failure modes.</p>
         <ul>
@@ -264,21 +282,54 @@
     <div class="note">No moral theater. No sales pressure. Just clarity.</div>
 
     <section id="evan" class="evan" aria-label="Talk with EVAN">
-      <h2>Talk with EVAN</h2>
+      <h2>Talk with EVAN (beta)</h2>
 
       <p>
-        EVAN is a decision support assistant designed to help people sort
-        through constraints and reduce noise during difficult moments.
+        Describe what's happening. EVAN helps you sort through constraints,
+        reduce noise, and find a stable next step.
       </p>
 
-      <div class="evan-coming">
-        <strong>EVAN is coming soon.</strong>
-        <p>
-          The interface is being built. When ready, you'll be able to
-          describe what's happening and EVAN will help map a stable next step.
-        </p>
-      </div>
+      <div id="chat-window"></div>
+
+      <input
+        id="chat-input"
+        type="text"
+        placeholder="Describe what's going on..."
+      />
     </section>
   </main>
+
+  <script>
+    const input = document.getElementById("chat-input");
+    const windowBox = document.getElementById("chat-window");
+
+    function addMessage(sender, text) {
+      const msg = document.createElement("div");
+      msg.className = "chat-message";
+      msg.innerHTML = "<strong>" + sender + ":</strong> " + text;
+
+      windowBox.appendChild(msg);
+      windowBox.scrollTop = windowBox.scrollHeight;
+    }
+
+    if (input && windowBox) {
+      input.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+          const text = input.value.trim();
+          if (!text) return;
+
+          addMessage("You", text);
+          input.value = "";
+
+          setTimeout(function () {
+            addMessage(
+              "EVAN",
+              "Start by identifying the constraint that is actually limiting your next move. What feels most locked right now?"
+            );
+          }, 600);
+        }
+      });
+    }
+  </script>
 </body>
 </html>
