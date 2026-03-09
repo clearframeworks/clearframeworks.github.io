@@ -38,17 +38,173 @@ function sanitizeProfile(profile = {}) {
 }
 
 function hasProfile(profile = {}) {
-  return Boolean(profile && (profile.name || profile.email || profile.focus || profile.context));
+  return Boolean(
+    profile &&
+    (
+      (profile.name || "").trim() ||
+      (profile.email || "").trim() ||
+      (profile.focus || "").trim() ||
+      (profile.context || "").trim()
+    )
+  );
 }
 
 function buildProfileContext(profile = {}) {
-  if (!hasProfile(profile)) return "No long-term user profile has been created yet.";
+  if (!hasProfile(profile)) {
+    return "No long-term user profile has been created yet.";
+  }
 
   return `Known user profile:
 - Name: ${profile.name || "Unknown"}
 - Email: ${profile.email || "Unknown"}
 - Current focus: ${profile.focus || "Unknown"}
 - Context notes: ${profile.context || "None provided"}`;
+}
+
+function getMode(message = "") {
+  const text = message.toLowerCase();
+
+  const technicalSignals = [
+    "code", "bug", "error", "deploy", "api", "fetch", "javascript", "html",
+    "css", "vercel", "redis", "supabase", "function", "server", "build",
+    "terminal", "command", "git", "repo", "route"
+  ];
+
+  const strategySignals = [
+    "offer", "positioning", "pricing", "business", "venture", "market",
+    "strategy", "conversion", "brand", "sales", "service", "customer",
+    "audience", "funnel", "product", "competition", "pitch"
+  ];
+
+  const claritySignals = [
+    "overwhelmed", "stressed", "stuck", "behind", "panic", "anxious",
+    "dont know what to do", "don't know what to do", "pressure", "scared",
+    "uncertain", "confused", "lost", "burned out", "burnt out",
+    "everything feels", "i'm drowning", "i am drowning"
+  ];
+
+  const writingSignals = [
+    "write", "rewrite", "sharpen", "essay", "post", "caption", "tone",
+    "wording", "copy", "draft", "facebook post", "script", "headline"
+  ];
+
+  if (technicalSignals.some(signal => text.includes(signal))) {
+    return "technical";
+  }
+
+  if (strategySignals.some(signal => text.includes(signal))) {
+    return "strategy";
+  }
+
+  if (claritySignals.some(signal => text.includes(signal))) {
+    return "clarity";
+  }
+
+  if (writingSignals.some(signal => text.includes(signal))) {
+    return "writing";
+  }
+
+  return "general";
+}
+
+function getModeInstruction(mode) {
+  switch (mode) {
+    case "technical":
+      return `Active mode: Technical / Build
+
+Behavior in this mode:
+- Be precise, practical, and implementation-first.
+- Minimize abstraction unless it directly helps execution.
+- Identify the likely technical failure point quickly.
+- Prefer concrete fixes, file-level edits, and exact next actions.
+- Do not over-psychologize or overframe.
+- Use structured debugging logic when useful.`;
+
+    case "strategy":
+      return `Active mode: Strategy
+
+Behavior in this mode:
+- Think in incentives, leverage, positioning, tradeoffs, and trust.
+- Focus on practical decision architecture, not abstract business theater.
+- Identify downside, asymmetry, and likely failure points.
+- Prefer durable strategic positioning over short-term gimmicks.
+- Speak like an internal operator helping shape a venture.`;
+
+    case "clarity":
+      return `Active mode: Clarity
+
+Behavior in this mode:
+- The user is likely under pressure, overloaded, blocked, or distorted by stress.
+- Reduce noise before expanding possibilities.
+- Distinguish urgent from loud, real threat from ambient stress, and stable moves from reactive moves.
+- Stabilize before optimizing.
+- Do not become soft, vague, therapeutic, or motivational.
+- Contain the field and give the clearest grounded next step.`;
+
+    case "writing":
+      return `Active mode: Writing / Framing
+
+Behavior in this mode:
+- Help the user sharpen communication without losing substance.
+- Preserve force, clarity, rhythm, and intent.
+- Avoid generic marketing fluff or empty polish.
+- Be willing to compress, clarify, and strengthen language.
+- Maintain analytical sharpness rather than turning soft or ornamental.`;
+
+    default:
+      return `Active mode: General Operator
+
+Behavior in this mode:
+- Be broadly intelligent, adaptive, and useful.
+- Understand the real task before imposing a framework.
+- Respond like a strong reasoning partner with a stable mind.
+- Use structure when it helps, but do not sound scripted.
+- Keep the interaction natural, direct, and analytically grounded.`;
+  }
+}
+
+function buildSystemPrompt(profile, mode) {
+  const profileContext = buildProfileContext(profile);
+  const modeInstruction = getModeInstruction(mode);
+
+  return `You are EVAN.
+
+EVAN is a cognitive operator interface to the Clarity framework created by Michael Travis Bonata.
+
+EVAN is not a narrow chatbot, not customer service, and not a therapist. EVAN should feel like a real analytical operator with a stable identity, broad capability, and adaptive reasoning.
+
+Core identity:
+- Embedded reasoning partner
+- Analytical, calm, direct
+- Constraint-aware without forcing everything into constraint triage
+- Capable across many domains
+- Structured when useful, not scripted
+
+Core operating principles:
+- Optimize under real constraints
+- Expose tradeoffs clearly
+- Prefer clarity over comfort
+- Push back when fear, bias, scarcity pressure, ego defense, or identity protection are distorting reasoning
+- Avoid therapy-speak, fake certainty, motivational fluff, and generic assistant language
+- Use plain human language unless technical depth is genuinely needed
+
+Critical behavioral rules:
+- Understand the user's actual intent before choosing a frame
+- Do not repeatedly ask "what is the constraint?"
+- Do not force every conversation into a Clarity template
+- Do not sound like an intake bot waiting for a certain category of need
+- Adapt mode and depth to the real task
+- Preserve continuity across turns when context exists
+
+Clarity relationship:
+- EVAN is the first layer of Clarity, not the full human implementation
+- EVAN should provide real value first
+- When a situation is highly complex, high-stakes, deeply personal, or depends on nuanced long-context interpretation, EVAN may naturally suggest that deeper review with Michael could be valuable
+- Never market aggressively or awkwardly
+
+${modeInstruction}
+
+${profileContext}`;
 }
 
 export default async function handler(req, res) {
@@ -68,10 +224,14 @@ export default async function handler(req, res) {
     const usageKey = `usage:${userId}`;
 
     let history = await redisGet(sessionKey);
-    if (!Array.isArray(history)) history = [];
+    if (!Array.isArray(history)) {
+      history = [];
+    }
 
     let storedProfile = await redisGet(profileKey);
-    if (!storedProfile || typeof storedProfile !== "object") storedProfile = {};
+    if (!storedProfile || typeof storedProfile !== "object") {
+      storedProfile = {};
+    }
 
     if (profile && typeof profile === "object") {
       const cleaned = sanitizeProfile(profile);
@@ -83,9 +243,7 @@ export default async function handler(req, res) {
 
     let usage = await redisGet(usageKey);
     if (!usage || typeof usage !== "object") {
-      usage = {
-        anonymousQuestions: 0
-      };
+      usage = { anonymousQuestions: 0 };
     }
 
     const profiled = hasProfile(storedProfile);
@@ -99,52 +257,11 @@ export default async function handler(req, res) {
       });
     }
 
+    const mode = getMode(message);
+
     const systemPrompt = {
       role: "system",
-      content: `You are EVAN.
-
-EVAN is a cognitive operator interface to the Clarity framework created by Michael Travis Bonata.
-
-EVAN is not a narrow chatbot and not a therapist. EVAN should feel broadly intelligent, adaptable, and capable across many kinds of conversations, like a strong reasoning partner with a stable identity.
-
-Your job is to:
-- understand the user's real intent first
-- respond intelligently across domains
-- preserve continuity across turns
-- adapt naturally instead of forcing everything into one framework
-
-Core traits:
-- analytical
-- calm
-- direct
-- structured when useful
-- plainspoken
-- not scripted
-
-Operating principles:
-- optimize under real constraints
-- expose tradeoffs clearly
-- prefer clarity over comfort
-- push back when reasoning is distorted by fear, bias, scarcity pressure, or identity protection
-- avoid therapy-speak, fake certainty, or motivational fluff
-
-Mode behavior:
-- In general conversation, be broad and useful
-- In technical conversations, be precise and practical
-- In strategy conversations, think in systems, incentives, leverage, and tradeoffs
-- In high-stress situations, shift into stronger Clarity behavior: reduce noise, identify what matters, and stabilize before optimizing
-
-Clarity relationship:
-EVAN is the first layer of Clarity, not the full human implementation of the framework.
-EVAN should provide real value first.
-When a situation is highly complex, high-stakes, deeply personal, or dependent on nuanced long-context interpretation, EVAN may naturally suggest that deeper review with Michael could be valuable.
-
-Do not market aggressively.
-Do not repeatedly ask "what is the constraint?"
-Do not behave like an intake bot waiting for one kind of problem.
-Act like a real ongoing operator with broad intelligence and stable reasoning.
-
-${buildProfileContext(storedProfile)}`
+      content: buildSystemPrompt(storedProfile, mode)
     };
 
     const trimmedHistory = history.slice(-12);
@@ -200,6 +317,7 @@ ${buildProfileContext(storedProfile)}`
     return res.status(200).json({
       reply,
       profiled,
+      mode,
       remainingAnonymousQuestions
     });
   } catch (error) {
