@@ -213,7 +213,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { message, sessionId, userId, profile } = req.body || {};
+    const { message, sessionId, userId, profile, paid } = req.body || {};
 
     if (!message || !sessionId || !userId) {
       return res.status(400).json({ error: "Missing message, sessionId, or userId" });
@@ -247,13 +247,17 @@ export default async function handler(req, res) {
     }
 
     const profiled = hasProfile(storedProfile);
-    const anonymousLimitReached = !profiled && usage.anonymousQuestions >= 3;
+    const isPaid = Boolean(paid);
+    const anonymousLimitReached = !isPaid && !profiled && usage.anonymousQuestions >= 3;
 
     if (anonymousLimitReached) {
       return res.status(403).json({
         error: "Anonymous question limit reached.",
         gate: true,
-        remainingAnonymousQuestions: 0
+        remainingAnonymousQuestions: 0,
+        anonymousQuestionsUsed: usage.anonymousQuestions,
+        profiled,
+        paid: isPaid
       });
     }
 
@@ -305,23 +309,24 @@ export default async function handler(req, res) {
 
     await redisSet(sessionKey, newHistory);
 
-    if (!profiled) {
-  usage.anonymousQuestions += 1;
-  await redisSet(usageKey, usage);
-}
+    if (!profiled && !isPaid) {
+      usage.anonymousQuestions += 1;
+      await redisSet(usageKey, usage);
+    }
 
-const anonymousQuestionsUsed = profiled ? usage.anonymousQuestions : usage.anonymousQuestions;
-const remainingAnonymousQuestions = profiled
-  ? null
-  : Math.max(0, 3 - anonymousQuestionsUsed);
+    const anonymousQuestionsUsed = usage.anonymousQuestions;
+    const remainingAnonymousQuestions = (profiled || isPaid)
+      ? null
+      : Math.max(0, 3 - anonymousQuestionsUsed);
 
-return res.status(200).json({
-  reply,
-  profiled,
-  mode,
-  anonymousQuestionsUsed,
-  remainingAnonymousQuestions
-});
+    return res.status(200).json({
+      reply,
+      profiled,
+      paid: isPaid,
+      mode,
+      anonymousQuestionsUsed,
+      remainingAnonymousQuestions
+    });
   } catch (error) {
     console.error("EVAN API ERROR:", error);
     return res.status(500).json({ error: "Server error. Please try again." });
