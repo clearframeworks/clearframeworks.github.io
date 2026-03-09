@@ -25,7 +25,6 @@
       --bg: #070a10;
       --bg2:#0b1220;
       --card:#0e1728;
-      --card2:#0c1424;
       --text:#e9eef7;
       --muted: rgba(233,238,247,.72);
       --border: rgba(233,238,247,.12);
@@ -98,9 +97,7 @@
       padding: 18px 0 44px;
     }
 
-    @media (max-width: 860px){
-      .grid{ grid-template-columns: 1fr; }
-    }
+    @media (max-width: 860px){ .grid{ grid-template-columns: 1fr; } }
 
     .card{
       background: linear-gradient(180deg, rgba(14,23,40,.88), rgba(12,20,36,.88));
@@ -179,17 +176,47 @@
       box-shadow: var(--shadow);
     }
 
-    .evan h2{
+    .evan-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .evan-head h2{
       margin: 0 0 10px;
       font-size: clamp(26px, 3vw, 34px);
       line-height: 1.1;
     }
 
-    .evan > p{
-      margin: 0 0 20px;
+    .evan-head p{
+      margin: 0;
       color: var(--muted);
       max-width: 62ch;
       line-height: 1.55;
+    }
+
+    .head-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .mini-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius: 999px;
+      border:1px solid rgba(233,238,247,.14);
+      background: rgba(7,10,16,.4);
+      color: var(--text);
+      text-decoration:none;
+      font-weight: 700;
+      cursor:pointer;
     }
 
     .status-row{
@@ -197,7 +224,7 @@
       justify-content:space-between;
       align-items:center;
       gap:14px;
-      margin-bottom:10px;
+      margin: 18px 0 10px;
       color: var(--muted);
       font-size: 14px;
       flex-wrap:wrap;
@@ -277,7 +304,7 @@
     }
 
     .gate-card{
-      width:min(760px, 100%);
+      width:min(860px, 100%);
       background: linear-gradient(180deg, rgba(14,23,40,.96), rgba(12,20,36,.96));
       border:1px solid rgba(233,238,247,.12);
       border-radius: 18px;
@@ -424,12 +451,19 @@
     <div class="note">No moral theater. No sales pressure. Just clarity.</div>
 
     <section id="evan" class="evan" aria-label="Talk with EVAN">
-      <h2>Talk with EVAN</h2>
+      <div class="evan-head">
+        <div>
+          <h2>Talk with EVAN</h2>
+          <p>
+            EVAN is the first layer of Clarity. He can help organize a situation,
+            reduce noise, and map the shape of a problem before deeper review with Michael.
+          </p>
+        </div>
 
-      <p>
-        EVAN is the first layer of Clarity. He can help organize a situation,
-        reduce noise, and map the shape of a problem before deeper review with Michael.
-      </p>
+        <div class="head-actions">
+          <button class="mini-btn" id="profile-cta-btn" type="button">Create profile / Log in</button>
+        </div>
+      </div>
 
       <div class="status-row">
         <div class="pill" id="memory-pill">Session memory active for this browser.</div>
@@ -450,16 +484,14 @@
     <div class="gate-card">
       <h3>Continue with better accuracy, payment for runtime costs, or contact Michael directly.</h3>
       <p>
-        You’ve used the anonymous EVAN preview. To continue, either create a lightweight profile
-        for better continuity and accuracy, pay to continue using EVAN beyond the preview limit,
-        or contact Michael directly for deeper Clarity work.
+        The anonymous EVAN preview has ended. Create a profile for continuity and accuracy, pay to continue using EVAN, or contact Michael directly for deeper Clarity work.
       </p>
 
       <div class="gate-grid">
         <div class="gate-panel">
-          <h4>Create profile</h4>
+          <h4>Create profile / Log in</h4>
           <p>
-            This creates a persistent browser profile so EVAN can respond with better continuity and context.
+            This is the continuity layer for EVAN. It helps preserve context and improves accuracy across sessions.
           </p>
 
           <input id="profile-name" type="text" placeholder="Your name" />
@@ -467,18 +499,18 @@
           <input id="profile-focus" type="text" placeholder="Main focus right now" />
           <textarea id="profile-context" placeholder="Any context EVAN should remember about your situation"></textarea>
 
-          <button class="btn btn-primary" id="save-profile-btn">Save profile and continue</button>
-          <div class="small-note">Profile improves continuity and accuracy across sessions.</div>
+          <button class="btn btn-primary" id="save-profile-btn" type="button">Create profile</button>
+          <div class="small-note">Profile improves continuity and accuracy, but continued EVAN runtime still requires payment.</div>
         </div>
 
         <div class="gate-panel">
           <h4>Pay to continue</h4>
           <p>
-            EVAN costs money to run. Payment unlocks continued use beyond the anonymous preview limit.
+            EVAN costs money to run. Payment unlocks continued use beyond the anonymous preview.
           </p>
 
-          <button class="btn btn-primary" id="pay-evan-btn">Pay to continue with EVAN</button>
-          <div class="small-note">This unlock is tied to this browser for now.</div>
+          <button class="btn btn-primary" id="pay-evan-btn" type="button">Pay to continue with EVAN</button>
+          <div class="small-note">This unlock is currently tied to this browser.</div>
         </div>
 
         <div class="gate-panel">
@@ -488,7 +520,7 @@
           </p>
 
           <a class="btn btn-secondary" href="mailto:hello@clearframeworks.org?subject=Clarity%20Inquiry">Email Michael directly</a>
-          <div class="small-note">You can replace this email address later if you want a different intake channel.</div>
+          <div class="small-note">You can swap this email later for a different intake channel.</div>
         </div>
       </div>
     </div>
@@ -502,18 +534,7 @@
     const memoryPill = document.getElementById("memory-pill");
     const saveProfileBtn = document.getElementById("save-profile-btn");
     const payEvanBtn = document.getElementById("pay-evan-btn");
-
-    let sessionId = localStorage.getItem("evanSession");
-    if (!sessionId) {
-      sessionId = crypto.randomUUID();
-      localStorage.setItem("evanSession", sessionId);
-    }
-
-    let userId = localStorage.getItem("evanUserId");
-    if (!userId) {
-      userId = crypto.randomUUID();
-      localStorage.setItem("evanUserId", userId);
-    }
+    const profileCtaBtn = document.getElementById("profile-cta-btn");
 
     let profile = {};
     try {
@@ -524,12 +545,12 @@
 
     const params = new URLSearchParams(window.location.search);
     if (params.get("paid") === "true") {
-      localStorage.setItem("evanPaid", "true");
+      document.cookie = "evan_paid=1; Path=/; Max-Age=2592000; SameSite=Lax; Secure";
       window.history.replaceState({}, document.title, "/clarity/");
     }
 
     function isPaid() {
-      return localStorage.getItem("evanPaid") === "true";
+      return document.cookie.split("; ").some(row => row.startsWith("evan_paid=1"));
     }
 
     function hasProfile(p) {
@@ -541,29 +562,27 @@
       );
     }
 
-    function updateStatusPill({ profiled = false, paid = false, remaining = null } = {}) {
+    function updateStatusPill({ profiled = false, paid = false, previewQuestionsUsed = 0, gate = false } = {}) {
       if (paid) {
         usagePill.textContent = "Paid access active. EVAN is unlocked on this browser.";
         memoryPill.textContent = hasProfile(profile)
           ? "Session memory + profile memory active."
-          : "Session memory active. Profile can improve continuity.";
+          : "Session memory active. Add a profile for better continuity.";
         return;
       }
 
-      if (profiled) {
-        usagePill.textContent = "Profile active. EVAN is using longer user context.";
-        memoryPill.textContent = "Session memory + profile memory active.";
+      if (gate) {
+        usagePill.textContent = "Preview complete. Create a profile, pay to continue, or contact Michael.";
+        memoryPill.textContent = hasProfile(profile)
+          ? "Profile saved. Payment unlocks continued EVAN runtime."
+          : "Anonymous preview complete.";
         return;
       }
 
-      if (typeof remaining === "number") {
-        usagePill.textContent = `${remaining} anonymous question${remaining === 1 ? "" : "s"} remaining.`;
-        memoryPill.textContent = "Session memory active for this browser.";
-        return;
-      }
-
-      usagePill.textContent = "3 anonymous questions available.";
-      memoryPill.textContent = "Session memory active for this browser.";
+      usagePill.textContent = `Anonymous preview in progress. ${Math.max(0, 3 - previewQuestionsUsed)} of 3 remaining.`;
+      memoryPill.textContent = profiled
+        ? "Profile saved. It improves continuity and accuracy."
+        : "Session memory active for this browser.";
     }
 
     async function initStatus() {
@@ -575,10 +594,7 @@
           },
           body: JSON.stringify({
             action: "status",
-            sessionId,
-            userId,
-            profile,
-            paid: isPaid()
+            profile
           })
         });
 
@@ -588,7 +604,8 @@
           updateStatusPill({
             profiled: hasProfile(profile),
             paid: isPaid(),
-            remaining: hasProfile(profile) || isPaid() ? null : 3
+            previewQuestionsUsed: 0,
+            gate: false
           });
           return;
         }
@@ -596,13 +613,15 @@
         updateStatusPill({
           profiled: Boolean(data.profiled),
           paid: Boolean(data.paid),
-          remaining: data.remainingAnonymousQuestions
+          previewQuestionsUsed: Number(data.previewQuestionsUsed || 0),
+          gate: Boolean(data.gate)
         });
       } catch {
         updateStatusPill({
           profiled: hasProfile(profile),
           paid: isPaid(),
-          remaining: hasProfile(profile) || isPaid() ? null : 3
+          previewQuestionsUsed: 0,
+          gate: false
         });
       }
     }
@@ -647,10 +666,7 @@
           body: JSON.stringify({
             action: "chat",
             message: text,
-            sessionId,
-            userId,
-            profile,
-            paid: isPaid()
+            profile
           })
         });
 
@@ -658,12 +674,13 @@
         typing.remove();
 
         if (data?.gate) {
-          addMessage("EVAN", "You’ve reached the anonymous preview limit. Create a profile for better accuracy, pay to continue with EVAN, or contact Michael directly.");
+          addMessage("EVAN", "The preview has ended. Create a profile for continuity, pay to continue using EVAN, or contact Michael directly.");
           showGate();
           updateStatusPill({
-            profiled: false,
-            paid: false,
-            remaining: 0
+            profiled: Boolean(data.profiled),
+            paid: Boolean(data.paid),
+            previewQuestionsUsed: Number(data.previewQuestionsUsed || 3),
+            gate: true
           });
           return;
         }
@@ -677,8 +694,13 @@
         updateStatusPill({
           profiled: Boolean(data.profiled),
           paid: Boolean(data.paid),
-          remaining: data.remainingAnonymousQuestions
+          previewQuestionsUsed: Number(data.previewQuestionsUsed || 0),
+          gate: Boolean(data.gate)
         });
+
+        if (data.gate) {
+          showGate();
+        }
       } catch (err) {
         typing.remove();
         addMessage("EVAN", "Connection error. Please try again.");
@@ -699,6 +721,12 @@
       });
     }
 
+    if (profileCtaBtn) {
+      profileCtaBtn.addEventListener("click", function () {
+        showGate();
+      });
+    }
+
     saveProfileBtn.addEventListener("click", function () {
       profile = {
         name: document.getElementById("profile-name").value.trim(),
@@ -709,13 +737,14 @@
       };
 
       localStorage.setItem("evanProfile", JSON.stringify(profile));
+      hideGate();
       updateStatusPill({
         profiled: true,
         paid: isPaid(),
-        remaining: null
+        previewQuestionsUsed: 0,
+        gate: false
       });
-      hideGate();
-      addMessage("EVAN", "Profile saved. You can continue, and I’ll use that context for better continuity.");
+      addMessage("EVAN", "Profile created. I’ll use that context for better continuity and accuracy.");
     });
 
     if (payEvanBtn) {

@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+
 async function redisGet(key) {
   const response = await fetch(
     `${process.env.UPSTASH_REDIS_REST_URL}/get/${encodeURIComponent(key)}`,
@@ -27,6 +29,34 @@ async function redisSet(key, value) {
   );
 }
 
+function parseCookies(cookieHeader = "") {
+  return Object.fromEntries(
+    cookieHeader
+      .split(";")
+      .map(part => part.trim())
+      .filter(Boolean)
+      .map(part => {
+        const eqIndex = part.indexOf("=");
+        const key = eqIndex >= 0 ? part.slice(0, eqIndex) : part;
+        const value = eqIndex >= 0 ? part.slice(eqIndex + 1) : "";
+        return [key, decodeURIComponent(value)];
+      })
+  );
+}
+
+function appendSetCookie(res, cookie) {
+  const existing = res.getHeader("Set-Cookie");
+  if (!existing) {
+    res.setHeader("Set-Cookie", [cookie]);
+    return;
+  }
+  if (Array.isArray(existing)) {
+    res.setHeader("Set-Cookie", [...existing, cookie]);
+    return;
+  }
+  res.setHeader("Set-Cookie", [existing, cookie]);
+}
+
 function sanitizeProfile(profile = {}) {
   return {
     name: (profile.name || "").trim().slice(0, 80),
@@ -51,7 +81,7 @@ function hasProfile(profile = {}) {
 
 function buildProfileContext(profile = {}) {
   if (!hasProfile(profile)) {
-    return "No long-term user profile has been created yet.";
+    return "No persistent user profile has been created yet.";
   }
 
   return `Known user profile:
@@ -186,19 +216,20 @@ Critical behavioral rules:
 - Preserve continuity across turns when context exists
 
 Clarity product context:
-- EVAN lives inside Clarity as the first layer of the experience.
-- Anonymous visitors get 3 preview questions.
-- The 3-question limit exists to give people a real sample without turning EVAN into unlimited unpaid infrastructure usage.
+- EVAN is the first layer of Clarity.
+- Users get a limited anonymous preview before the gate appears.
+- The preview exists to let users experience EVAN without turning the system into unlimited unpaid infrastructure usage.
 - Creating a profile improves continuity and accuracy across sessions.
-- Payment exists to cover the runtime cost of OpenAI, memory, hosting, and continued EVAN usage.
-- Michael is the founder and deeper Clarity work with him is the higher-order layer when situations become more nuanced, higher-stakes, or require stronger human interpretation.
-- If the user asks why there is a 3-question limit, why profile matters, why payment is required, or why Michael is involved, answer directly from this actual product context instead of giving an abstract generic answer.
+- Creating a profile does not remove the runtime cost of EVAN.
+- Payment exists to cover OpenAI, memory, hosting, and continued EVAN runtime.
+- Michael is the founder and deeper Clarity work with him is the higher-order layer when a situation becomes more nuanced, higher-stakes, or more dependent on human interpretation.
+- If a user asks why there is a preview limit, why profile matters, why payment is required, or why Michael is involved, answer directly from this product context rather than giving a generic abstract answer.
 
 Clarity relationship:
-- EVAN is the first layer of Clarity, not the full human implementation
-- EVAN should provide real value first
-- When a situation is highly complex, high-stakes, deeply personal, or depends on nuanced long-context interpretation, EVAN may naturally suggest that deeper review with Michael could be valuable
-- Never market aggressively or awkwardly
+- EVAN is the first layer of Clarity, not the full human implementation.
+- EVAN should provide real value first.
+- When a situation is highly complex, high-stakes, deeply personal, or depends on nuanced long-context interpretation, EVAN may naturally suggest that deeper review with Michael could be valuable.
+- Never market aggressively or awkwardly.
 
 ${modeInstruction}
 
@@ -211,22 +242,28 @@ export default async function handler(req, res) {
   }
 
   try {
+    const cookies = parseCookies(req.headers.cookie || "");
+    let previewId = cookies.evan_preview;
+
+    if (!previewId) {
+      previewId = randomUUID();
+      appendSetCookie(
+        res,
+        `evan_preview=${encodeURIComponent(previewId)}; Path=/; Max-Age=2592000; SameSite=Lax; Secure`
+      );
+    }
+
+    const isPaid = cookies.evan_paid === "1";
+
     const {
       action = "chat",
       message = "",
-      sessionId,
-      userId,
-      profile,
-      paid
+      profile
     } = req.body || {};
 
-    if (!sessionId || !userId) {
-      return res.status(400).json({ error: "Missing sessionId or userId" });
-    }
-
-    const sessionKey = `session:${sessionId}`;
-    const profileKey = `profile:${userId}`;
-    const usageKey = `usage:${userId}`;
+    const sessionKey = `evan:session:${previewId}`;
+    const profileKey = `evan:profile:${previewId}`;
+    const usageKey = `evan:usage:${previewId}`;
 
     let history = await redisGet(sessionKey);
     if (!Array.isArray(history)) {
@@ -252,16 +289,13 @@ export default async function handler(req, res) {
     }
 
     const profiled = hasProfile(storedProfile);
-    const isPaid = Boolean(paid);
 
     if (action === "status") {
       return res.status(200).json({
         profiled,
         paid: isPaid,
-        anonymousQuestionsUsed: usage.previewQuestionsUsed,
-        remainingAnonymousQuestions: (profiled || isPaid)
-          ? null
-          : Math.max(0, 3 - usage.previewQuestionsUsed)
+        previewQuestionsUsed: usage.previewQuestionsUsed,
+        gate: !isPaid && usage.previewQuestionsUsed >= 3
       });
     }
 
@@ -269,14 +303,13 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Missing message" });
     }
 
-    if (!profiled && !isPaid && usage.previewQuestionsUsed >= 3) {
+    if (!isPaid && usage.previewQuestionsUsed >= 3) {
       return res.status(403).json({
-        error: "Anonymous question limit reached.",
+        error: "Preview limit reached.",
         gate: true,
-        remainingAnonymousQuestions: 0,
-        anonymousQuestionsUsed: usage.previewQuestionsUsed,
         profiled,
-        paid: isPaid
+        paid: isPaid,
+        previewQuestionsUsed: usage.previewQuestionsUsed
       });
     }
 
@@ -328,7 +361,7 @@ export default async function handler(req, res) {
 
     await redisSet(sessionKey, newHistory);
 
-    if (!profiled && !isPaid) {
+    if (!isPaid) {
       usage.previewQuestionsUsed += 1;
       await redisSet(usageKey, usage);
     }
@@ -338,10 +371,8 @@ export default async function handler(req, res) {
       profiled,
       paid: isPaid,
       mode,
-      anonymousQuestionsUsed: usage.previewQuestionsUsed,
-      remainingAnonymousQuestions: (profiled || isPaid)
-        ? null
-        : Math.max(0, 3 - usage.previewQuestionsUsed)
+      previewQuestionsUsed: usage.previewQuestionsUsed,
+      gate: !isPaid && usage.previewQuestionsUsed >= 3
     });
   } catch (error) {
     console.error("EVAN API ERROR:", error);
