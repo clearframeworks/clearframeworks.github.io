@@ -306,20 +306,22 @@ export default async function handler(req, res) {
     await redisSet(sessionKey, newHistory);
 
     if (!profiled) {
-      usage.anonymousQuestions += 1;
-      await redisSet(usageKey, usage);
-    }
+  usage.anonymousQuestions += 1;
+  await redisSet(usageKey, usage);
+}
 
-    const remainingAnonymousQuestions = profiled
-      ? null
-      : Math.max(0, 3 - usage.anonymousQuestions);
+const anonymousQuestionsUsed = profiled ? usage.anonymousQuestions : usage.anonymousQuestions;
+const remainingAnonymousQuestions = profiled
+  ? null
+  : Math.max(0, 3 - anonymousQuestionsUsed);
 
-    return res.status(200).json({
-      reply,
-      profiled,
-      mode,
-      remainingAnonymousQuestions
-    });
+return res.status(200).json({
+  reply,
+  profiled,
+  mode,
+  anonymousQuestionsUsed,
+  remainingAnonymousQuestions
+});
   } catch (error) {
     console.error("EVAN API ERROR:", error);
     return res.status(500).json({ error: "Server error. Please try again." });
