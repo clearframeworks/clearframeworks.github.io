@@ -321,12 +321,20 @@
           addMessage("You", text);
           input.value = "";
 
-          setTimeout(function () {
-            addMessage(
-              "EVAN",
-              "Start by identifying the constraint that is actually limiting your next move. What feels most locked right now?"
-            );
-          }, 600);
+fetch("/api/evan", {
+method: "POST",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify({ message: text })
+})
+.then(res => res.json())
+.then(data => {
+addMessage("EVAN", data.reply);
+})
+.catch(err => {
+addMessage("EVAN", "Connection error. Please try again.");
+});
         }
       });
     }
