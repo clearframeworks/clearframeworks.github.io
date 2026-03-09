@@ -211,10 +211,17 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { message, sessionId, userId, profile, paid } = req.body || {};
+    const {
+      action = "chat",
+      message = "",
+      sessionId,
+      userId,
+      profile,
+      paid
+    } = req.body || {};
 
-    if (!message || !sessionId || !userId) {
-      return res.status(400).json({ error: "Missing message, sessionId, or userId" });
+    if (!sessionId || !userId) {
+      return res.status(400).json({ error: "Missing sessionId or userId" });
     }
 
     const sessionKey = `session:${sessionId}`;
@@ -247,23 +254,30 @@ export default async function handler(req, res) {
     const profiled = hasProfile(storedProfile);
     const isPaid = Boolean(paid);
 
-    let remainingAnonymousQuestions = null;
+    if (action === "status") {
+      return res.status(200).json({
+        profiled,
+        paid: isPaid,
+        anonymousQuestionsUsed: usage.previewQuestionsUsed,
+        remainingAnonymousQuestions: (profiled || isPaid)
+          ? null
+          : Math.max(0, 3 - usage.previewQuestionsUsed)
+      });
+    }
 
-    if (!profiled && !isPaid) {
-      if (usage.previewQuestionsUsed >= 3) {
-        return res.status(403).json({
-          error: "Anonymous question limit reached.",
-          gate: true,
-          remainingAnonymousQuestions: 0,
-          anonymousQuestionsUsed: usage.previewQuestionsUsed,
-          profiled,
-          paid: isPaid
-        });
-      }
+    if (!message.trim()) {
+      return res.status(400).json({ error: "Missing message" });
+    }
 
-      usage.previewQuestionsUsed += 1;
-      await redisSet(usageKey, usage);
-      remainingAnonymousQuestions = Math.max(0, 3 - usage.previewQuestionsUsed);
+    if (!profiled && !isPaid && usage.previewQuestionsUsed >= 3) {
+      return res.status(403).json({
+        error: "Anonymous question limit reached.",
+        gate: true,
+        remainingAnonymousQuestions: 0,
+        anonymousQuestionsUsed: usage.previewQuestionsUsed,
+        profiled,
+        paid: isPaid
+      });
     }
 
     const mode = getMode(message);
@@ -314,13 +328,20 @@ export default async function handler(req, res) {
 
     await redisSet(sessionKey, newHistory);
 
+    if (!profiled && !isPaid) {
+      usage.previewQuestionsUsed += 1;
+      await redisSet(usageKey, usage);
+    }
+
     return res.status(200).json({
       reply,
       profiled,
       paid: isPaid,
       mode,
       anonymousQuestionsUsed: usage.previewQuestionsUsed,
-      remainingAnonymousQuestions
+      remainingAnonymousQuestions: (profiled || isPaid)
+        ? null
+        : Math.max(0, 3 - usage.previewQuestionsUsed)
     });
   } catch (error) {
     console.error("EVAN API ERROR:", error);

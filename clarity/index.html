@@ -277,7 +277,7 @@
     }
 
     .gate-card{
-      width:min(680px, 100%);
+      width:min(760px, 100%);
       background: linear-gradient(180deg, rgba(14,23,40,.96), rgba(12,20,36,.96));
       border:1px solid rgba(233,238,247,.12);
       border-radius: 18px;
@@ -299,12 +299,12 @@
 
     .gate-grid{
       display:grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       gap:16px;
       margin-top: 18px;
     }
 
-    @media (max-width: 760px){
+    @media (max-width: 900px){
       .gate-grid{ grid-template-columns: 1fr; }
     }
 
@@ -433,7 +433,7 @@
 
       <div class="status-row">
         <div class="pill" id="memory-pill">Session memory active for this browser.</div>
-        <div class="pill" id="usage-pill">3 anonymous questions available.</div>
+        <div class="pill" id="usage-pill">Loading preview status...</div>
       </div>
 
       <div id="chat-window"></div>
@@ -448,17 +448,18 @@
 
   <div class="gate-overlay" id="gate-overlay">
     <div class="gate-card">
-      <h3>Continue with better accuracy or contact Michael directly.</h3>
+      <h3>Continue with better accuracy, payment for runtime costs, or contact Michael directly.</h3>
       <p>
         You’ve used the anonymous EVAN preview. To continue, either create a lightweight profile
-        so EVAN can reason with better continuity, or contact Michael directly for deeper Clarity work.
+        for better continuity and accuracy, pay to continue using EVAN beyond the preview limit,
+        or contact Michael directly for deeper Clarity work.
       </p>
 
       <div class="gate-grid">
         <div class="gate-panel">
           <h4>Create profile</h4>
           <p>
-            This is not a full account system yet. It creates a persistent browser profile so EVAN can respond with better continuity and context.
+            This creates a persistent browser profile so EVAN can respond with better continuity and context.
           </p>
 
           <input id="profile-name" type="text" placeholder="Your name" />
@@ -467,7 +468,17 @@
           <textarea id="profile-context" placeholder="Any context EVAN should remember about your situation"></textarea>
 
           <button class="btn btn-primary" id="save-profile-btn">Save profile and continue</button>
-          <div class="small-note">Your profile improves continuity and lets EVAN go beyond the anonymous preview limit.</div>
+          <div class="small-note">Profile improves continuity and accuracy across sessions.</div>
+        </div>
+
+        <div class="gate-panel">
+          <h4>Pay to continue</h4>
+          <p>
+            EVAN costs money to run. Payment unlocks continued use beyond the anonymous preview limit.
+          </p>
+
+          <button class="btn btn-primary" id="pay-evan-btn">Pay to continue with EVAN</button>
+          <div class="small-note">This unlock is tied to this browser for now.</div>
         </div>
 
         <div class="gate-panel">
@@ -490,6 +501,7 @@
     const usagePill = document.getElementById("usage-pill");
     const memoryPill = document.getElementById("memory-pill");
     const saveProfileBtn = document.getElementById("save-profile-btn");
+    const payEvanBtn = document.getElementById("pay-evan-btn");
 
     let sessionId = localStorage.getItem("evanSession");
     if (!sessionId) {
@@ -510,6 +522,16 @@
       profile = {};
     }
 
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("paid") === "true") {
+      localStorage.setItem("evanPaid", "true");
+      window.history.replaceState({}, document.title, "/clarity/");
+    }
+
+    function isPaid() {
+      return localStorage.getItem("evanPaid") === "true";
+    }
+
     function hasProfile(p) {
       return Boolean(
         (p?.name || "").trim() ||
@@ -519,7 +541,15 @@
       );
     }
 
-    function updateStatusPill({ profiled = false, remaining = null } = {}) {
+    function updateStatusPill({ profiled = false, paid = false, remaining = null } = {}) {
+      if (paid) {
+        usagePill.textContent = "Paid access active. EVAN is unlocked on this browser.";
+        memoryPill.textContent = hasProfile(profile)
+          ? "Session memory + profile memory active."
+          : "Session memory active. Profile can improve continuity.";
+        return;
+      }
+
       if (profiled) {
         usagePill.textContent = "Profile active. EVAN is using longer user context.";
         memoryPill.textContent = "Session memory + profile memory active.";
@@ -536,15 +566,59 @@
       memoryPill.textContent = "Session memory active for this browser.";
     }
 
-    updateStatusPill({
-      profiled: hasProfile(profile),
-      remaining: hasProfile(profile) ? null : 3
-    });
+    async function initStatus() {
+      try {
+        const res = await fetch("/api/evan", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            action: "status",
+            sessionId,
+            userId,
+            profile,
+            paid: isPaid()
+          })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          updateStatusPill({
+            profiled: hasProfile(profile),
+            paid: isPaid(),
+            remaining: hasProfile(profile) || isPaid() ? null : 3
+          });
+          return;
+        }
+
+        updateStatusPill({
+          profiled: Boolean(data.profiled),
+          paid: Boolean(data.paid),
+          remaining: data.remainingAnonymousQuestions
+        });
+      } catch {
+        updateStatusPill({
+          profiled: hasProfile(profile),
+          paid: isPaid(),
+          remaining: hasProfile(profile) || isPaid() ? null : 3
+        });
+      }
+    }
 
     function addMessage(sender, text) {
       const msg = document.createElement("div");
       msg.className = "chat-message";
-      msg.innerHTML = "<strong>" + sender + ":</strong> " + text;
+
+      const strong = document.createElement("strong");
+      strong.textContent = `${sender}: `;
+
+      const body = document.createElement("span");
+      body.textContent = text;
+
+      msg.appendChild(strong);
+      msg.appendChild(body);
       windowBox.appendChild(msg);
       windowBox.scrollTop = windowBox.scrollHeight;
     }
@@ -571,10 +645,12 @@
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
+            action: "chat",
             message: text,
             sessionId,
             userId,
-            profile
+            profile,
+            paid: isPaid()
           })
         });
 
@@ -582,10 +658,11 @@
         typing.remove();
 
         if (data?.gate) {
-          addMessage("EVAN", "You’ve reached the anonymous preview limit. Create a profile for better accuracy or contact Michael directly.");
+          addMessage("EVAN", "You’ve reached the anonymous preview limit. Create a profile for better accuracy, pay to continue with EVAN, or contact Michael directly.");
           showGate();
           updateStatusPill({
             profiled: false,
+            paid: false,
             remaining: 0
           });
           return;
@@ -599,6 +676,7 @@
         addMessage("EVAN", data.reply);
         updateStatusPill({
           profiled: Boolean(data.profiled),
+          paid: Boolean(data.paid),
           remaining: data.remainingAnonymousQuestions
         });
       } catch (err) {
@@ -608,8 +686,9 @@
     }
 
     if (input && windowBox) {
-      input.addEventListener("keypress", function (e) {
-        if (e.key === "Enter") {
+      input.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
           const text = input.value.trim();
           if (!text) return;
 
@@ -632,11 +711,35 @@
       localStorage.setItem("evanProfile", JSON.stringify(profile));
       updateStatusPill({
         profiled: true,
+        paid: isPaid(),
         remaining: null
       });
       hideGate();
       addMessage("EVAN", "Profile saved. You can continue, and I’ll use that context for better continuity.");
     });
+
+    if (payEvanBtn) {
+      payEvanBtn.addEventListener("click", async function () {
+        try {
+          const res = await fetch("/api/create-checkout-session", {
+            method: "POST"
+          });
+
+          const data = await res.json();
+
+          if (data.url) {
+            window.location.href = data.url;
+            return;
+          }
+
+          alert(data.error || "Unable to start checkout.");
+        } catch (err) {
+          alert("Checkout connection error.");
+        }
+      });
+    }
+
+    initStatus();
   </script>
 </body>
 </html>
