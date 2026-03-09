@@ -308,70 +308,62 @@
     </section>
   </main>
 
-  <script>
-    const input = document.getElementById("chat-input");
-    const windowBox = document.getElementById("chat-window");
+ <script>
+  const input = document.getElementById("chat-input");
+  const windowBox = document.getElementById("chat-window");
 
-    let sessionId = localStorage.getItem("evanSession");
-    if (!sessionId) {
-      sessionId = crypto.randomUUID();
-      localStorage.setItem("evanSession", sessionId);
-    }
+  let sessionId = localStorage.getItem("evanSession");
+  if (!sessionId) {
+    sessionId = crypto.randomUUID();
+    localStorage.setItem("evanSession", sessionId);
+  }
 
-    function addMessage(sender, text) {
-      const msg = document.createElement("div");
-      msg.className = "chat-message";
-      msg.innerHTML = "<strong>" + sender + ":</strong> " + text;
-      windowBox.appendChild(msg);
-      windowBox.scrollTop = windowBox.scrollHeight;
-    }
+  function addMessage(sender, text) {
+    const msg = document.createElement("div");
+    msg.className = "chat-message";
+    msg.innerHTML = "<strong>" + sender + ":</strong> " + text;
+    windowBox.appendChild(msg);
+    windowBox.scrollTop = windowBox.scrollHeight;
+  }
 
-    async function sendMessage(text) {
-      const typing = document.createElement("div");
-      typing.className = "chat-status";
-      typing.textContent = "EVAN is thinking...";
-      windowBox.appendChild(typing);
-      windowBox.scrollTop = windowBox.scrollHeight;
-
-      try {
-        const res = await fetch("/api/evan", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            message: text,
-            sessionId
-          })
-        });
-
-        const data = await res.json();
-        typing.remove();
-
-        if (!res.ok) {
-          addMessage("EVAN", data.error || "Something went wrong.");
-          return;
-        }
-
-        addMessage("EVAN", data.reply);
-      } catch (err) {
-        typing.remove();
-        addMessage("EVAN", "Connection error. Please try again.");
-      }
-    }
-
-    if (input && windowBox) {
-      input.addEventListener("keypress", function (e) {
-        if (e.key === "Enter") {
-          const text = input.value.trim();
-          if (!text) return;
-
-          addMessage("You", text);
-          input.value = "";
-          sendMessage(text);
-        }
+  async function sendMessage(text) {
+    try {
+      const res = await fetch("/api/evan", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: text,
+          sessionId
+        })
       });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        addMessage("EVAN", data.error || "Server error. Please try again.");
+        return;
+      }
+
+      addMessage("EVAN", data.reply);
+    } catch (err) {
+      addMessage("EVAN", "Connection error. Please try again.");
     }
-  </script>
+  }
+
+  if (input && windowBox) {
+    input.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        const text = input.value.trim();
+        if (!text) return;
+
+        addMessage("You", text);
+        input.value = "";
+        sendMessage(text);
+      }
+    });
+  }
+</script>
 </body>
 </html>
