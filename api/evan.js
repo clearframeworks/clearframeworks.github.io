@@ -27,12 +27,28 @@ async function redisSet(key, value) {
   );
 }
 
-function normalizeProfile(profile) {
-  if (!profile || typeof profile !== "object") return null;
-  const name = typeof profile.name === "string" ? profile.name.trim() : "";
-  const email = typeof profile.email === "string" ? profile.email.trim().toLowerCase() : "";
-  if (!email) return null;
-  return { name, email };
+function sanitizeProfile(profile = {}) {
+  return {
+    name: (profile.name || "").trim().slice(0, 80),
+    email: (profile.email || "").trim().slice(0, 120),
+    focus: (profile.focus || "").trim().slice(0, 300),
+    context: (profile.context || "").trim().slice(0, 500),
+    createdAt: profile.createdAt || new Date().toISOString()
+  };
+}
+
+function hasProfile(profile = {}) {
+  return Boolean(profile && (profile.name || profile.email || profile.focus || profile.context));
+}
+
+function buildProfileContext(profile = {}) {
+  if (!hasProfile(profile)) return "No long-term user profile has been created yet.";
+
+  return `Known user profile:
+- Name: ${profile.name || "Unknown"}
+- Email: ${profile.email || "Unknown"}
+- Current focus: ${profile.focus || "Unknown"}
+- Context notes: ${profile.context || "None provided"}`;
 }
 
 export default async function handler(req, res) {
@@ -41,33 +57,46 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { message, sessionId, profile } = req.body || {};
-    const cleanProfile = normalizeProfile(profile);
+    const { message, sessionId, userId, profile } = req.body || {};
 
-    if (!message || !sessionId) {
-      return res.status(400).json({ error: "Missing message or sessionId" });
+    if (!message || !sessionId || !userId) {
+      return res.status(400).json({ error: "Missing message, sessionId, or userId" });
     }
 
-    const anonCountKey = `anon-count:${sessionId}`;
-    const sessionKey = cleanProfile
-      ? `profile-history:${cleanProfile.email}`
-      : `session:${sessionId}`;
-
-    let anonCount = await redisGet(anonCountKey);
-    if (typeof anonCount !== "number") anonCount = 0;
-
-    if (!cleanProfile && anonCount >= 3) {
-      return res.status(403).json({
-        gateRequired: true,
-        error: "You've reached the 3-question anonymous limit. Create a profile for more accurate EVAN support or contact Michael for deeper Clarity review."
-      });
-    }
+    const sessionKey = `session:${sessionId}`;
+    const profileKey = `profile:${userId}`;
+    const usageKey = `usage:${userId}`;
 
     let history = await redisGet(sessionKey);
     if (!Array.isArray(history)) history = [];
 
-    if (cleanProfile) {
-      await redisSet(`profile:${cleanProfile.email}`, cleanProfile);
+    let storedProfile = await redisGet(profileKey);
+    if (!storedProfile || typeof storedProfile !== "object") storedProfile = {};
+
+    if (profile && typeof profile === "object") {
+      const cleaned = sanitizeProfile(profile);
+      if (hasProfile(cleaned)) {
+        storedProfile = { ...storedProfile, ...cleaned };
+        await redisSet(profileKey, storedProfile);
+      }
+    }
+
+    let usage = await redisGet(usageKey);
+    if (!usage || typeof usage !== "object") {
+      usage = {
+        anonymousQuestions: 0
+      };
+    }
+
+    const profiled = hasProfile(storedProfile);
+    const anonymousLimitReached = !profiled && usage.anonymousQuestions >= 3;
+
+    if (anonymousLimitReached) {
+      return res.status(403).json({
+        error: "Anonymous question limit reached.",
+        gate: true,
+        remainingAnonymousQuestions: 0
+      });
     }
 
     const systemPrompt = {
@@ -110,25 +139,18 @@ EVAN is the first layer of Clarity, not the full human implementation of the fra
 EVAN should provide real value first.
 When a situation is highly complex, high-stakes, deeply personal, or dependent on nuanced long-context interpretation, EVAN may naturally suggest that deeper review with Michael could be valuable.
 
-If the user has created a profile, use that profile context naturally where relevant. Do not awkwardly restate profile details.
-
 Do not market aggressively.
-Do not repeatedly ask \"what is the constraint?\"
+Do not repeatedly ask "what is the constraint?"
 Do not behave like an intake bot waiting for one kind of problem.
-Act like a real ongoing operator with broad intelligence and stable reasoning.`
+Act like a real ongoing operator with broad intelligence and stable reasoning.
+
+${buildProfileContext(storedProfile)}`
     };
 
     const trimmedHistory = history.slice(-12);
-    const profileMessage = cleanProfile
-      ? {
-          role: "system",
-          content: `Known user profile: ${JSON.stringify(cleanProfile)}`
-        }
-      : null;
 
     const messages = [
       systemPrompt,
-      ...(profileMessage ? [profileMessage] : []),
       ...trimmedHistory,
       { role: "user", content: message }
     ];
@@ -154,7 +176,9 @@ Act like a real ongoing operator with broad intelligence and stable reasoning.`
       });
     }
 
-    const reply = data?.choices?.[0]?.message?.content || "I hit a response issue. Try that again.";
+    const reply =
+      data?.choices?.[0]?.message?.content ||
+      "I hit a response issue. Try that again.";
 
     const newHistory = [
       ...trimmedHistory,
@@ -164,14 +188,19 @@ Act like a real ongoing operator with broad intelligence and stable reasoning.`
 
     await redisSet(sessionKey, newHistory);
 
-    if (!cleanProfile) {
-      await redisSet(anonCountKey, anonCount + 1);
+    if (!profiled) {
+      usage.anonymousQuestions += 1;
+      await redisSet(usageKey, usage);
     }
+
+    const remainingAnonymousQuestions = profiled
+      ? null
+      : Math.max(0, 3 - usage.anonymousQuestions);
 
     return res.status(200).json({
       reply,
-      gateRequired: false,
-      remainingAnonymous: cleanProfile ? null : Math.max(0, 2 - anonCount)
+      profiled,
+      remainingAnonymousQuestions
     });
   } catch (error) {
     console.error("EVAN API ERROR:", error);
