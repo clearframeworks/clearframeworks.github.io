@@ -467,7 +467,7 @@
 
       <div class="status-row">
         <div class="pill" id="memory-pill">Session memory active for this browser.</div>
-        <div class="pill" id="usage-pill">Loading preview status...</div>
+        <div class="pill" id="usage-pill">Preview active.</div>
       </div>
 
       <div id="chat-window"></div>
@@ -546,12 +546,12 @@
 
     const params = new URLSearchParams(window.location.search);
     if (params.get("paid") === "true") {
-      document.cookie = "evan_paid=1; Path=/; Max-Age=2592000; SameSite=Lax; Secure";
+      localStorage.setItem("evanPaid", "true");
       window.history.replaceState({}, document.title, "/clarity/");
     }
 
     function isPaid() {
-      return document.cookie.split("; ").some(row => row.startsWith("evan_paid=1"));
+      return localStorage.getItem("evanPaid") === "true";
     }
 
     function hasProfile(p) {
@@ -563,7 +563,7 @@
       );
     }
 
-    function updateStatusPill({ profiled = false, paid = false, previewQuestionsUsed = 0, gate = false } = {}) {
+    function updateStatusPill({ profiled = false, paid = false, gate = false } = {}) {
       if (paid) {
         usagePill.textContent = "Paid access active. EVAN is unlocked on this browser.";
         memoryPill.textContent = hasProfile(profile)
@@ -580,7 +580,7 @@
         return;
       }
 
-      usagePill.textContent = `Anonymous preview in progress. ${Math.max(0, 3 - previewQuestionsUsed)} of 3 remaining.`;
+      usagePill.textContent = "Preview active.";
       memoryPill.textContent = profiled
         ? "Profile saved. It improves continuity and accuracy."
         : "Session memory active for this browser.";
@@ -596,7 +596,8 @@
           body: JSON.stringify({
             action: "status",
             profile,
-            previewId
+            previewId,
+            paid: isPaid()
           })
         });
 
@@ -607,27 +608,15 @@
           localStorage.setItem("evanPreviewId", previewId);
         }
 
-        if (!res.ok) {
-          updateStatusPill({
-            profiled: hasProfile(profile),
-            paid: isPaid(),
-            previewQuestionsUsed: 0,
-            gate: false
-          });
-          return;
-        }
-
         updateStatusPill({
           profiled: Boolean(data.profiled),
           paid: Boolean(data.paid),
-          previewQuestionsUsed: Number(data.previewQuestionsUsed || 0),
           gate: Boolean(data.gate)
         });
       } catch {
         updateStatusPill({
           profiled: hasProfile(profile),
           paid: isPaid(),
-          previewQuestionsUsed: 0,
           gate: false
         });
       }
@@ -674,7 +663,8 @@
             action: "chat",
             message: text,
             profile,
-            previewId
+            previewId,
+            paid: isPaid()
           })
         });
 
@@ -692,7 +682,6 @@
           updateStatusPill({
             profiled: Boolean(data.profiled),
             paid: Boolean(data.paid),
-            previewQuestionsUsed: Number(data.previewQuestionsUsed || 3),
             gate: true
           });
           return;
@@ -707,7 +696,6 @@
         updateStatusPill({
           profiled: Boolean(data.profiled),
           paid: Boolean(data.paid),
-          previewQuestionsUsed: Number(data.previewQuestionsUsed || 0),
           gate: Boolean(data.gate)
         });
 
@@ -754,7 +742,6 @@
       updateStatusPill({
         profiled: true,
         paid: isPaid(),
-        previewQuestionsUsed: 0,
         gate: false
       });
       addMessage("EVAN", "Profile created. I’ll use that context for better continuity and accuracy.");

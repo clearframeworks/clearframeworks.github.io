@@ -29,34 +29,6 @@ async function redisSet(key, value) {
   );
 }
 
-function parseCookies(cookieHeader = "") {
-  return Object.fromEntries(
-    cookieHeader
-      .split(";")
-      .map(part => part.trim())
-      .filter(Boolean)
-      .map(part => {
-        const eqIndex = part.indexOf("=");
-        const key = eqIndex >= 0 ? part.slice(0, eqIndex) : part;
-        const value = eqIndex >= 0 ? part.slice(eqIndex + 1) : "";
-        return [key, decodeURIComponent(value)];
-      })
-  );
-}
-
-function appendSetCookie(res, cookie) {
-  const existing = res.getHeader("Set-Cookie");
-  if (!existing) {
-    res.setHeader("Set-Cookie", [cookie]);
-    return;
-  }
-  if (Array.isArray(existing)) {
-    res.setHeader("Set-Cookie", [...existing, cookie]);
-    return;
-  }
-  res.setHeader("Set-Cookie", [existing, cookie]);
-}
-
 function sanitizeProfile(profile = {}) {
   return {
     name: (profile.name || "").trim().slice(0, 80),
@@ -242,36 +214,22 @@ export default async function handler(req, res) {
   }
 
   try {
-    const cookies = parseCookies(req.headers.cookie || "");
     const body = req.body || {};
 
-    let previewId = body.previewId || cookies.evan_preview || null;
-
+    let previewId = body.previewId || null;
     if (!previewId) {
       previewId = randomUUID();
     }
 
-    appendSetCookie(
-      res,
-      `evan_preview=${encodeURIComponent(previewId)}; Path=/; Max-Age=2592000; SameSite=Lax; Secure`
-    );
-
-    const isPaid = cookies.evan_paid === "1";
-
-    const {
-      action = "chat",
-      message = "",
-      profile
-    } = body;
+    const paidFlag = body.paid === true;
+    const { action = "chat", message = "", profile } = body;
 
     const sessionKey = `evan:session:${previewId}`;
     const profileKey = `evan:profile:${previewId}`;
     const usageKey = `evan:usage:${previewId}`;
 
     let history = await redisGet(sessionKey);
-    if (!Array.isArray(history)) {
-      history = [];
-    }
+    if (!Array.isArray(history)) history = [];
 
     let storedProfile = await redisGet(profileKey);
     if (!storedProfile || typeof storedProfile !== "object") {
@@ -297,9 +255,8 @@ export default async function handler(req, res) {
       return res.status(200).json({
         previewId,
         profiled,
-        paid: isPaid,
-        previewQuestionsUsed: usage.previewQuestionsUsed,
-        gate: !isPaid && usage.previewQuestionsUsed >= 3
+        paid: paidFlag,
+        gate: !paidFlag && usage.previewQuestionsUsed >= 3
       });
     }
 
@@ -307,14 +264,12 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Missing message" });
     }
 
-    if (!isPaid && usage.previewQuestionsUsed >= 3) {
+    if (!paidFlag && usage.previewQuestionsUsed >= 3) {
       return res.status(403).json({
         previewId,
-        error: "Preview limit reached.",
         gate: true,
         profiled,
-        paid: isPaid,
-        previewQuestionsUsed: usage.previewQuestionsUsed
+        paid: paidFlag
       });
     }
 
@@ -366,7 +321,7 @@ export default async function handler(req, res) {
 
     await redisSet(sessionKey, newHistory);
 
-    if (!isPaid) {
+    if (!paidFlag) {
       usage.previewQuestionsUsed += 1;
       await redisSet(usageKey, usage);
     }
@@ -375,10 +330,9 @@ export default async function handler(req, res) {
       previewId,
       reply,
       profiled,
-      paid: isPaid,
+      paid: paidFlag,
       mode,
-      previewQuestionsUsed: usage.previewQuestionsUsed,
-      gate: !isPaid && usage.previewQuestionsUsed >= 3
+      gate: !paidFlag && usage.previewQuestionsUsed >= 3
     });
   } catch (error) {
     console.error("EVAN API ERROR:", error);
