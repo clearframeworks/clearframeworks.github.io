@@ -511,12 +511,35 @@
     }
 
     function hasProfile(p) {
-      return Boolean((p?.name || "").trim() || (p?.email || "").trim() || (p?.focus || "").trim() || (p?.context || "").trim());
+      return Boolean(
+        (p?.name || "").trim() ||
+        (p?.email || "").trim() ||
+        (p?.focus || "").trim() ||
+        (p?.context || "").trim()
+      );
     }
 
-    function updateStatusPill(remaining) {
+    function updateStatusPill({ profiled = false, remaining = null } = {}) {
+      if (profiled) {
+        usagePill.textContent = "Profile active. EVAN is using longer user context.";
+        memoryPill.textContent = "Session memory + profile memory active.";
+        return;
+      }
 
-    updateStatusPill();
+      if (typeof remaining === "number") {
+        usagePill.textContent = `${remaining} anonymous question${remaining === 1 ? "" : "s"} remaining.`;
+        memoryPill.textContent = "Session memory active for this browser.";
+        return;
+      }
+
+      usagePill.textContent = "3 anonymous questions available.";
+      memoryPill.textContent = "Session memory active for this browser.";
+    }
+
+    updateStatusPill({
+      profiled: hasProfile(profile),
+      remaining: hasProfile(profile) ? null : 3
+    });
 
     function addMessage(sender, text) {
       const msg = document.createElement("div");
@@ -561,10 +584,10 @@
         if (data?.gate) {
           addMessage("EVAN", "You’ve reached the anonymous preview limit. Create a profile for better accuracy or contact Michael directly.");
           showGate();
-          updateStatupdateStatusPill({
-  profiled: false,
-  remaining: 0
-});usPill(0);
+          updateStatusPill({
+            profiled: false,
+            remaining: 0
+          });
           return;
         }
 
@@ -575,9 +598,9 @@
 
         addMessage("EVAN", data.reply);
         updateStatusPill({
-  profiled: Boolean(data.profiled),
-  remaining: data.remainingAnonymousQuestions
-});
+          profiled: Boolean(data.profiled),
+          remaining: data.remainingAnonymousQuestions
+        });
       } catch (err) {
         typing.remove();
         addMessage("EVAN", "Connection error. Please try again.");
@@ -607,7 +630,10 @@
       };
 
       localStorage.setItem("evanProfile", JSON.stringify(profile));
-      updateStatusPill(null);
+      updateStatusPill({
+        profiled: true,
+        remaining: null
+      });
       hideGate();
       addMessage("EVAN", "Profile saved. You can continue, and I’ll use that context for better continuity.");
     });
