@@ -536,6 +536,7 @@
     const payEvanBtn = document.getElementById("pay-evan-btn");
     const profileCtaBtn = document.getElementById("profile-cta-btn");
 
+    let previewId = localStorage.getItem("evanPreviewId") || "";
     let profile = {};
     try {
       profile = JSON.parse(localStorage.getItem("evanProfile") || "{}");
@@ -594,11 +595,17 @@
           },
           body: JSON.stringify({
             action: "status",
-            profile
+            profile,
+            previewId
           })
         });
 
         const data = await res.json();
+
+        if (data.previewId) {
+          previewId = data.previewId;
+          localStorage.setItem("evanPreviewId", previewId);
+        }
 
         if (!res.ok) {
           updateStatusPill({
@@ -666,12 +673,18 @@
           body: JSON.stringify({
             action: "chat",
             message: text,
-            profile
+            profile,
+            previewId
           })
         });
 
         const data = await res.json();
         typing.remove();
+
+        if (data.previewId) {
+          previewId = data.previewId;
+          localStorage.setItem("evanPreviewId", previewId);
+        }
 
         if (data?.gate) {
           addMessage("EVAN", "The preview has ended. Create a profile for continuity, pay to continue using EVAN, or contact Michael directly.");

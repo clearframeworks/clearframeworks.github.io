@@ -243,15 +243,18 @@ export default async function handler(req, res) {
 
   try {
     const cookies = parseCookies(req.headers.cookie || "");
-    let previewId = cookies.evan_preview;
+    const body = req.body || {};
+
+    let previewId = body.previewId || cookies.evan_preview || null;
 
     if (!previewId) {
       previewId = randomUUID();
-      appendSetCookie(
-        res,
-        `evan_preview=${encodeURIComponent(previewId)}; Path=/; Max-Age=2592000; SameSite=Lax; Secure`
-      );
     }
+
+    appendSetCookie(
+      res,
+      `evan_preview=${encodeURIComponent(previewId)}; Path=/; Max-Age=2592000; SameSite=Lax; Secure`
+    );
 
     const isPaid = cookies.evan_paid === "1";
 
@@ -259,7 +262,7 @@ export default async function handler(req, res) {
       action = "chat",
       message = "",
       profile
-    } = req.body || {};
+    } = body;
 
     const sessionKey = `evan:session:${previewId}`;
     const profileKey = `evan:profile:${previewId}`;
@@ -292,6 +295,7 @@ export default async function handler(req, res) {
 
     if (action === "status") {
       return res.status(200).json({
+        previewId,
         profiled,
         paid: isPaid,
         previewQuestionsUsed: usage.previewQuestionsUsed,
@@ -305,6 +309,7 @@ export default async function handler(req, res) {
 
     if (!isPaid && usage.previewQuestionsUsed >= 3) {
       return res.status(403).json({
+        previewId,
         error: "Preview limit reached.",
         gate: true,
         profiled,
@@ -367,6 +372,7 @@ export default async function handler(req, res) {
     }
 
     return res.status(200).json({
+      previewId,
       reply,
       profiled,
       paid: isPaid,
