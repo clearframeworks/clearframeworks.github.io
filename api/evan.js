@@ -88,21 +88,10 @@ function getMode(message = "") {
     "wording", "copy", "draft", "facebook post", "script", "headline"
   ];
 
-  if (technicalSignals.some(signal => text.includes(signal))) {
-    return "technical";
-  }
-
-  if (strategySignals.some(signal => text.includes(signal))) {
-    return "strategy";
-  }
-
-  if (claritySignals.some(signal => text.includes(signal))) {
-    return "clarity";
-  }
-
-  if (writingSignals.some(signal => text.includes(signal))) {
-    return "writing";
-  }
+  if (technicalSignals.some(signal => text.includes(signal))) return "technical";
+  if (strategySignals.some(signal => text.includes(signal))) return "strategy";
+  if (claritySignals.some(signal => text.includes(signal))) return "clarity";
+  if (writingSignals.some(signal => text.includes(signal))) return "writing";
 
   return "general";
 }
@@ -196,6 +185,15 @@ Critical behavioral rules:
 - Adapt mode and depth to the real task
 - Preserve continuity across turns when context exists
 
+Clarity product context:
+- EVAN lives inside Clarity as the first layer of the experience.
+- Anonymous visitors get 3 preview questions.
+- The 3-question limit exists to give people a real sample without turning EVAN into unlimited unpaid infrastructure usage.
+- Creating a profile improves continuity and accuracy across sessions.
+- Payment exists to cover the runtime cost of OpenAI, memory, hosting, and continued EVAN usage.
+- Michael is the founder and deeper Clarity work with him is the higher-order layer when situations become more nuanced, higher-stakes, or require stronger human interpretation.
+- If the user asks why there is a 3-question limit, why profile matters, why payment is required, or why Michael is involved, answer directly from this actual product context instead of giving an abstract generic answer.
+
 Clarity relationship:
 - EVAN is the first layer of Clarity, not the full human implementation
 - EVAN should provide real value first
@@ -243,22 +241,29 @@ export default async function handler(req, res) {
 
     let usage = await redisGet(usageKey);
     if (!usage || typeof usage !== "object") {
-      usage = { anonymousQuestions: 0 };
+      usage = { previewQuestionsUsed: 0 };
     }
 
     const profiled = hasProfile(storedProfile);
     const isPaid = Boolean(paid);
-    const anonymousLimitReached = !isPaid && !profiled && usage.anonymousQuestions >= 3;
 
-    if (anonymousLimitReached) {
-      return res.status(403).json({
-        error: "Anonymous question limit reached.",
-        gate: true,
-        remainingAnonymousQuestions: 0,
-        anonymousQuestionsUsed: usage.anonymousQuestions,
-        profiled,
-        paid: isPaid
-      });
+    let remainingAnonymousQuestions = null;
+
+    if (!profiled && !isPaid) {
+      if (usage.previewQuestionsUsed >= 3) {
+        return res.status(403).json({
+          error: "Anonymous question limit reached.",
+          gate: true,
+          remainingAnonymousQuestions: 0,
+          anonymousQuestionsUsed: usage.previewQuestionsUsed,
+          profiled,
+          paid: isPaid
+        });
+      }
+
+      usage.previewQuestionsUsed += 1;
+      await redisSet(usageKey, usage);
+      remainingAnonymousQuestions = Math.max(0, 3 - usage.previewQuestionsUsed);
     }
 
     const mode = getMode(message);
@@ -268,7 +273,7 @@ export default async function handler(req, res) {
       content: buildSystemPrompt(storedProfile, mode)
     };
 
-    const trimmedHistory = history.slice(-12);
+    const trimmedHistory = history.slice(-16);
 
     const messages = [
       systemPrompt,
@@ -309,22 +314,12 @@ export default async function handler(req, res) {
 
     await redisSet(sessionKey, newHistory);
 
-    if (!profiled && !isPaid) {
-      usage.anonymousQuestions += 1;
-      await redisSet(usageKey, usage);
-    }
-
-    const anonymousQuestionsUsed = usage.anonymousQuestions;
-    const remainingAnonymousQuestions = (profiled || isPaid)
-      ? null
-      : Math.max(0, 3 - anonymousQuestionsUsed);
-
     return res.status(200).json({
       reply,
       profiled,
       paid: isPaid,
       mode,
-      anonymousQuestionsUsed,
+      anonymousQuestionsUsed: usage.previewQuestionsUsed,
       remainingAnonymousQuestions
     });
   } catch (error) {
