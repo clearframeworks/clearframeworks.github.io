@@ -17,14 +17,12 @@ async function redisGet(key) {
 
 async function redisSet(key, value) {
   await fetch(
-    `${process.env.UPSTASH_REDIS_REST_URL}/set/${encodeURIComponent(key)}`,
+    `${process.env.UPSTASH_REDIS_REST_URL}/set/${encodeURIComponent(key)}/${encodeURIComponent(JSON.stringify(value))}`,
     {
-      method: "POST",
+      method: "GET",
       headers: {
-        Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(JSON.stringify(value))
+        Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`
+      }
     }
   );
 }
