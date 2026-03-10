@@ -1,30 +1,50 @@
 import { randomUUID } from "node:crypto";
 
-async function redisGet(key) {
+async function redisRequest(path, { syncToken, method = "GET" } = {}) {
+  const headers = {
+    Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`
+  };
+
+  if (syncToken) {
+    headers["upstash-sync-token"] = syncToken;
+  }
+
   const response = await fetch(
-    `${process.env.UPSTASH_REDIS_REST_URL}/get/${encodeURIComponent(key)}`,
+    `${process.env.UPSTASH_REDIS_REST_URL}${path}`,
     {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`
-      }
+      method,
+      headers
     }
   );
 
   const data = await response.json();
-  return data.result ? JSON.parse(data.result) : null;
+  return {
+    data,
+    syncToken: response.headers.get("upstash-sync-token") || syncToken || ""
+  };
 }
 
-async function redisSet(key, value) {
-  await fetch(
-    `${process.env.UPSTASH_REDIS_REST_URL}/set/${encodeURIComponent(key)}/${encodeURIComponent(JSON.stringify(value))}`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`
-      }
-    }
+async function redisGet(key, syncToken = "") {
+  const result = await redisRequest(`/get/${encodeURIComponent(key)}`, {
+    syncToken
+  });
+
+  return {
+    value: result.data.result ? JSON.parse(result.data.result) : null,
+    syncToken: result.syncToken
+  };
+}
+
+async function redisSet(key, value, syncToken = "") {
+  const result = await redisRequest(
+    `/set/${encodeURIComponent(key)}/${encodeURIComponent(JSON.stringify(value))}`,
+    { syncToken }
   );
+
+  return {
+    ok: result.data.result === "OK",
+    syncToken: result.syncToken
+  };
 }
 
 function sanitizeProfile(profile = {}) {
@@ -214,11 +234,8 @@ export default async function handler(req, res) {
   try {
     const body = req.body || {};
 
-    let previewId = body.previewId || null;
-    if (!previewId) {
-      previewId = randomUUID();
-    }
-
+    let previewId = body.previewId || randomUUID();
+    let syncToken = body.syncToken || "";
     const paidFlag = body.paid === true;
     const { action = "chat", message = "", profile } = body;
 
@@ -226,35 +243,39 @@ export default async function handler(req, res) {
     const profileKey = `evan:profile:${previewId}`;
     const usageKey = `evan:usage:${previewId}`;
 
-    let history = await redisGet(sessionKey);
-    if (!Array.isArray(history)) history = [];
+    let result = await redisGet(sessionKey, syncToken);
+    let history = Array.isArray(result.value) ? result.value : [];
+    syncToken = result.syncToken;
 
-    let storedProfile = await redisGet(profileKey);
-    if (!storedProfile || typeof storedProfile !== "object") {
-      storedProfile = {};
-    }
+    result = await redisGet(profileKey, syncToken);
+    let storedProfile = result.value && typeof result.value === "object" ? result.value : {};
+    syncToken = result.syncToken;
 
     if (profile && typeof profile === "object") {
       const cleaned = sanitizeProfile(profile);
       if (hasProfile(cleaned)) {
         storedProfile = { ...storedProfile, ...cleaned };
-        await redisSet(profileKey, storedProfile);
+        result = await redisSet(profileKey, storedProfile, syncToken);
+        syncToken = result.syncToken;
       }
     }
 
-    let usage = await redisGet(usageKey);
-    if (!usage || typeof usage !== "object") {
-      usage = { previewQuestionsUsed: 0 };
-    }
+    result = await redisGet(usageKey, syncToken);
+    let usage = result.value && typeof result.value === "object"
+      ? result.value
+      : { previewQuestionsUsed: 0 };
+    syncToken = result.syncToken;
 
     const profiled = hasProfile(storedProfile);
+    const gate = !paidFlag && usage.previewQuestionsUsed >= 3;
 
     if (action === "status") {
       return res.status(200).json({
         previewId,
+        syncToken,
         profiled,
         paid: paidFlag,
-        gate: !paidFlag && usage.previewQuestionsUsed >= 3
+        gate
       });
     }
 
@@ -262,9 +283,10 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Missing message" });
     }
 
-    if (!paidFlag && usage.previewQuestionsUsed >= 3) {
+    if (gate) {
       return res.status(403).json({
         previewId,
+        syncToken,
         gate: true,
         profiled,
         paid: paidFlag
@@ -317,15 +339,18 @@ export default async function handler(req, res) {
       { role: "assistant", content: reply }
     ];
 
-    await redisSet(sessionKey, newHistory);
+    result = await redisSet(sessionKey, newHistory, syncToken);
+    syncToken = result.syncToken;
 
     if (!paidFlag) {
       usage.previewQuestionsUsed += 1;
-      await redisSet(usageKey, usage);
+      result = await redisSet(usageKey, usage, syncToken);
+      syncToken = result.syncToken;
     }
 
     return res.status(200).json({
       previewId,
+      syncToken,
       reply,
       profiled,
       paid: paidFlag,

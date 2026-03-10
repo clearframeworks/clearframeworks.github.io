@@ -537,6 +537,7 @@
     const profileCtaBtn = document.getElementById("profile-cta-btn");
 
     let previewId = localStorage.getItem("evanPreviewId") || "";
+    let syncToken = localStorage.getItem("evanSyncToken") || "";
     let profile = {};
     try {
       profile = JSON.parse(localStorage.getItem("evanProfile") || "{}");
@@ -586,6 +587,17 @@
         : "Session memory active for this browser.";
     }
 
+    function persistServerState(data) {
+      if (data.previewId) {
+        previewId = data.previewId;
+        localStorage.setItem("evanPreviewId", previewId);
+      }
+      if (data.syncToken) {
+        syncToken = data.syncToken;
+        localStorage.setItem("evanSyncToken", syncToken);
+      }
+    }
+
     async function initStatus() {
       try {
         const res = await fetch("/api/evan", {
@@ -597,16 +609,13 @@
             action: "status",
             profile,
             previewId,
+            syncToken,
             paid: isPaid()
           })
         });
 
         const data = await res.json();
-
-        if (data.previewId) {
-          previewId = data.previewId;
-          localStorage.setItem("evanPreviewId", previewId);
-        }
+        persistServerState(data);
 
         updateStatusPill({
           profiled: Boolean(data.profiled),
@@ -664,17 +673,14 @@
             message: text,
             profile,
             previewId,
+            syncToken,
             paid: isPaid()
           })
         });
 
         const data = await res.json();
         typing.remove();
-
-        if (data.previewId) {
-          previewId = data.previewId;
-          localStorage.setItem("evanPreviewId", previewId);
-        }
+        persistServerState(data);
 
         if (data?.gate) {
           addMessage("EVAN", "The preview has ended. Create a profile for continuity, pay to continue using EVAN, or contact Michael directly.");
