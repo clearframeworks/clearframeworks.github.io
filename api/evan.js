@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 
-async function redisRequest(path, { syncToken, method = "GET" } = {}) {
+async function redisRequest(path, { syncToken = "", method = "GET" } = {}) {
   const headers = {
     Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`
   };
@@ -18,6 +18,7 @@ async function redisRequest(path, { syncToken, method = "GET" } = {}) {
   );
 
   const data = await response.json();
+
   return {
     data,
     syncToken: response.headers.get("upstash-sync-token") || syncToken || ""
@@ -60,12 +61,12 @@ function sanitizeProfile(profile = {}) {
 function hasProfile(profile = {}) {
   return Boolean(
     profile &&
-    (
-      (profile.name || "").trim() ||
-      (profile.email || "").trim() ||
-      (profile.focus || "").trim() ||
-      (profile.context || "").trim()
-    )
+      (
+        (profile.name || "").trim() ||
+        (profile.email || "").trim() ||
+        (profile.focus || "").trim() ||
+        (profile.context || "").trim()
+      )
   );
 }
 
