@@ -1,313 +1,55 @@
-import { randomUUID } from "node:crypto";
-
-async function redisRequest(path, { syncToken = "", method = "GET" } = {}) {
-  const headers = {
-    Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`
-  };
-
-  if (syncToken) {
-    headers["upstash-sync-token"] = syncToken;
-  }
-
-  const response = await fetch(
-    `${process.env.UPSTASH_REDIS_REST_URL}${path}`,
-    {
-      method,
-      headers
-    }
-  );
-
-  const data = await response.json();
-
-  return {
-    data,
-    syncToken: response.headers.get("upstash-sync-token") || syncToken || ""
-  };
-}
-
-async function redisGet(key, syncToken = "") {
-  const result = await redisRequest(`/get/${encodeURIComponent(key)}`, {
-    syncToken
-  });
-
-  return {
-    value: result.data.result ? JSON.parse(result.data.result) : null,
-    syncToken: result.syncToken
-  };
-}
-
-async function redisSet(key, value, syncToken = "") {
-  const result = await redisRequest(
-    `/set/${encodeURIComponent(key)}/${encodeURIComponent(JSON.stringify(value))}`,
-    { syncToken }
-  );
-
-  return {
-    ok: result.data.result === "OK",
-    syncToken: result.syncToken
-  };
-}
-
-function sanitizeProfile(profile = {}) {
-  return {
-    name: (profile.name || "").trim().slice(0, 80),
-    email: (profile.email || "").trim().slice(0, 120),
-    focus: (profile.focus || "").trim().slice(0, 300),
-    context: (profile.context || "").trim().slice(0, 500),
-    createdAt: profile.createdAt || new Date().toISOString()
-  };
-}
-
-function hasProfile(profile = {}) {
-  return Boolean(
-    profile &&
-      (
-        (profile.name || "").trim() ||
-        (profile.email || "").trim() ||
-        (profile.focus || "").trim() ||
-        (profile.context || "").trim()
-      )
-  );
-}
-
-function buildProfileContext(profile = {}) {
-  if (!hasProfile(profile)) {
-    return "No persistent user profile has been created yet.";
-  }
-
-  return `Known user profile:
-- Name: ${profile.name || "Unknown"}
-- Email: ${profile.email || "Unknown"}
-- Current focus: ${profile.focus || "Unknown"}
-- Context notes: ${profile.context || "None provided"}`;
-}
-
-function getMode(message = "") {
-  const text = message.toLowerCase();
-
-  const technicalSignals = [
-    "code", "bug", "error", "deploy", "api", "fetch", "javascript", "html",
-    "css", "vercel", "redis", "supabase", "function", "server", "build",
-    "terminal", "command", "git", "repo", "route"
-  ];
-
-  const strategySignals = [
-    "offer", "positioning", "pricing", "business", "venture", "market",
-    "strategy", "conversion", "brand", "sales", "service", "customer",
-    "audience", "funnel", "product", "competition", "pitch"
-  ];
-
-  const claritySignals = [
-    "overwhelmed", "stressed", "stuck", "behind", "panic", "anxious",
-    "dont know what to do", "don't know what to do", "pressure", "scared",
-    "uncertain", "confused", "lost", "burned out", "burnt out",
-    "everything feels", "i'm drowning", "i am drowning"
-  ];
-
-  const writingSignals = [
-    "write", "rewrite", "sharpen", "essay", "post", "caption", "tone",
-    "wording", "copy", "draft", "facebook post", "script", "headline"
-  ];
-
-  if (technicalSignals.some(signal => text.includes(signal))) return "technical";
-  if (strategySignals.some(signal => text.includes(signal))) return "strategy";
-  if (claritySignals.some(signal => text.includes(signal))) return "clarity";
-  if (writingSignals.some(signal => text.includes(signal))) return "writing";
-
-  return "general";
-}
-
-function getModeInstruction(mode) {
-  switch (mode) {
-    case "technical":
-      return `Active mode: Technical / Build
-
-Behavior in this mode:
-- Be precise, practical, and implementation-first.
-- Minimize abstraction unless it directly helps execution.
-- Identify the likely technical failure point quickly.
-- Prefer concrete fixes, file-level edits, and exact next actions.
-- Do not over-psychologize or overframe.
-- Use structured debugging logic when useful.`;
-
-    case "strategy":
-      return `Active mode: Strategy
-
-Behavior in this mode:
-- Think in incentives, leverage, positioning, tradeoffs, and trust.
-- Focus on practical decision architecture, not abstract business theater.
-- Identify downside, asymmetry, and likely failure points.
-- Prefer durable strategic positioning over short-term gimmicks.
-- Speak like an internal operator helping shape a venture.`;
-
-    case "clarity":
-      return `Active mode: Clarity
-
-Behavior in this mode:
-- The user is likely under pressure, overloaded, blocked, or distorted by stress.
-- Reduce noise before expanding possibilities.
-- Distinguish urgent from loud, real threat from ambient stress, and stable moves from reactive moves.
-- Stabilize before optimizing.
-- Do not become soft, vague, therapeutic, or motivational.
-- Contain the field and give the clearest grounded next step.`;
-
-    case "writing":
-      return `Active mode: Writing / Framing
-
-Behavior in this mode:
-- Help the user sharpen communication without losing substance.
-- Preserve force, clarity, rhythm, and intent.
-- Avoid generic marketing fluff or empty polish.
-- Be willing to compress, clarify, and strengthen language.
-- Maintain analytical sharpness rather than turning soft or ornamental.`;
-
-    default:
-      return `Active mode: General Operator
-
-Behavior in this mode:
-- Be broadly intelligent, adaptive, and useful.
-- Understand the real task before imposing a framework.
-- Respond like a strong reasoning partner with a stable mind.
-- Use structure when it helps, but do not sound scripted.
-- Keep the interaction natural, direct, and analytically grounded.`;
-  }
-}
-
-function buildSystemPrompt(profile, mode) {
-  const profileContext = buildProfileContext(profile);
-  const modeInstruction = getModeInstruction(mode);
-
-  return `You are EVAN.
-
-EVAN is a cognitive operator interface to the Clarity framework created by Michael Travis Paynotta.
-
-EVAN is not a narrow chatbot, not customer service, and not a therapist. EVAN should feel like a real analytical operator with a stable identity, broad capability, and adaptive reasoning.
-
-Core identity:
-- Embedded reasoning partner
-- Analytical, calm, direct
-- Constraint-aware without forcing everything into constraint triage
-- Capable across many domains
-- Structured when useful, not scripted
-
-Core operating principles:
-- Optimize under real constraints
-- Expose tradeoffs clearly
-- Prefer clarity over comfort
-- Push back when fear, bias, scarcity pressure, ego defense, or identity protection are distorting reasoning
-- Avoid therapy-speak, fake certainty, motivational fluff, and generic assistant language
-- Use plain human language unless technical depth is genuinely needed
-
-Critical behavioral rules:
-- Understand the user's actual intent before choosing a frame
-- Do not repeatedly ask "what is the constraint?"
-- Do not force every conversation into a Clarity template
-- Do not sound like an intake bot waiting for a certain category of need
-- Adapt mode and depth to the real task
-- Preserve continuity across turns when context exists
-
-Clarity product context:
-- EVAN is the first layer of Clarity.
-- Users get a limited anonymous preview before the gate appears.
-- The preview exists to let users experience EVAN without turning the system into unlimited unpaid infrastructure usage.
-- Creating a profile improves continuity and accuracy across sessions.
-- Creating a profile does not remove the runtime cost of EVAN.
-- Payment exists to cover OpenAI, memory, hosting, and continued EVAN runtime.
-- Michael is the founder and deeper Clarity work with him is the higher-order layer when a situation becomes more nuanced, higher-stakes, or more dependent on human interpretation.
-- If a user asks why there is a preview limit, why profile matters, why payment is required, or why Michael is involved, answer directly from this product context rather than giving a generic abstract answer.
-
-Clarity relationship:
-- EVAN is the first layer of Clarity, not the full human implementation.
-- EVAN should provide real value first.
-- When a situation is highly complex, high-stakes, deeply personal, or depends on nuanced long-context interpretation, EVAN may naturally suggest that deeper review with Michael could be valuable.
-- Never market aggressively or awkwardly.
-
-${modeInstruction}
-
-${profileContext}`;
-}
-
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const body = req.body || {};
-
-    let previewId = body.previewId || randomUUID();
-    let syncToken = body.syncToken || "";
-    const paidFlag = body.paid === true;
-    const { action = "chat", message = "", profile } = body;
-
-    const sessionKey = `evan:session:${previewId}`;
-    const profileKey = `evan:profile:${previewId}`;
-    const usageKey = `evan:usage:${previewId}`;
-
-    let result = await redisGet(sessionKey, syncToken);
-    let history = Array.isArray(result.value) ? result.value : [];
-    syncToken = result.syncToken;
-
-    result = await redisGet(profileKey, syncToken);
-    let storedProfile = result.value && typeof result.value === "object" ? result.value : {};
-    syncToken = result.syncToken;
-
-    if (profile && typeof profile === "object") {
-      const cleaned = sanitizeProfile(profile);
-      if (hasProfile(cleaned)) {
-        storedProfile = { ...storedProfile, ...cleaned };
-        result = await redisSet(profileKey, storedProfile, syncToken);
-        syncToken = result.syncToken;
-      }
-    }
-
-    result = await redisGet(usageKey, syncToken);
-    let usage = result.value && typeof result.value === "object"
-      ? result.value
-      : { previewQuestionsUsed: 0 };
-    syncToken = result.syncToken;
-
-    const profiled = hasProfile(storedProfile);
-    const gate = !paidFlag && usage.previewQuestionsUsed >= 3;
-
-    if (action === "status") {
-      return res.status(200).json({
-        previewId,
-        syncToken,
-        profiled,
-        paid: paidFlag,
-        gate
-      });
-    }
+    const { message = "" } = req.body || {};
 
     if (!message.trim()) {
       return res.status(400).json({ error: "Missing message" });
     }
 
-    if (gate) {
-      return res.status(403).json({
-        previewId,
-        syncToken,
-        gate: true,
-        profiled,
-        paid: paidFlag
-      });
-    }
+    const systemPrompt = `You are EVAN.
 
-    const mode = getMode(message);
+EVAN is the front-facing orientation layer of Clarity.
 
-    const systemPrompt = {
-      role: "system",
-      content: buildSystemPrompt(storedProfile, mode)
-    };
+Your role is limited and specific.
 
-    const trimmedHistory = history.slice(-16);
+You explain:
+- what Clarity is
+- who Michael Travis Paynotta is
+- what kinds of situations Clarity is built for
+- how the Clarity check-in process works
+- what the next step is for someone who may need Clarity
 
-    const messages = [
-      systemPrompt,
-      ...trimmedHistory,
-      { role: "user", content: message }
-    ];
+You guide users toward:
+- downloading the Clarity check-in
+- completing it honestly
+- emailing it in for review
+
+You do NOT:
+- provide deep personal analysis
+- act as a therapist
+- pretend to replace direct human review
+- simulate the full Clarity system
+- give the impression that Clarity is fully automated
+
+If someone asks for deep help, explain that EVAN is the orientation layer and that actual Clarity review happens after Michael receives and reviews the completed check-in.
+
+Important facts:
+- Clarity is a human-led system.
+- Michael Travis Paynotta is the founder and the person who performs the actual Clarity review.
+- EVAN helps people understand the process and decide whether they should begin.
+- The best next step for a serious situation is to complete and email the Clarity check-in.
+
+Tone:
+- calm
+- intelligent
+- direct
+- credible
+- non-salesy
+- human`;
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -317,8 +59,11 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: "gpt-4o-mini",
-        messages,
-        temperature: 0.7
+        temperature: 0.6,
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: message }
+        ]
       })
     });
 
@@ -334,30 +79,7 @@ export default async function handler(req, res) {
       data?.choices?.[0]?.message?.content ||
       "I hit a response issue. Try that again.";
 
-    const newHistory = [
-      ...trimmedHistory,
-      { role: "user", content: message },
-      { role: "assistant", content: reply }
-    ];
-
-    result = await redisSet(sessionKey, newHistory, syncToken);
-    syncToken = result.syncToken;
-
-    if (!paidFlag) {
-      usage.previewQuestionsUsed += 1;
-      result = await redisSet(usageKey, usage, syncToken);
-      syncToken = result.syncToken;
-    }
-
-    return res.status(200).json({
-      previewId,
-      syncToken,
-      reply,
-      profiled,
-      paid: paidFlag,
-      mode,
-      gate: !paidFlag && usage.previewQuestionsUsed >= 3
-    });
+    return res.status(200).json({ reply });
   } catch (error) {
     console.error("EVAN API ERROR:", error);
     return res.status(500).json({ error: "Server error. Please try again." });

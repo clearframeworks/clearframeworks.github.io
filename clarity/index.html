@@ -5,19 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <title>Clarity | Choose your context</title>
-  <meta name="description" content="Clarity helps you get clear under pressure—what matters first, what’s reversible, and what to do next." />
+  <meta name="description" content="Clarity helps people understand their situation clearly under real pressure and begin with the right next step." />
   <link rel="canonical" href="https://clearframeworks.org/clarity/" />
   <meta name="robots" content="index,follow,max-image-preview:large" />
 
   <meta property="og:title" content="Clarity" />
-  <meta property="og:description" content="Get clear under pressure—choose individual or institution." />
+  <meta property="og:description" content="Understand what Clarity is, who it is for, and how to begin." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://clearframeworks.org/clarity/" />
   <meta property="og:image" content="https://clearframeworks.org/clarity/assets/og-clarity.png" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Clarity" />
-  <meta name="twitter:description" content="Get clear under pressure—choose individual or institution." />
+  <meta name="twitter:description" content="Understand what Clarity is, who it is for, and how to begin." />
   <meta name="twitter:image" content="https://clearframeworks.org/clarity/assets/og-clarity.png" />
 
   <style>
@@ -97,7 +97,9 @@
       padding: 18px 0 44px;
     }
 
-    @media (max-width: 860px){ .grid{ grid-template-columns: 1fr; } }
+    @media (max-width: 860px){
+      .grid{ grid-template-columns: 1fr; }
+    }
 
     .card{
       background: linear-gradient(180deg, rgba(14,23,40,.88), rgba(12,20,36,.88));
@@ -286,121 +288,6 @@
       font-size: 14px;
       margin-bottom: 10px;
     }
-
-    .gate-overlay{
-      position: fixed;
-      inset: 0;
-      background: rgba(2,5,10,.72);
-      backdrop-filter: blur(6px);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-      z-index: 999;
-    }
-
-    .gate-overlay.active{
-      display:flex;
-    }
-
-    .gate-card{
-      width:min(860px, 100%);
-      background: linear-gradient(180deg, rgba(14,23,40,.96), rgba(12,20,36,.96));
-      border:1px solid rgba(233,238,247,.12);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-      padding: 28px;
-    }
-
-    .gate-card h3{
-      margin:0 0 10px;
-      font-size: 28px;
-      line-height:1.1;
-    }
-
-    .gate-card p{
-      margin:0 0 16px;
-      color: var(--muted);
-      line-height:1.55;
-    }
-
-    .gate-grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap:16px;
-      margin-top: 18px;
-    }
-
-    @media (max-width: 900px){
-      .gate-grid{ grid-template-columns: 1fr; }
-    }
-
-    .gate-panel{
-      padding:18px;
-      border-radius: 14px;
-      border:1px solid rgba(233,238,247,.12);
-      background: rgba(7,10,16,.42);
-    }
-
-    .gate-panel h4{
-      margin:0 0 8px;
-      font-size: 18px;
-    }
-
-    .gate-panel p{
-      margin:0 0 12px;
-      font-size: 14px;
-    }
-
-    .gate-panel input,
-    .gate-panel textarea{
-      width:100%;
-      margin:0 0 10px;
-      padding: 12px 14px;
-      border-radius: 10px;
-      border:1px solid rgba(233,238,247,.16);
-      background: rgba(7,10,16,.55);
-      color: var(--text);
-      font: inherit;
-      outline:none;
-    }
-
-    .gate-panel textarea{
-      min-height: 92px;
-      resize: vertical;
-    }
-
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      border:none;
-      border-radius: 12px;
-      padding: 12px 14px;
-      font: inherit;
-      font-weight: 700;
-      cursor:pointer;
-      text-decoration:none;
-      width:100%;
-    }
-
-    .btn-primary{
-      background: linear-gradient(180deg, var(--accent2), var(--accent));
-      color:#041019;
-    }
-
-    .btn-secondary{
-      background: rgba(233,238,247,.08);
-      border:1px solid rgba(233,238,247,.14);
-      color: var(--text);
-    }
-
-    .small-note{
-      margin-top: 10px;
-      font-size: 12px;
-      color: rgba(233,238,247,.52);
-    }
   </style>
 </head>
 <body>
@@ -455,19 +342,25 @@
         <div>
           <h2>Talk with EVAN</h2>
           <p>
-            EVAN is the first layer of Clarity. He can help organize a situation,
-            reduce noise, and map the shape of a problem before deeper review with Michael.
+            EVAN is the orientation layer of Clarity.
+            He can explain what Clarity is, who it is for, who Michael Travis Paynotta is, and how to begin.
+            The actual Clarity review happens after Michael receives and reviews a completed check-in.
           </p>
         </div>
 
         <div class="head-actions">
-          <button class="mini-btn" id="profile-cta-btn" type="button">Create profile / Log in</button>
+          <a class="mini-btn" href="/clarity/assets/clarity-checkin.pdf" target="_blank" rel="noopener">
+            Download Check-In
+          </a>
+          <a class="mini-btn" href="mailto:hello@clearframeworks.org?subject=Clarity%20Check-In">
+            Email Completed Check-In
+          </a>
         </div>
       </div>
 
       <div class="status-row">
-        <div class="pill" id="memory-pill">Session memory active for this browser.</div>
-        <div class="pill" id="usage-pill">Preview active.</div>
+        <div class="pill" id="memory-pill">EVAN explains the process. Michael performs the review.</div>
+        <div class="pill" id="usage-pill">Best next step: complete the check-in.</div>
       </div>
 
       <div id="chat-window"></div>
@@ -475,161 +368,14 @@
       <input
         id="chat-input"
         type="text"
-        placeholder="Describe what's going on..."
+        placeholder="Ask what Clarity is, who it is for, or how to begin..."
       />
     </section>
   </main>
 
-  <div class="gate-overlay" id="gate-overlay">
-    <div class="gate-card">
-      <h3>Continue with better accuracy, payment for runtime costs, or contact Michael directly.</h3>
-      <p>
-        The anonymous EVAN preview has ended. Create a profile for continuity and accuracy, pay to continue using EVAN, or contact Michael directly for deeper Clarity work.
-      </p>
-
-      <div class="gate-grid">
-        <div class="gate-panel">
-          <h4>Create profile / Log in</h4>
-          <p>
-            This is the continuity layer for EVAN. It helps preserve context and improves accuracy across sessions.
-          </p>
-
-          <input id="profile-name" type="text" placeholder="Your name" />
-          <input id="profile-email" type="email" placeholder="Email (optional)" />
-          <input id="profile-focus" type="text" placeholder="Main focus right now" />
-          <textarea id="profile-context" placeholder="Any context EVAN should remember about your situation"></textarea>
-
-          <button class="btn btn-primary" id="save-profile-btn" type="button">Create profile</button>
-          <div class="small-note">Profile improves continuity and accuracy, but continued EVAN runtime still requires payment.</div>
-        </div>
-
-        <div class="gate-panel">
-          <h4>Pay to continue</h4>
-          <p>
-            EVAN costs money to run. Payment unlocks continued use beyond the anonymous preview.
-          </p>
-
-          <button class="btn btn-primary" id="pay-evan-btn" type="button">Pay to continue with EVAN</button>
-          <div class="small-note">This unlock is currently tied to this browser.</div>
-        </div>
-
-        <div class="gate-panel">
-          <h4>Contact Michael</h4>
-          <p>
-            When the situation is higher-stakes, more personal, or requires stronger interpretation across your full context, direct Clarity review is the better path.
-          </p>
-
-          <a class="btn btn-secondary" href="mailto:hello@clearframeworks.org?subject=Clarity%20Inquiry">Email Michael directly</a>
-          <div class="small-note">You can swap this email later for a different intake channel.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <script>
     const input = document.getElementById("chat-input");
     const windowBox = document.getElementById("chat-window");
-    const gateOverlay = document.getElementById("gate-overlay");
-    const usagePill = document.getElementById("usage-pill");
-    const memoryPill = document.getElementById("memory-pill");
-    const saveProfileBtn = document.getElementById("save-profile-btn");
-    const payEvanBtn = document.getElementById("pay-evan-btn");
-    const profileCtaBtn = document.getElementById("profile-cta-btn");
-
-    let previewId = localStorage.getItem("evanPreviewId") || "";
-    let syncToken = localStorage.getItem("evanSyncToken") || "";
-    let profile = {};
-    try {
-      profile = JSON.parse(localStorage.getItem("evanProfile") || "{}");
-    } catch {
-      profile = {};
-    }
-
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("paid") === "true") {
-      localStorage.setItem("evanPaid", "true");
-      window.history.replaceState({}, document.title, "/clarity/");
-    }
-
-    function isPaid() {
-      return localStorage.getItem("evanPaid") === "true";
-    }
-
-    function hasProfile(p) {
-      return Boolean(
-        (p?.name || "").trim() ||
-        (p?.email || "").trim() ||
-        (p?.focus || "").trim() ||
-        (p?.context || "").trim()
-      );
-    }
-
-    function updateStatusPill({ profiled = false, paid = false, gate = false } = {}) {
-      if (paid) {
-        usagePill.textContent = "Paid access active. EVAN is unlocked on this browser.";
-        memoryPill.textContent = hasProfile(profile)
-          ? "Session memory + profile memory active."
-          : "Session memory active. Add a profile for better continuity.";
-        return;
-      }
-
-      if (gate) {
-        usagePill.textContent = "Preview complete. Create a profile, pay to continue, or contact Michael.";
-        memoryPill.textContent = hasProfile(profile)
-          ? "Profile saved. Payment unlocks continued EVAN runtime."
-          : "Anonymous preview complete.";
-        return;
-      }
-
-      usagePill.textContent = "Preview active.";
-      memoryPill.textContent = profiled
-        ? "Profile saved. It improves continuity and accuracy."
-        : "Session memory active for this browser.";
-    }
-
-    function persistServerState(data) {
-      if (data.previewId) {
-        previewId = data.previewId;
-        localStorage.setItem("evanPreviewId", previewId);
-      }
-      if (data.syncToken) {
-        syncToken = data.syncToken;
-        localStorage.setItem("evanSyncToken", syncToken);
-      }
-    }
-
-    async function initStatus() {
-      try {
-        const res = await fetch("/api/evan", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            action: "status",
-            profile,
-            previewId,
-            syncToken,
-            paid: isPaid()
-          })
-        });
-
-        const data = await res.json();
-        persistServerState(data);
-
-        updateStatusPill({
-          profiled: Boolean(data.profiled),
-          paid: Boolean(data.paid),
-          gate: Boolean(data.gate)
-        });
-      } catch {
-        updateStatusPill({
-          profiled: hasProfile(profile),
-          paid: isPaid(),
-          gate: false
-        });
-      }
-    }
 
     function addMessage(sender, text) {
       const msg = document.createElement("div");
@@ -647,14 +393,6 @@
       windowBox.scrollTop = windowBox.scrollHeight;
     }
 
-    function showGate() {
-      gateOverlay.classList.add("active");
-    }
-
-    function hideGate() {
-      gateOverlay.classList.remove("active");
-    }
-
     async function sendMessage(text) {
       const typing = document.createElement("div");
       typing.className = "chat-status";
@@ -669,29 +407,12 @@
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            action: "chat",
-            message: text,
-            profile,
-            previewId,
-            syncToken,
-            paid: isPaid()
+            message: text
           })
         });
 
         const data = await res.json();
         typing.remove();
-        persistServerState(data);
-
-        if (data?.gate) {
-          addMessage("EVAN", "The preview has ended. Create a profile for continuity, pay to continue using EVAN, or contact Michael directly.");
-          showGate();
-          updateStatusPill({
-            profiled: Boolean(data.profiled),
-            paid: Boolean(data.paid),
-            gate: true
-          });
-          return;
-        }
 
         if (!res.ok) {
           addMessage("EVAN", data.error || "Server error. Please try again.");
@@ -699,15 +420,6 @@
         }
 
         addMessage("EVAN", data.reply);
-        updateStatusPill({
-          profiled: Boolean(data.profiled),
-          paid: Boolean(data.paid),
-          gate: Boolean(data.gate)
-        });
-
-        if (data.gate) {
-          showGate();
-        }
       } catch (err) {
         typing.remove();
         addMessage("EVAN", "Connection error. Please try again.");
@@ -728,53 +440,10 @@
       });
     }
 
-    if (profileCtaBtn) {
-      profileCtaBtn.addEventListener("click", function () {
-        showGate();
-      });
-    }
-
-    saveProfileBtn.addEventListener("click", function () {
-      profile = {
-        name: document.getElementById("profile-name").value.trim(),
-        email: document.getElementById("profile-email").value.trim(),
-        focus: document.getElementById("profile-focus").value.trim(),
-        context: document.getElementById("profile-context").value.trim(),
-        createdAt: new Date().toISOString()
-      };
-
-      localStorage.setItem("evanProfile", JSON.stringify(profile));
-      hideGate();
-      updateStatusPill({
-        profiled: true,
-        paid: isPaid(),
-        gate: false
-      });
-      addMessage("EVAN", "Profile created. I’ll use that context for better continuity and accuracy.");
-    });
-
-    if (payEvanBtn) {
-      payEvanBtn.addEventListener("click", async function () {
-        try {
-          const res = await fetch("/api/create-checkout-session", {
-            method: "POST"
-          });
-
-          const data = await res.json();
-
-          if (data.url) {
-            window.location.href = data.url;
-            return;
-          }
-
-          alert(data.error || "Unable to start checkout.");
-        } catch (err) {
-          alert("Checkout connection error.");
-        }
-      });
-    }
-
-    initStatus();
+    addMessage(
+      "EVAN",
+      "I can explain what Clarity is, who it is for, how the check-in works, and what happens after Michael reviews it."
+    );
   </script>
 </body>
 </html>
