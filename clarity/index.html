@@ -3,189 +3,814 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title>Clarity | Choose your context</title>
-  <meta name="description" content="Clarity helps people understand their situation clearly under real pressure and begin with the right next step." />
+  <meta name="description" content="Clarity helps you get clear under pressure—what matters first, what’s reversible, and what to do next." />
   <link rel="canonical" href="https://clearframeworks.org/clarity/" />
   <meta name="robots" content="index,follow,max-image-preview:large" />
+
   <meta property="og:title" content="Clarity" />
-  <meta property="og:description" content="Understand what Clarity is, who it is for, and how to begin." />
+  <meta property="og:description" content="Get clear under pressure—choose individual or institution." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://clearframeworks.org/clarity/" />
   <meta property="og:image" content="https://clearframeworks.org/clarity/assets/og-clarity.png" />
+
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Clarity" />
-  <meta name="twitter:description" content="Understand what Clarity is, who it is for, and how to begin." />
+  <meta name="twitter:description" content="Get clear under pressure—choose individual or institution." />
   <meta name="twitter:image" content="https://clearframeworks.org/clarity/assets/og-clarity.png" />
-  <link rel="stylesheet" href="/clarity/assets/clarity.css?v=2" />
+
+  <style>
+    :root{
+      --bg: #070a10;
+      --bg2:#0b1220;
+      --card:#0e1728;
+      --text:#e9eef7;
+      --muted: rgba(233,238,247,.72);
+      --border: rgba(233,238,247,.12);
+      --accent: #2f6f8a;
+      --accent2: #79b3cc;
+      --radius: 18px;
+      --shadow: 0 22px 50px rgba(0,0,0,.48);
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      padding-top: 74px;
+      font-family: var(--font);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 15% 10%, rgba(47,111,138,.22), transparent 60%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(11,31,58,.38), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      min-height: 100vh;
+    }
+
+    .wrap{ width:min(1040px, calc(100% - 40px)); margin:0 auto; }
+    header{
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 26px 0 14px;
+      background: rgba(7,10,16,.72);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(233,238,247,.08);
+      transition: transform .25s ease, opacity .25s ease;
+    }
+    header.hide{
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      text-decoration:none;
+      color:inherit;
+    }
+
+    .brand img{ height: 34px; width:auto; display:block; }
+
+    .kicker{
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: rgba(233,238,247,.62);
+    }
+
+    .hero{ padding: 34px 0 18px; }
+
+    h1{
+      margin: 10px 0 10px;
+      font-size: clamp(32px, 4vw, 46px);
+      line-height:1.05;
+    }
+
+    .lead{
+      margin:0;
+      max-width: 70ch;
+      color: var(--muted);
+      font-size: 16px;
+      line-height:1.5;
+    }
+
+    .rule{
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(233,238,247,.18), transparent);
+      margin: 22px 0;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 18px;
+      padding: 18px 0 44px;
+    }
+
+    @media (max-width: 860px){ .grid{ grid-template-columns: 1fr; } }
+
+    .card{
+      background: linear-gradient(180deg, rgba(14,23,40,.88), rgba(12,20,36,.88));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+      text-decoration:none;
+      color: inherit;
+      position:relative;
+      overflow:hidden;
+      transition: transform .12s ease, border-color .12s ease;
+    }
+
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      background: radial-gradient(500px 220px at 18% 18%, rgba(47,111,138,.18), transparent 60%);
+      pointer-events:none;
+    }
+
+    .card:hover{
+      transform: translateY(-2px);
+      border-color: rgba(47,111,138,.34);
+    }
+
+    .title{
+      font-size: 18px;
+      font-weight: 800;
+      margin:0 0 6px;
+      position:relative;
+    }
+
+    .sub{
+      margin:0 0 12px;
+      color: var(--muted);
+      position:relative;
+    }
+
+    ul{
+      margin: 0;
+      padding-left: 18px;
+      color: rgba(233,238,247,.78);
+      position:relative;
+    }
+
+    li{ margin: 8px 0; }
+
+    .cta{
+      margin-top: 14px;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(233,238,247,.16);
+      background: rgba(7,10,16,.35);
+      position:relative;
+      font-weight: 700;
+    }
+
+    .note{
+      padding: 0 0 28px;
+      color: rgba(233,238,247,.55);
+      font-size: 13px;
+    }
+
+    .evan{
+      max-width: 900px;
+      margin: 40px auto 80px;
+      padding: 28px;
+      background: linear-gradient(180deg, rgba(14,23,40,.88), rgba(12,20,36,.88));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .evan-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .evan-head h2{
+      margin: 0 0 10px;
+      font-size: clamp(26px, 3vw, 34px);
+      line-height: 1.1;
+    }
+
+    .evan-head p{
+      margin: 0;
+      color: var(--muted);
+      max-width: 62ch;
+      line-height: 1.55;
+    }
+
+    .head-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .mini-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius: 999px;
+      border:1px solid rgba(233,238,247,.14);
+      background: rgba(7,10,16,.4);
+      color: var(--text);
+      text-decoration:none;
+      font-weight: 700;
+      cursor:pointer;
+    }
+
+    .status-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      margin: 18px 0 10px;
+      color: var(--muted);
+      font-size: 14px;
+      flex-wrap:wrap;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      background: rgba(7,10,16,.45);
+      border: 1px solid rgba(233,238,247,.12);
+    }
+
+    #chat-window{
+      height: 320px;
+      overflow-y: auto;
+      margin-bottom: 14px;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(233,238,247,.12);
+      background: rgba(7,10,16,.38);
+    }
+
+    .chat-message{
+      margin-bottom: 12px;
+      line-height: 1.6;
+      color: var(--text);
+      white-space: pre-wrap;
+    }
+
+    .chat-message strong{
+      color: #ffffff;
+    }
+
+    #chat-input{
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(233,238,247,.16);
+      background: rgba(7,10,16,.55);
+      color: var(--text);
+      font-size: 16px;
+      outline: none;
+    }
+
+    #chat-input::placeholder{
+      color: rgba(233,238,247,.42);
+    }
+
+    #chat-input:focus{
+      border-color: rgba(47,111,138,.75);
+      box-shadow: 0 0 0 3px rgba(47,111,138,.18);
+    }
+
+    .chat-status{
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .gate-overlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(2,5,10,.72);
+      backdrop-filter: blur(6px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index: 999;
+    }
+
+    .gate-overlay.active{
+      display:flex;
+    }
+
+    .gate-card{
+      width:min(860px, 100%);
+      background: linear-gradient(180deg, rgba(14,23,40,.96), rgba(12,20,36,.96));
+      border:1px solid rgba(233,238,247,.12);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 28px;
+    }
+
+    .gate-card h3{
+      margin:0 0 10px;
+      font-size: 28px;
+      line-height:1.1;
+    }
+
+    .gate-card p{
+      margin:0 0 16px;
+      color: var(--muted);
+      line-height:1.55;
+    }
+
+    .gate-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:16px;
+      margin-top: 18px;
+    }
+
+    @media (max-width: 900px){
+      .gate-grid{ grid-template-columns: 1fr; }
+    }
+
+    .gate-panel{
+      padding:18px;
+      border-radius: 14px;
+      border:1px solid rgba(233,238,247,.12);
+      background: rgba(7,10,16,.42);
+    }
+
+    .gate-panel h4{
+      margin:0 0 8px;
+      font-size: 18px;
+    }
+
+    .gate-panel p{
+      margin:0 0 12px;
+      font-size: 14px;
+    }
+
+    .gate-panel input,
+    .gate-panel textarea{
+      width:100%;
+      margin:0 0 10px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border:1px solid rgba(233,238,247,.16);
+      background: rgba(7,10,16,.55);
+      color: var(--text);
+      font: inherit;
+      outline:none;
+    }
+
+    .gate-panel textarea{
+      min-height: 92px;
+      resize: vertical;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      border:none;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font: inherit;
+      font-weight: 700;
+      cursor:pointer;
+      text-decoration:none;
+      width:100%;
+    }
+
+    .btn-primary{
+      background: linear-gradient(180deg, var(--accent2), var(--accent));
+      color:#041019;
+    }
+
+    .btn-secondary{
+      background: rgba(233,238,247,.08);
+      border:1px solid rgba(233,238,247,.14);
+      color: var(--text);
+    }
+
+    .small-note{
+      margin-top: 10px;
+      font-size: 12px;
+      color: rgba(233,238,247,.52);
+    }
+  </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="wrap header-inner">
+  <header>
+    <div class="wrap">
       <a class="brand" href="/clarity/" aria-label="Clarity home">
-        <img class="brand-mark brand-mark--home" src="/clarity/assets/clarity-home.png" alt="Clarity" decoding="async" />
+        <img src="/clarity/assets/clarity-wordmark-alt.png" alt="Clarity" decoding="async" />
       </a>
-      <nav class="nav" aria-label="Primary navigation">
-        <a href="#what">What Clarity is</a>
-        <a href="#path">How to begin</a>
-        <a href="#evan">Talk with EVAN</a>
-      </nav>
     </div>
   </header>
 
-  <main>
+  <main class="wrap">
     <section class="hero">
-      <div class="wrap">
-        <div class="hero-copy">
-          <div class="kicker">Clarity</div>
-          <h1>Get your footing. Or stabilize a system.</h1>
-          <p class="lead">Clarity is decision support for real pressure. Not hype. Not “we can solve your life.” Just a clean order of operations: what matters first, what’s reversible, and what to do next.</p>
-        </div>
-        <div class="rule"></div>
-        <div class="section-head align-start" id="path">
-          <div>
-            <div class="kicker">Choose your context</div>
-            <h2>Two entry points. Same method.</h2>
-          </div>
-          <p>Clarity starts by identifying the real constraint, reducing downside, and building the smallest next move that actually holds under stress.</p>
-        </div>
-
-        <section class="grid" aria-label="Clarity routing">
-          <a class="card" href="/clarity/individual/">
-            <h2 class="title">Individual</h2>
-            <p class="sub">For people who feel overwhelmed, behind, and out of margin.</p>
-            <ul>
-              <li>Sort what’s urgent versus what’s loud</li>
-              <li>Stop compounding damage</li>
-              <li>Build a buffer before bigger moves</li>
-            </ul>
-            <span class="cta">Enter Individual →</span>
-          </a>
-          <a class="card" href="/clarity/institution/">
-            <h2 class="title">Institution</h2>
-            <p class="sub">For operators mapping constraints, tradeoffs, and failure modes inside real systems.</p>
-            <ul>
-              <li>Grounded analysis, not theater</li>
-              <li>Stability-first decision paths</li>
-              <li>Clear tradeoffs under stress</li>
-            </ul>
-            <span class="cta">Enter Institution →</span>
-          </a>
-        </section>
-
-        <p class="note" style="margin-top:18px;">No moral theater. No sales pressure. Just clarity.</p>
-      </div>
+      <div class="kicker">Clarity</div>
+      <h1>Get your footing. Or stabilize a system.</h1>
+      <p class="lead">
+        Clarity is decision support for real pressure. Not hype. Not “we can solve your life.”
+        Just a clean order of operations: what matters first, what’s reversible, and what to do next.
+      </p>
+      <div class="rule"></div>
+      <div class="kicker">Choose your context</div>
     </section>
 
-    <section class="section" id="what">
-      <div class="wrap">
-        <div class="section-head align-start">
-          <div>
-            <div class="kicker">Method</div>
-            <h2>What Clarity is built to do</h2>
-          </div>
-          <p>Clarity is not motivational language. It is structured judgment under pressure: constraint map, option field, stabilization plan, and conditional forward movement.</p>
-        </div>
-        <div class="info-grid">
-          <div class="info-card"><h3>Context first</h3><p>Name the situation as it actually exists before trying to optimize it.</p></div>
-          <div class="info-card"><h3>Stability first</h3><p>Reduce immediate downside before adding complexity or chasing ideal outcomes.</p></div>
-          <div class="info-card"><h3>Plain next steps</h3><p>Turn abstract pressure into usable order: what matters now, what can wait, what comes next.</p></div>
-        </div>
-      </div>
+    <section class="grid" aria-label="Clarity routing">
+      <a class="card" href="/clarity/individual/">
+        <h2 class="title">Individual</h2>
+        <p class="sub">For people who feel overwhelmed, behind, and out of margin.</p>
+        <ul>
+          <li>Sort what’s urgent vs what’s loud</li>
+          <li>Stop compounding damage</li>
+          <li>Build a small buffer before big moves</li>
+        </ul>
+        <span class="cta">Enter Individual →</span>
+      </a>
+
+      <a class="card" href="/clarity/institution/">
+        <h2 class="title">Institution</h2>
+        <p class="sub">For operators mapping constraints, tradeoffs, and failure modes.</p>
+        <ul>
+          <li>Grounded analysis, not theater</li>
+          <li>Stability-first decision paths</li>
+          <li>Clear tradeoffs under stress</li>
+        </ul>
+        <span class="cta">Enter Institution →</span>
+      </a>
     </section>
 
-    <section class="section">
-      <div class="wrap">
-        <section id="evan" class="evan panel" aria-label="Talk with EVAN">
-          <div class="evan-head">
-            <div>
-              <div class="kicker">Orientation layer</div>
-              <h2>Talk with EVAN</h2>
-              <p>EVAN explains the Clarity process, who it is for, how the check-in works, and what happens after Michael reviews it. EVAN orients. Michael performs the actual review.</p>
-            </div>
-            <div class="head-actions">
-              <a class="mini-btn" href="/clarity/assets/clarity-checkin.png" target="_blank" rel="noopener">Open Check-In</a>
-              <a class="mini-btn" href="mailto:michaelpaynotta@clearframeworks.org?subject=Clarity%20Check-In">Email Completed Check-In</a>
-            </div>
-          </div>
-          <div class="status-row">
-            <div class="pill" id="memory-pill">EVAN explains the process. Michael performs the review.</div>
-            <div class="pill" id="usage-pill">Best next step: complete the check-in.</div>
-          </div>
-          <div id="chat-window"></div>
-          <input id="chat-input" type="text" placeholder="Ask what Clarity is, who it is for, or how to begin..." />
-        </section>
+    <div class="note">No moral theater. No sales pressure. Just clarity.</div>
+
+    <section id="evan" class="evan" aria-label="Talk with EVAN">
+      <div class="evan-head">
+        <div>
+          <h2>Talk with EVAN</h2>
+          <p>
+            EVAN is the first layer of Clarity. He can help organize a situation,
+            reduce noise, and map the shape of a problem before deeper review with Michael.
+          </p>
+        </div>
+
+        <div class="head-actions">
+          <button class="mini-btn" id="profile-cta-btn" type="button">Create profile / Log in</button>
+        </div>
       </div>
+
+      <div class="status-row">
+        <div class="pill" id="memory-pill">Session memory active for this browser.</div>
+        <div class="pill" id="usage-pill">Preview active.</div>
+      </div>
+
+      <div id="chat-window"></div>
+
+      <input
+        id="chat-input"
+        type="text"
+        placeholder="Describe what's going on..."
+      />
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="wrap footer-grid">
-      <div>
-        <h4>Clarity</h4>
-        <p>Decision support for real pressure. Constraint-aware, stability-first, plain-language next steps.</p>
-      </div>
-      <div>
-        <h4>Routes</h4>
-        <ul>
-          <li><a href="/clarity/individual/">Individual</a></li>
-          <li><a href="/clarity/institution/">Institution</a></li>
-          <li><a href="/clarity/assets/clarity-checkin.png" target="_blank" rel="noopener">Check-In</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Contact</h4>
-        <ul>
-          <li><a href="mailto:michaelpaynotta@clearframeworks.org?subject=Clarity%20Check-In">michaelpaynotta@clearframeworks.org</a></li>
-        </ul>
+  <div class="gate-overlay" id="gate-overlay">
+    <div class="gate-card">
+      <h3>Continue with better accuracy, payment for runtime costs, or contact Michael directly.</h3>
+      <p>
+        The anonymous EVAN preview has ended. Create a profile for continuity and accuracy, pay to continue using EVAN, or contact Michael directly for deeper Clarity work.
+      </p>
+
+      <div class="gate-grid">
+        <div class="gate-panel">
+          <h4>Create profile / Log in</h4>
+          <p>
+            This is the continuity layer for EVAN. It helps preserve context and improves accuracy across sessions.
+          </p>
+
+          <input id="profile-name" type="text" placeholder="Your name" />
+          <input id="profile-email" type="email" placeholder="Email (optional)" />
+          <input id="profile-focus" type="text" placeholder="Main focus right now" />
+          <textarea id="profile-context" placeholder="Any context EVAN should remember about your situation"></textarea>
+
+          <button class="btn btn-primary" id="save-profile-btn" type="button">Create profile</button>
+          <div class="small-note">Profile improves continuity and accuracy, but continued EVAN runtime still requires payment.</div>
+        </div>
+
+        <div class="gate-panel">
+          <h4>Pay to continue</h4>
+          <p>
+            EVAN costs money to run. Payment unlocks continued use beyond the anonymous preview.
+          </p>
+
+          <button class="btn btn-primary" id="pay-evan-btn" type="button">Pay to continue with EVAN</button>
+          <div class="small-note">This unlock is currently tied to this browser.</div>
+        </div>
+
+        <div class="gate-panel">
+          <h4>Contact Michael</h4>
+          <p>
+            When the situation is higher-stakes, more personal, or requires stronger interpretation across your full context, direct Clarity review is the better path.
+          </p>
+
+          <a class="btn btn-secondary" href="mailto:hello@clearframeworks.org?subject=Clarity%20Inquiry">Email Michael directly</a>
+          <div class="small-note">You can swap this email later for a different intake channel.</div>
+        </div>
       </div>
     </div>
-  </footer>
+  </div>
 
   <script>
     const input = document.getElementById("chat-input");
     const windowBox = document.getElementById("chat-window");
+    const gateOverlay = document.getElementById("gate-overlay");
+    const usagePill = document.getElementById("usage-pill");
+    const memoryPill = document.getElementById("memory-pill");
+    const saveProfileBtn = document.getElementById("save-profile-btn");
+    const payEvanBtn = document.getElementById("pay-evan-btn");
+    const profileCtaBtn = document.getElementById("profile-cta-btn");
+
+    let previewId = localStorage.getItem("evanPreviewId") || "";
+    let syncToken = localStorage.getItem("evanSyncToken") || "";
+    let profile = {};
+    try {
+      profile = JSON.parse(localStorage.getItem("evanProfile") || "{}");
+    } catch {
+      profile = {};
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("paid") === "true") {
+      localStorage.setItem("evanPaid", "true");
+      window.history.replaceState({}, document.title, "/clarity/");
+    }
+
+    function isPaid() {
+      return localStorage.getItem("evanPaid") === "true";
+    }
+
+    function hasProfile(p) {
+      return Boolean(
+        (p?.name || "").trim() ||
+        (p?.email || "").trim() ||
+        (p?.focus || "").trim() ||
+        (p?.context || "").trim()
+      );
+    }
+
+    function updateStatusPill({ profiled = false, paid = false, gate = false } = {}) {
+      if (paid) {
+        usagePill.textContent = "Paid access active. EVAN is unlocked on this browser.";
+        memoryPill.textContent = hasProfile(profile)
+          ? "Session memory + profile memory active."
+          : "Session memory active. Add a profile for better continuity.";
+        return;
+      }
+
+      if (gate) {
+        usagePill.textContent = "Preview complete. Create a profile, pay to continue, or contact Michael.";
+        memoryPill.textContent = hasProfile(profile)
+          ? "Profile saved. Payment unlocks continued EVAN runtime."
+          : "Anonymous preview complete.";
+        return;
+      }
+
+      usagePill.textContent = "Preview active.";
+      memoryPill.textContent = profiled
+        ? "Profile saved. It improves continuity and accuracy."
+        : "Session memory active for this browser.";
+    }
+
+    function persistServerState(data) {
+      if (data.previewId) {
+        previewId = data.previewId;
+        localStorage.setItem("evanPreviewId", previewId);
+      }
+      if (data.syncToken) {
+        syncToken = data.syncToken;
+        localStorage.setItem("evanSyncToken", syncToken);
+      }
+    }
+
+    async function initStatus() {
+      try {
+        const res = await fetch("/api/evan", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            action: "status",
+            profile,
+            previewId,
+            syncToken,
+            paid: isPaid()
+          })
+        });
+
+        const data = await res.json();
+        persistServerState(data);
+
+        updateStatusPill({
+          profiled: Boolean(data.profiled),
+          paid: Boolean(data.paid),
+          gate: Boolean(data.gate)
+        });
+      } catch {
+        updateStatusPill({
+          profiled: hasProfile(profile),
+          paid: isPaid(),
+          gate: false
+        });
+      }
+    }
+
     function addMessage(sender, text) {
       const msg = document.createElement("div");
       msg.className = "chat-message";
+
       const strong = document.createElement("strong");
       strong.textContent = `${sender}: `;
+
       const body = document.createElement("span");
       body.textContent = text;
+
       msg.appendChild(strong);
       msg.appendChild(body);
       windowBox.appendChild(msg);
       windowBox.scrollTop = windowBox.scrollHeight;
     }
+
+    function showGate() {
+      gateOverlay.classList.add("active");
+    }
+
+    function hideGate() {
+      gateOverlay.classList.remove("active");
+    }
+
     async function sendMessage(text) {
       const typing = document.createElement("div");
       typing.className = "chat-status";
       typing.textContent = "EVAN is thinking...";
       windowBox.appendChild(typing);
       windowBox.scrollTop = windowBox.scrollHeight;
+
       try {
-        const res = await fetch("/api/evan", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: text }) });
+        const res = await fetch("/api/evan", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            action: "chat",
+            message: text,
+            profile,
+            previewId,
+            syncToken,
+            paid: isPaid()
+          })
+        });
+
         const data = await res.json();
         typing.remove();
-        if (!res.ok) { addMessage("EVAN", data.error || "Server error. Please try again."); return; }
+        persistServerState(data);
+
+        if (data?.gate) {
+          addMessage("EVAN", "The preview has ended. Create a profile for continuity, pay to continue using EVAN, or contact Michael directly.");
+          showGate();
+          updateStatusPill({
+            profiled: Boolean(data.profiled),
+            paid: Boolean(data.paid),
+            gate: true
+          });
+          return;
+        }
+
+        if (!res.ok) {
+          addMessage("EVAN", data.error || "Server error. Please try again.");
+          return;
+        }
+
         addMessage("EVAN", data.reply);
+        updateStatusPill({
+          profiled: Boolean(data.profiled),
+          paid: Boolean(data.paid),
+          gate: Boolean(data.gate)
+        });
+
+        if (data.gate) {
+          showGate();
+        }
       } catch (err) {
         typing.remove();
         addMessage("EVAN", "Connection error. Please try again.");
       }
     }
+
     if (input && windowBox) {
       input.addEventListener("keydown", function (e) {
         if (e.key === "Enter" && !e.shiftKey) {
           e.preventDefault();
           const text = input.value.trim();
           if (!text) return;
+
           addMessage("You", text);
           input.value = "";
           sendMessage(text);
         }
       });
     }
-    addMessage("EVAN", "I can explain what Clarity is, who it is for, how the check-in works, and what happens after Michael reviews it.");
+
+    if (profileCtaBtn) {
+      profileCtaBtn.addEventListener("click", function () {
+        showGate();
+      });
+    }
+
+    saveProfileBtn.addEventListener("click", function () {
+      profile = {
+        name: document.getElementById("profile-name").value.trim(),
+        email: document.getElementById("profile-email").value.trim(),
+        focus: document.getElementById("profile-focus").value.trim(),
+        context: document.getElementById("profile-context").value.trim(),
+        createdAt: new Date().toISOString()
+      };
+
+      localStorage.setItem("evanProfile", JSON.stringify(profile));
+      hideGate();
+      updateStatusPill({
+        profiled: true,
+        paid: isPaid(),
+        gate: false
+      });
+      addMessage("EVAN", "Profile created. I’ll use that context for better continuity and accuracy.");
+    });
+
+    if (payEvanBtn) {
+      payEvanBtn.addEventListener("click", async function () {
+        try {
+          const res = await fetch("/api/create-checkout-session", {
+            method: "POST"
+          });
+
+          const data = await res.json();
+
+          if (data.url) {
+            window.location.href = data.url;
+            return;
+          }
+
+          alert(data.error || "Unable to start checkout.");
+        } catch (err) {
+          alert("Checkout connection error.");
+        }
+      });
+    }
+
+    initStatus();
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      let lastScroll = window.pageYOffset;
+      const header = document.querySelector("header");
+      if (!header) return;
+
+      window.addEventListener("scroll", function () {
+        const current = window.pageYOffset;
+
+        if (current > lastScroll && current > 80) {
+          header.classList.add("hide");
+        } else {
+          header.classList.remove("hide");
+        }
+
+        lastScroll = current;
+      }, { passive: true });
+    });
   </script>
 </body>
 </html>

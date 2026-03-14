@@ -3,33 +3,70 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Clarity | Privacy</title>
+  <title>Clarity — Privacy</title>
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="https://clearframeworks.org/clarity/institution/privacy.html" />
-  <link rel="stylesheet" href="/clarity/assets/clarity.css?v=2" />
+  <link rel="stylesheet" href="./styles.css?v=6" />
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
-  <header class="site-header">
-    <div class="wrap header-inner">
-      <a class="brand" href="/clarity/institution/" aria-label="Clarity institution home"><img class="brand-mark" src="../assets/clarity-wordmark.png" alt="Clarity" /></a>
-      <nav class="nav" aria-label="Primary navigation">
-        <a href="/clarity/">Home</a>
-        <a href="terms.html">Terms</a>
-        <a class="nav-cta" href="mailto:michaelpaynotta@clearframeworks.org?subject=Clarity%20Institutional%20Inquiry">Email</a>
-      </nav>
+
+  <div class="topbar">
+    <div class="wrap">
+      <div class="row">
+        <a class="brand" href="/clarity/institution/" aria-label="Clarity home">
+          <img src="../assets/clarity-wordmark.png" alt="Clarity" />
+        </a>
+        <nav class="nav" aria-label="Primary navigation">
+          <a href="/clarity/">Home</a>
+          <a href="terms.html">Terms</a>
+          <a href="mailto:michaelpaynotta@clearframeworks.org?subject=Clarity%20Institutional%20Inquiry">Email</a>
+        </nav>
+      </div>
     </div>
-  </header>
+  </div>
+
   <main id="main">
     <section class="section">
-      <div class="wrap article">
-        <div class="kicker">Privacy</div>
-        <h1 class="h1" style="max-width:10ch;">Minimal necessary information.</h1>
-        <p class="p">This site does not require you to submit sensitive personal information. If you contact us by email, your message is used only to respond to your inquiry and scope the appropriate next step.</p>
-        <p class="p">For institutional collaborations, Clarity prefers minimal necessary data and clear boundaries. Do not send highly sensitive personal details unless specifically requested and supported by appropriate consent and policy structure.</p>
-        <p class="p">If your organization needs a formal data-handling agreement for an engagement, request it by email and requirements can be scoped directly.</p>
+      <div class="wrap">
+        <div class="article">
+          <h2 class="h2">Privacy</h2>
+
+          <p class="p">
+            This site does not require you to submit sensitive information. If you contact us by email, your message will be received and used only to respond to your inquiry.
+          </p>
+
+          <p class="p">
+            For institutional collaborations, we prefer minimal necessary information and clear boundaries. Do not email highly sensitive personal details unless specifically requested
+            and you have appropriate consent and policies in place.
+          </p>
+
+          <p class="p">
+            If you need a formal data handling agreement for an organizational engagement, request it via email and we will scope requirements appropriately.
+          </p>
+        </div>
       </div>
     </section>
   </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      let lastScroll = window.pageYOffset;
+      const header = document.querySelector(".site-header, .topbar");
+      if (!header) return;
+
+      window.addEventListener("scroll", function () {
+        const current = window.pageYOffset;
+
+        if (current > lastScroll && current > 80) {
+          header.classList.add("hide");
+        } else {
+          header.classList.remove("hide");
+        }
+
+        lastScroll = current;
+      }, { passive: true });
+    });
+  </script>
 </body>
 </html>
