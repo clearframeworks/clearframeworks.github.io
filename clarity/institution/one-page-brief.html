@@ -3,78 +3,89 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Clarity — One-Page Brief</title>
+  <title>Clarity | One-Page Brief</title>
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="https://clearframeworks.org/clarity/institution/one-page-brief.html" />
-  <link rel="stylesheet" href="./styles.css?v=6" />
+  <link rel="stylesheet" href="/clarity/assets/clarity.css?v=4" />
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
-
-  <div class="topbar">
-    <div class="wrap">
-      <div class="row">
-        <a class="brand" href="/clarity/institution/" aria-label="Clarity home">
-          <img src="../assets/clarity-wordmark.png" alt="Clarity" />
-        </a>
-        <nav class="nav" aria-label="Primary navigation">
-          <a href="/clarity/institution/#what">What it is</a>
-          <a href="/clarity/institution/#apply">For agencies</a>
-          <a href="mailto:michaelpaynotta@clearframeworks.org?subject=Clarity%20Institutional%20Inquiry">Email</a>
-        </nav>
-      </div>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="/clarity/institution/" aria-label="Clarity institution home"><img class="brand-mark" src="../assets/clarity-wordmark-site.png" alt="Clarity" /></a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="/clarity/institution/#what">What it is</a>
+        <a href="/clarity/institution/#apply">For agencies</a>
+        <a class="nav-cta" href="mailto:michaelpaynotta@clearframeworks.org?subject=Clarity%20Institutional%20Inquiry">Email</a>
+      </nav>
     </div>
-  </div>
-
+  </header>
   <main id="main">
     <section class="section">
-      <div class="wrap">
-        <div class="article">
-          <div class="kicker">One-page brief</div>
-          <h1 class="h1">Clarity: constraint-based decision support for public systems</h1>
-
-          <p class="p">
-            Clarity is a stability-first framework for mapping barriers, triaging needs, and designing steps that work under real constraints
-            (time, access, paperwork friction, volatility, staffing, and risk).
-          </p>
-
-          <div class="decls">
-            <div class="decl"><b>What it does</b><span>Constraint map → option field → stabilization plan → conditional growth.</span></div>
-            <div class="decl"><b>Why it helps</b><span>Targets the correct constraint instead of escalating the wrong lever.</span></div>
-            <div class="decl"><b>Agency use</b><span>Intake triage design, workflow friction review, eligibility/access logic.</span></div>
-            <div class="decl"><b>Boundary</b><span>Not emergency services; urgent needs route to local resources first.</span></div>
-          </div>
-
-          <p class="p" style="margin-top:14px;">
-            Contact: <a class="quietLink" href="mailto:michaelpaynotta@clearframeworks.org?subject=Clarity%20Institutional%20Inquiry">michaelpaynotta@clearframeworks.org</a>
-          </p>
-
-          <p class="small" style="margin-top:10px;">
-            Printing tip: use your browser print dialog and select “Save as PDF.”
-          </p>
+      <div class="wrap article">
+        <div class="kicker">One-page brief</div>
+        <h1 class="h1" style="max-width:12ch;">Clarity for public systems.</h1>
+        <p class="p">Clarity is a stability-first framework for mapping barriers, triaging needs, and designing steps that work under real constraints: time, access, paperwork friction, volatility, staffing load, and risk.</p>
+        <div class="decls">
+          <div class="decl"><b>What it does</b><span>Constraint map → option field → stabilization plan → conditional growth.</span></div>
+          <div class="decl"><b>Why it helps</b><span>Targets the correct constraint instead of escalating the wrong lever.</span></div>
+          <div class="decl"><b>Agency use</b><span>Intake triage design, workflow friction review, eligibility/access logic.</span></div>
+          <div class="decl"><b>Boundary</b><span>Not emergency services. Route urgent needs to direct resources first.</span></div>
+        </div>
+        <div class="heroLinks">
+          <a class="btn primary" href="mailto:michaelpaynotta@clearframeworks.org?subject=Clarity%20Institutional%20Inquiry">Institutional inquiry</a>
+          <a class="btn" href="../assets/clarity-checkin.png" target="_blank" rel="noopener">Open Access Check-In</a>
         </div>
       </div>
     </section>
   </main>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      let lastScroll = window.pageYOffset;
-      const header = document.querySelector(".site-header, .topbar");
-      if (!header) return;
+  <footer class="footer">
+    <div class="wrap footer-grid">
+      <div>
+        <h4>Clarity</h4>
+        <p>Decision support for real pressure. Constraint-aware, stability-first, plain-language next steps.</p>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="/clarity/">Clarity home</a></li>
+          <li><a href="/clarity/individual/">Individual</a></li>
+          <li><a href="/clarity/institution/">Institution</a></li>
+          <li><a href="/clarity/assets/clarity-checkin.png" target="_blank" rel="noopener">Check-In</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:michaelpaynotta@clearframeworks.org?subject=Clarity%20Check-In">michaelpaynotta@clearframeworks.org</a></li>
+          <li><a href="tel:+15409857517">540-985-7517</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
 
-      window.addEventListener("scroll", function () {
-        const current = window.pageYOffset;
 
-        if (current > lastScroll && current > 80) {
-          header.classList.add("hide");
-        } else {
-          header.classList.remove("hide");
-        }
-
-        lastScroll = current;
-      }, { passive: true });
-    });
-  </script>
+<script>
+(() => {
+  const header = document.querySelector('.site-header');
+  if (!header) return;
+  let lastY = window.scrollY;
+  let ticking = false;
+  function updateHeader(){
+    const y = window.scrollY;
+    if (y <= 24 || y < lastY) header.classList.remove('is-hidden');
+    else if (y > lastY && y > 80) header.classList.add('is-hidden');
+    lastY = y;
+    ticking = false;
+  }
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(updateHeader);
+      ticking = true;
+    }
+  }, { passive: true });
+})();
+</script>
 </body>
 </html>
