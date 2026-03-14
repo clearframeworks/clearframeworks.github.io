@@ -3,263 +3,136 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- Primary SEO (beta page) -->
-  <title>Clarity | Get your footing when life is heavy</title>
-  <meta name="description" content="When you feel overwhelmed, Clarity helps you get your footing: what matters first, what can wait, and what to do next without making it worse." />
-  <link rel="canonical" href="https://clearframeworks.org/beta2/individual/" />
-  <meta name="robots" content="noindex,nofollow" />
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="Clarity — Get your footing" />
-  <meta property="og:description" content="When you feel overwhelmed, get clear on what matters first and what to do next—without hype." />
+  <title>Clarity | Individual</title>
+  <meta name="description" content="When everything starts stacking up, Clarity helps you get your footing: what matters first, what can wait, and what to do next without making it worse." />
+  <link rel="canonical" href="https://clearframeworks.org/clarity/individual/" />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <meta property="og:title" content="Clarity | Individual" />
+  <meta property="og:description" content="A stability-first way to get your footing when pressure starts stacking up." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://clearframeworks.org/beta2/individual/" />
-  <meta property="og:image" content="https://clearframeworks.org/beta2/assets/og-clarity.png" />
-
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Clarity — Get your footing" />
-  <meta name="twitter:description" content="When you feel overwhelmed, get clear on what matters first and what to do next—without hype." />
-  <meta name="twitter:image" content="https://clearframeworks.org/beta2/assets/og-clarity.png" />
-
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    "name": "Clarity",
-    "url": "https://clearframeworks.org/clarity/",
-    "serviceType": "Decision support",
-    "areaServed": "US",
-    "provider": {
-      "@type": "Organization",
-      "name": "Clarity"
-    },
-    "description": "Constraint-aware decision support focused on stability, reversibility, downside control, and next steps under pressure."
-  }
-  </script>
-
-  <link rel="stylesheet" href="./styles.css?v=1" />
-
-  <!-- Page-level safety overrides (prevents white-on-white if global CSS drifts) -->
-  <style>
-    /* Keep cards readable even if global theme changes. */
-    .page .card,
-    .page .card * { color: #101214; }
-    .page .card .muted,
-    .page .card .small { color: rgba(16,18,20,.72); }
-
-    /* Clarity-specific hero spacing */
-    .hero .lead { max-width: 60ch; }
-    .intent-grid { display:grid; gap:18px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    @media (max-width: 980px){ .intent-grid { grid-template-columns: 1fr; } }
-
-    .intent-card { position:relative; }
-    .intent-card .tag { position:absolute; top:14px; right:14px; }
-    .intent-card h3 { margin-top: 8px; margin-bottom: 8px; }
-    .intent-card p { margin: 0; }
-
-    /* Hero card hierarchy */
-    .hero-card-title { font-weight: 700; }
-    .hero-card-quote { margin-top: 10px; font-size: 14px; line-height: 1.35; }
-    .hero-card-quote .attribution { display:block; margin-top: 8px; opacity:.72; font-size: 12px; }
-    .hero-logo-center { padding: 18px 14px 22px; display:flex; align-items:center; justify-content:center; }
-    .hero-logo-center img { max-width: 420px; width: 100%; height: auto; display:block; }
-  </style>
+  <meta property="og:url" content="https://clearframeworks.org/clarity/individual/" />
+  <meta property="og:image" content="https://clearframeworks.org/clarity/assets/og-clarity.png" />
+  <link rel="stylesheet" href="/clarity/assets/clarity.css?v=2" />
 </head>
-
 <body>
-
-<header class="site-header">
-  <div class="wrap header-inner">
-    <a class="brand" href="/clarity/" aria-label="Go to Clarity home">
-      <img class="brand-mark"
-           src="../assets/clarity-wordmark.png"
-           alt="Clarity wordmark"
-           decoding="async" />
-    </a>
-
-    <nav class="nav">
-      <a href="#what">What this is</a>
-      <a href="#how">How it works</a>
-      <a href="#offers">What happens</a>
-      <a class="nav-cta" href="#start">Reach out</a>
-    </nav>
-  </div>
-</header>
-
-<main class="page">
-
-  <section class="hero">
-    <div class="wrap grid">
-      <div class="hero-copy">
-        <h1>When everything starts stacking up, it helps to slow down.</h1>
-
-        <p class="lead">
-          Sometimes it isn’t one problem.
-          It’s money, time, obligations, and fatigue all sitting on top of each other.
-          If you’re carrying too much and it’s getting hard to think, you’re in the right place.
-        </p>
-
-        <div class="hero-actions">
-          <a class="btn primary"
-             href="mailto:michaelpaynotta@clearframeworks.org?subject=Clarity%20Check-In">
-            Email
-          </a>
-
-          <a class="btn" href="tel:+15409857517">Call</a>
-        </div>
-
-        <p class="small muted" style="margin-top:10px;">
-          If you reach out, you’ll get a short check-in first. No pressure and no obligation.
-        </p>
-
-        <ul class="checks">
-          <li>You don’t need the right words — just send what you can.</li>
-          <li>If things feel tangled, we start by separating what’s real from what’s loud.</li>
-          <li>Plain language. No therapy-speak. No promises.</li>
-        </ul>
-      </div>
-
-<aside class="heroCard" aria-label="Clarity">
-  <div style="font-weight:800; font-size:14px; letter-spacing:0.01em;">
-    Clarity
-  </div>
-  <p class="small" style="margin:10px 0 0;">
-    When pressure is high, thinking gets harder.<br/>
-    This is a place to slow down and look at your situation clearly.
-  </p>
-</aside>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="/clarity/" aria-label="Go to Clarity home">
+        <img class="brand-mark" src="../assets/clarity-wordmark.png" alt="Clarity wordmark" decoding="async" />
+      </a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="#what">What this is</a>
+        <a href="#how">How it works</a>
+        <a href="#expect">What to expect</a>
+        <a class="nav-cta" href="#start">Reach out</a>
+      </nav>
     </div>
-  </section>
+  </header>
 
-  <section class="section" id="what">
-    <div class="wrap">
-      <h2>What this is</h2>
-      <p class="muted">
-        Clarity is a quiet place to sort through a situation when everything feels tangled.
-        Not coaching. Not motivation. Not a miracle solution.
-        Just a way to slow down, name what’s real, and separate urgency from noise.
-      </p>
-
-      <div class="intent-grid" style="margin-top:16px;">
-        <div class="card intent-card">
-          <span class="tag">Money</span>
-          <h3>Money & stability</h3>
-          <p class="muted">Bills, income swings, debt, and how to stop things from compounding.</p>
+  <main id="main">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <div class="kicker">Individual</div>
+          <h1>When everything starts stacking up, it helps to slow down.</h1>
+          <p class="lead">Sometimes it isn’t one problem. It’s money, time, obligations, and fatigue all sitting on top of each other. If you’re carrying too much and it’s getting hard to think, you’re in the right place.</p>
+          <div class="hero-actions">
+            <a class="btn primary" href="../assets/clarity-checkin.png" target="_blank" rel="noopener">Open Check-In</a>
+            <a class="btn" href="mailto:michaelpaynotta@clearframeworks.org?subject=Clarity%20Check-In">Email</a>
+            <a class="btn" href="tel:+15409857517">Call</a>
+          </div>
+          <p class="note" style="margin-top:14px; max-width:60ch;">Best for moments where the ground feels noisy, urgent, or unstable.</p>
         </div>
+        <aside class="heroCard">
+          <div class="kicker">Quick read</div>
+          <p>You don’t need a perfect plan. You need enough order to stop compounding harm and make the next move visible again.</p>
+          <div class="hero-logo-center"><img src="../assets/clarity-home.png" alt="Clarity logo" /></div>
+        </aside>
+      </div>
+    </section>
 
-        <div class="card intent-card">
-          <span class="tag">Work</span>
-          <h3>Work & time pressure</h3>
-          <p class="muted">Forks in the road, overload, and how to move forward without burning out.</p>
+    <section class="section" id="what">
+      <div class="wrap">
+        <div class="section-head align-start">
+          <div>
+            <div class="kicker">What this is</div>
+            <h2>Clarity is not pressure. It is reduction.</h2>
+          </div>
+          <p>Clarity is for moments when life gets loud enough that your judgment starts collapsing into urgency. The goal is not to optimize your whole life at once. The goal is to make the next correct move visible.</p>
         </div>
-
-        <div class="card intent-card">
-          <span class="tag">Personal</span>
-          <h3>Life decisions</h3>
-          <p class="muted">Moves, relationships, and hard choices where every option has a cost.</p>
+        <div class="info-grid">
+          <div class="info-card"><h3>Money or instability</h3><p>When bills, income swings, or recurring costs start narrowing your options.</p></div>
+          <div class="info-card"><h3>Work or time pressure</h3><p>When bandwidth drops and everything starts feeling equally urgent.</p></div>
+          <div class="info-card"><h3>Life decisions</h3><p>When you need structure, not hype, before you act.</p></div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section" id="how">
-    <div class="wrap grid-2">
-
-      <div class="card">
-        <h2>How it works</h2>
-        <ol class="steps">
-          <li><strong>You send context</strong> (what’s happening + what’s at stake)</li>
-          <li><strong>We sort what’s binding you</strong> (money, time, obligations, risk, energy)</li>
-          <li><strong>You get a plan</strong> focused on stability, reversibility, and the next moves</li>
-        </ol>
-        <p class="muted">If you’re not sure what to include, send what you have — we’ll ask targeted questions.</p>
+    <section class="section" id="how">
+      <div class="wrap article">
+        <div class="kicker">How it works</div>
+        <h2 class="h2">The process is simple on purpose.</h2>
+        <p class="p">We start by identifying the real constraint: what is actually binding you right now. Then we separate loud inputs from urgent ones, reduce avoidable downside, and build the smallest next steps that buy you stability instead of more pressure.</p>
+        <div class="decls">
+          <div class="decl"><b>Context map</b><span>What is pressing, what is optional, and what is creating drag.</span></div>
+          <div class="decl"><b>Option field</b><span>What is available now, what is blocked, and what needs to wait.</span></div>
+          <div class="decl"><b>Stabilization</b><span>Reversible moves that reduce pressure without locking you into worse outcomes.</span></div>
+          <div class="decl"><b>Forward path</b><span>Conditional next steps once the situation stops shaking.</span></div>
+        </div>
       </div>
+    </section>
 
-      <div class="card">
-        <h2>What you can expect</h2>
-        <ul class="bullets">
-          <li>A clear picture of what’s actually driving the problem</li>
-          <li>Options that match your real situation</li>
-          <li>A short plan you can execute this week</li>
-          <li>Adjustments if the situation changes</li>
-        </ul>
+    <section class="section" id="expect">
+      <div class="wrap article">
+        <div class="kicker">What to expect</div>
+        <h2 class="h2">You should leave with less distortion.</h2>
+        <div class="decls">
+          <div class="decl"><b>Less noise</b><span>A better sense of what matters first and what can wait.</span></div>
+          <div class="decl"><b>More traction</b><span>Simple next moves you can execute under current conditions.</span></div>
+          <div class="decl"><b>More honesty</b><span>Clearer naming of tradeoffs instead of magical thinking.</span></div>
+          <div class="decl"><b>More stability</b><span>A path that protects you before it tries to optimize you.</span></div>
+        </div>
       </div>
+    </section>
 
-    </div>
-  </section>
-
-  <section class="section" id="offers">
-    <div class="wrap grid-2">
-
-      <div class="card">
-        <h2>What happens</h2>
-        <p class="muted">
-          We work in two modes depending on how urgent things are and how much support you want.
-        </p>
-        <ul class="bullets">
-          <li><strong>Ongoing support</strong> for active situations that evolve week to week</li>
-          <li><strong>One-time deep dive</strong> for a specific decision or fork</li>
-        </ul>
-        <p class="small">Details are handled directly by email so we don’t trap you in a one-size-fits-all package.</p>
-      </div>
-
-      <div class="card">
-        <h2>Integrity</h2>
-        <p class="muted">
-          Clarity doesn’t charge people in immediate survival crisis.
-          If you’re facing eviction, domestic violence, or a medical emergency, the right move is local assistance first.
-        </p>
-        <ul class="bullets">
-          <li>Emergency services: call 911 if you’re in immediate danger</li>
-          <li>If you’re in the U.S., dialing 211 can connect you to local resources</li>
-          <li>Once you’re stable, we can help you think cleanly again</li>
-        </ul>
-      </div>
-
-    </div>
-  </section>
-
-  <section class="section" id="start">
-    <div class="wrap">
-      <div class="card start">
-        <h2>Reach out</h2>
-        <p class="muted">
-          Send what’s going on.
-          If you have numbers (income, bills, deadlines), include them — it helps.
-
-          If you reach out, you’ll get a short check-in first. No pressure and no obligation.
-        </p>
-
+    <section class="section" id="start">
+      <div class="wrap article">
+        <div class="kicker">Reach out</div>
+        <h2 class="h2">Start with the check-in.</h2>
+        <p class="p">If this seems useful, open the Clarity check-in first. That gives structure to the situation before email or conversation. If you already know what you need, reach out directly.</p>
         <div class="start-actions">
-          <a class="btn primary"
-             href="mailto:michaelpaynotta@clearframeworks.org?subject=Clarity%20Check-In">
-            Email
-          </a>
-
+          <a class="btn primary" href="../assets/clarity-checkin.png" target="_blank" rel="noopener">Open Check-In</a>
+          <a class="btn" href="mailto:michaelpaynotta@clearframeworks.org?subject=Clarity%20Check-In">Email</a>
           <a class="btn" href="tel:+15409857517">Call</a>
         </div>
-
-        <p class="small">You’re not behind. You’re navigating constraints.</p>
+        <p class="note" style="margin-top:14px;">Clarity is not emergency services, medical care, legal advice, or crisis response. Immediate risk should go to direct resources first.</p>
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
-</main>
-
-<footer class="footer">
-  <div class="wrap footer-inner">
-    <div class="footer-left">
-      <img src="../assets/clarity-icon-1024.png" class="footer-icon" alt="" decoding="async" />
+  <footer class="footer">
+    <div class="wrap footer-grid">
       <div>
-        <div class="footer-title">Clarity</div>
-        <div class="footer-sub">Decision support under pressure.</div>
+        <h4>Clarity</h4>
+        <p>Decision support for real pressure. Plain next steps, honest constraints, stability first.</p>
+      </div>
+      <div>
+        <h4>Routes</h4>
+        <ul>
+          <li><a href="/clarity/">Clarity home</a></li>
+          <li><a href="/clarity/institution/">Institution</a></li>
+          <li><a href="../assets/clarity-checkin.png" target="_blank" rel="noopener">Check-In</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:michaelpaynotta@clearframeworks.org?subject=Clarity%20Check-In">michaelpaynotta@clearframeworks.org</a></li>
+          <li><a href="tel:+15409857517">540-985-7517</a></li>
+        </ul>
       </div>
     </div>
-  </div>
-</footer>
-
+  </footer>
 </body>
 </html>
