@@ -15,32 +15,118 @@
 <link rel="stylesheet" href="/clarity/assets/clarity.css">
 
 <style>
-
 .contact-card{
-max-width:640px;
-margin-top:28px;
-margin-bottom:48px;
-padding:28px;
+  max-width:760px;
+  margin-top:28px;
+  margin-bottom:48px;
+  padding:34px;
+}
+
+.contact-kicker{
+  margin:0 0 8px;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--accent-2);
+}
+
+.contact-name{
+  margin:0 0 8px;
+  font-size:34px;
+  line-height:1.05;
+  letter-spacing:-.02em;
+  font-weight:800;
+}
+
+.contact-role{
+  margin:0 0 22px;
+  color:var(--muted);
+  font-size:16px;
+  max-width:40ch;
+}
+
+.contact-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px;
+  margin:0 0 20px;
+}
+
+.contact-item{
+  padding:16px 18px;
+  border:1px solid rgba(121,179,204,.12);
+  border-radius:14px;
+  background:rgba(255,255,255,.02);
+}
+
+.contact-label{
+  display:block;
+  margin:0 0 6px;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--accent-2);
+}
+
+.contact-value{
+  display:block;
+  font-size:20px;
+  line-height:1.35;
+  font-weight:700;
+  color:var(--text);
+  text-decoration:none;
+  word-break:break-word;
+}
+
+.contact-value:hover{
+  color:var(--accent-2);
+}
+
+.contact-note{
+  margin:0;
+  color:var(--muted);
+  font-size:15px;
+}
+
+.projects-anchor{
+  margin:0 0 10px;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--accent-2);
 }
 
 .logo-wrap{
-height:60px;
-display:flex;
-align-items:center;
-justify-content:center;
-margin-bottom:14px;
+  height:64px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:14px;
 }
 
 .logo-wrap img{
-max-height:48px;
-width:auto;
-object-fit:contain;
+  max-height:50px;
+  width:auto;
+  object-fit:contain;
 }
 
+.logo-wrap--blank{
+  border:1px dashed rgba(121,179,204,.14);
+  border-radius:12px;
+  background:rgba(255,255,255,.015);
+}
+
+@media (max-width: 720px){
+  .contact-card{padding:24px}
+  .contact-name{font-size:28px}
+  .contact-grid{grid-template-columns:1fr}
+}
 </style>
 
 </head>
-
 
 <body>
 
@@ -50,6 +136,7 @@ object-fit:contain;
 
 <div class="wrap">
 
+<p class="contact-kicker">Direct contact</p>
 <h1 class="h1">Contact</h1>
 
 <p class="p muted">
@@ -59,33 +146,41 @@ Reach out regarding any project below or general inquiries.
 
 <div class="info-card contact-card">
 
-<strong>Michael Paynotta</strong>
+<p class="contact-kicker">Michael Paynotta</p>
+<h2 class="contact-name">Clear contact. Direct path forward.</h2>
+<p class="contact-role">
+Website work, decision-support projects, landscape design, writing, or general inquiries.
+</p>
 
-<p style="margin-top:10px;">
-<a href="mailto:michaelpaynotta@clearframeworks.org">
+<div class="contact-grid">
+
+<div class="contact-item">
+<span class="contact-label">Email</span>
+<a class="contact-value" href="mailto:michaelpaynotta@clearframeworks.org">
 michaelpaynotta@clearframeworks.org
 </a>
-</p>
+</div>
 
-<p>
-<a href="tel:+15409857517">
+<div class="contact-item">
+<span class="contact-label">Phone</span>
+<a class="contact-value" href="tel:+15409857517">
 +1 (540) 985-7517
 </a>
-</p>
+</div>
 
-<p class="note">
-Email is usually the fastest way to start.
+</div>
+
+<p class="contact-note">
+Email is usually the fastest way to start. If calling, leave a message and I’ll return it.
 </p>
 
 </div>
 
 
-
-<h2 class="title">Projects</h2>
-
+<p class="projects-anchor">Project map</p>
+<h2 class="title" style="margin-bottom:0;">Projects</h2>
 
 <div class="quick-grid" style="margin-top:22px;">
-
 
 <a class="quick-card" href="/">
 <div class="logo-wrap">
@@ -95,7 +190,6 @@ Email is usually the fastest way to start.
 <div class="quick-sub">Website structure and execution</div>
 </a>
 
-
 <a class="quick-card" href="/clarity/">
 <div class="logo-wrap">
 <img src="/assets/img/examples/clarity.png" alt="Clarity">
@@ -103,7 +197,6 @@ Email is usually the fastest way to start.
 <div class="quick-title">Clarity</div>
 <div class="quick-sub">Constraint-first decision support</div>
 </a>
-
 
 <a class="quick-card" href="/proximity/">
 <div class="logo-wrap">
@@ -113,7 +206,6 @@ Email is usually the fastest way to start.
 <div class="quick-sub">Remote landscape design</div>
 </a>
 
-
 <a class="quick-card" href="https://eliasmarrow.org">
 <div class="logo-wrap">
 <img src="/assets/img/examples/eliasmarrow.jpg" alt="Writing">
@@ -122,23 +214,19 @@ Email is usually the fastest way to start.
 <div class="quick-sub">Author projects and fiction</div>
 </a>
 
-
 <a class="quick-card" href="/examples/">
-<div class="logo-wrap"></div>
+<div class="logo-wrap logo-wrap--blank"></div>
 <div class="quick-title">Examples</div>
 <div class="quick-sub">Built work across the ecosystem</div>
 </a>
 
-
 <a class="quick-card" href="/learn/">
-<div class="logo-wrap"></div>
+<div class="logo-wrap logo-wrap--blank"></div>
 <div class="quick-title">Learn</div>
 <div class="quick-sub">How the system works</div>
 </a>
 
-
 </div>
-
 
 </div>
 
